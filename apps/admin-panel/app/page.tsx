@@ -1,5 +1,4 @@
 import { Button } from '@finalproject/ui';
-
 export default async function Index() {
   return (
     <div>

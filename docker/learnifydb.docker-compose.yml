@@ -5,14 +5,14 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: learnifydbpassword
+      POSTGRES_PASSWORD: learnifydbpwd
       POSTGRES_DB: learnify
       PGDATA: /data/postgres
     volumes:
-      - postgres-db:/data/postgres
+      - learnify:/data/postgres
     ports:
       - '5432:5432'
 
 volumes:
-  postgres-db:
+  learnify:
     driver: local

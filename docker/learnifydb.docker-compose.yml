@@ -6,6 +6,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: learnifydbpassword
+      POSTGRES_DB: learnify
       PGDATA: /data/postgres
     volumes:
       - postgres-db:/data/postgres

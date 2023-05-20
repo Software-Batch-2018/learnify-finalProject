@@ -1,6 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Blog } from '../../app/api/blogs/entities/blog.entity';
+import { join } from 'path';
+import { getMetadataArgsStorage } from 'typeorm';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -15,8 +18,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: this.config.get<string>('POSTGRES_DB'),
       username: this.config.get<string>('POSTGRES_USER'),
       password: this.config.get<string>('POSTGRES_PASSWORD'),
-      entities: ['dist/**/*.entity.{ts,js}'],
-      migrations: ['dist/migrations/*.{ts,js}'],
+      entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
+      migrations: [],
       migrationsTableName: 'typeorm_migrations',
       logging: true,
       dropSchema: false,

@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Blog {
@@ -25,4 +27,7 @@ export class Blog {
 
   @UpdateDateColumn()
   updated_at!: Date;
+
+  @ManyToOne(() => User)
+  author!: User;
 }

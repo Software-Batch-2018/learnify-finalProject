@@ -9,6 +9,7 @@ import Layout from '../components/layout';
 import dynamic from 'next/dynamic';
 import { domAnimation } from 'framer-motion';
 import 'react-quill/dist/quill.snow.css';
+import { useRouter } from 'next/router';
 const Toaster = dynamic(
   () => import('react-hot-toast').then((c) => c.Toaster),
   {
@@ -33,6 +34,8 @@ const queryClient = new QueryClient({
   },
 });
 function CustomApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -43,16 +46,21 @@ function CustomApp({ Component, pageProps }: AppProps) {
           <Background>
             <QueryClientProvider client={queryClient}>
               <LazyMotion features={domAnimation}>
-                <Layout>
-                  <Toaster
-                    position="bottom-center"
-                    toastOptions={{
-                      className:
-                        'text-sm font-medium !shadow-[0_2px_12px_2px_rgba(0,0,0,0.12)] !p-3',
-                    }}
-                  />
+                {router.pathname === '/login' ? (
                   <Component {...pageProps} />
-                </Layout>
+                ) : (
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                )}
+
+                <Toaster
+                  position="bottom-center"
+                  toastOptions={{
+                    className:
+                      'text-sm font-medium !shadow-[0_2px_12px_2px_rgba(0,0,0,0.12)] !p-3',
+                  }}
+                />
               </LazyMotion>
             </QueryClientProvider>
           </Background>

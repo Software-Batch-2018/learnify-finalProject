@@ -17,7 +17,7 @@ const Sidebar = () => {
     { title: 'Dashboard', path: '/', src: <AiFillPieChart /> },
     { title: 'Blogs', path: '/blogs', src: <BsNewspaper /> },
     { title: 'Profile', path: '/profile', src: <CgProfile /> },
-    { title: 'Signin', path: '/login', src: <SiOpenaccess />, gap: 'true' },
+    { title: 'logout', path: '/logout', src: <SiOpenaccess />, gap: 'true' },
   ];
 
   return (

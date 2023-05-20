@@ -30,6 +30,7 @@ export function Index() {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm();
   const img = watch('blog_img');
 
@@ -37,40 +38,44 @@ export function Index() {
   const { mutate: editMutate } = useMutation({
     mutationFn: async ({ id, payload }: EditPayload) => {
       const data = await editBlogs({ id, payload });
-      if (data) {
+      if (data.error) {
+        toast.error(data.message);
+      } else {
         toast.success('Successfully Edited!');
+        refetch();
       }
-      refetch();
-      return data;
     },
   });
 
   const { mutate: deleteMutate } = useMutation({
     mutationFn: async ({ id }: { id: string }) => {
       const data = await deleteBlogs({ id });
-      if (data) {
-        toast.error('Successfully Deleted!');
+      if (data.error) {
+        toast.error(data.message);
+      } else {
+        toast.success('Deleted blog!');
+        refetch();
       }
-      refetch();
-      return data;
     },
   });
 
   const { mutate: createMutate } = useMutation({
     mutationFn: async (payload: any) => {
       const data = await createBlogs(payload);
-      if (data) {
-        toast.success('Successfully added new blog!');
+      if (data.error) {
+        toast.error(data.message);
+      } else {
+        toast.success('Successfully created new blog!');
+        refetch();
       }
-
-      refetch();
-      return data;
     },
   });
 
   const onSubmit = (data: any) => {
     createMutate({ ...data, content });
     setAddBlogModal(false);
+    reset();
+    setContent('');
   };
 
   const editBlog = (data: any) => {

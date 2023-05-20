@@ -6,10 +6,15 @@ import { loginUser } from '../utils/queryfn/auth';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import { Button } from '@finalproject/ui';
 const LoginPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm();
-  const { mutate: loginMutate, data: mutateData } = useMutation({
+  const {
+    mutate: loginMutate,
+    data: mutateData,
+    isLoading,
+  } = useMutation({
     mutationFn: async (payload: any) => {
       const data = await loginUser(payload);
       if (data.error) {
@@ -26,7 +31,6 @@ const LoginPage = () => {
 
   React.useEffect(() => {
     if (mutateData && !mutateData.error) {
-      // localStorage.setItem('user', mutateData);
       Cookies.set('user', JSON.stringify(mutateData));
       router.push('/');
     }
@@ -93,12 +97,7 @@ const LoginPage = () => {
                         {...register('password')}
                       />
                     </div>
-                    <button
-                      type="submit"
-                      className="btn btn-lg bg-green-600 w-full flex items-center justify-center text-gray-50"
-                    >
-                      Submit
-                    </button>
+                    <Button type="submit" isLoading={isLoading} name="Login" />
                   </div>
                 </form>
               </div>

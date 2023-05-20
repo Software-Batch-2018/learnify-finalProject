@@ -1,36 +1,33 @@
-import { classNames } from '../utils/classNames';
+import { AbsoluteSpinner } from '../spinner';
 
 /* eslint-disable-next-line */
 export interface ButtonProps {
-  name: string;
+  isLoading: boolean;
+  name?: string;
+  type?: 'submit' | 'reset' | 'button';
+  style?: 'primary' | 'danger' | 'grey';
 }
 
-export function Button(props: ButtonProps) {
-  return (
-    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      {props.name}
-    </button>
-  );
-}
-
-export function PageButton({
-  children,
-  className,
-  ...rest
-}: {
-  children: React.ReactNode;
-  className: string;
-}) {
+export function Button({
+  isLoading,
+  name = 'Submit',
+  type = 'button',
+  style = 'primary',
+}: ButtonProps) {
   return (
     <button
-      type="button"
-      className={classNames(
-        'relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50',
-        className
-      )}
-      {...rest}
+      type={type}
+      disabled={isLoading}
+      className="btn btn-lg bg-green-600 w-full flex items-center justify-center text-gray-50"
     >
-      {children}
+      {isLoading ? (
+        <div className="flex  justify-center items-center gap-2">
+          <AbsoluteSpinner />
+          <p>Submitting</p>
+        </div>
+      ) : (
+        <p> {name}</p>
+      )}
     </button>
   );
 }

@@ -16,6 +16,7 @@ import { Modal } from '../../components/modal';
 import { useForm } from 'react-hook-form';
 import RichTextEditor from '../../components/RichTextEditor';
 import { AlertDialog } from '../../components/alert-dialog';
+
 export function Index() {
   const [addBlogModal, setAddBlogModal] = React.useState(false);
   const [viewBlogContent, setViewBlogContent] = React.useState(false);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { BsArrowLeftCircle, BsNewspaper } from 'react-icons/bs';
 import { AiFillPieChart } from 'react-icons/ai';
-import { SiFuturelearn, SiOpenaccess } from 'react-icons/si';
+import { SiOpenaccess } from 'react-icons/si';
 import { CgProfile } from 'react-icons/cg';
 import HamburgerButton from './HamburgerMenuButton/HamburgerButton';
 import Link from 'next/link';
@@ -16,8 +16,8 @@ const Sidebar = () => {
   const Menus = [
     { title: 'Dashboard', path: '/', src: <AiFillPieChart /> },
     { title: 'Blogs', path: '/blogs', src: <BsNewspaper /> },
-    { title: 'Profile', path: '/profile', src: <CgProfile /> },
-    { title: 'logout', path: '/logout', src: <SiOpenaccess />, gap: 'true' },
+    { title: 'Courses', path: '/courses', src: <CgProfile /> },
+    { title: 'Logout', path: '/logout', src: <SiOpenaccess />, gap: 'true' },
   ];
 
   return (
@@ -66,7 +66,6 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
-      {/* Mobile Menu */}
       <div className="pt-3">
         <HamburgerButton
           setMobileMenu={setMobileMenu}

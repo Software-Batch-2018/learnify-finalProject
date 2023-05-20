@@ -1,7 +1,7 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
-
+import NextNProgress from 'nextjs-progressbar';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from '../components/ThemeContext';
 import Background from '../components/background';
@@ -45,6 +45,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <ThemeProvider>
           <Background>
             <QueryClientProvider client={queryClient}>
+              <NextNProgress height={4} color="green" />
               <LazyMotion features={domAnimation}>
                 {router.pathname === '/login' ? (
                   <Component {...pageProps} />

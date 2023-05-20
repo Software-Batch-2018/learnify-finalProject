@@ -1,5 +1,4 @@
-import axios from 'axios';
-
+import { axios } from './axios-inteceptor';
 async function getBlogs() {
   try {
     const response = await axios.get('http://localhost:3334/api/blogs');
@@ -32,7 +31,6 @@ async function createBlogs(payload: CreatePayload) {
       payload
     );
     const data = await response.data;
-    console.log(data);
     return data;
   } catch (error: any) {
     return {

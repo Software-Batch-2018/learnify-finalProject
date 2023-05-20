@@ -9,23 +9,33 @@ import {
   Pagination,
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
+import { Roles, User } from '../users/entities/user.entity';
 
 @Injectable()
 export class BlogsService {
   constructor(
     @InjectRepository(Blog)
-    private blogRepository: Repository<Blog>
+    private blogRepository: Repository<Blog>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>
   ) {}
   async create(createBlogDto: CreateBlogDto) {
+    const admin = await this.userRepository.findOne({
+      where: { role: Roles.ADMIN },
+    });
     const blog = new Blog();
     blog.content = createBlogDto.content;
     blog.title = createBlogDto.title;
     blog.blog_img = createBlogDto.blog_img;
+    blog.author = admin;
     return await this.blogRepository.save(blog);
   }
 
   async findAll(options: IPaginationOptions): Promise<Pagination<Blog>> {
-    return paginate<Blog>(this.blogRepository, { limit: 10, page: 1 });
+    const query = this.blogRepository
+      .createQueryBuilder('q')
+      .leftJoinAndSelect('q.author', 'u');
+    return paginate<Blog>(query, { limit: 10, page: 1 });
   }
 
   async findOne(id: string) {

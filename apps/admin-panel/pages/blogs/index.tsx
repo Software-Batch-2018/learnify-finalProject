@@ -115,6 +115,11 @@ export function Index() {
       },
     },
     {
+      headerName: 'Author',
+      field: 'author.name',
+      floatingFilter: true,
+    },
+    {
       headerName: 'Action',
       floatingFilter: false,
       cellRenderer: (param: any) => {

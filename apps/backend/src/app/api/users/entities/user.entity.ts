@@ -13,6 +13,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 export enum Roles {
   ADMIN = 'admin',
   USER = 'user',
+  TEACHER = 'teacher',
 }
 
 @Entity()
@@ -48,7 +49,6 @@ export class User extends BaseEntity {
         const salt = await bcrypt.genSalt(8);
         this.password = await bcrypt.hash(this.password, salt);
       } catch (e) {
-        console.log(e);
         throw new HttpException(
           'There are some issues in the hashing.',
           HttpStatus.INTERNAL_SERVER_ERROR

@@ -11,7 +11,7 @@ async function loginUser(payload: { email: string; password: string }) {
   } catch (error: any) {
     return {
       error: true,
-      message: error.message,
+      message: error.response.data.message,
     };
   }
 }

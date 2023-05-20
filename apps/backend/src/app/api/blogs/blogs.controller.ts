@@ -9,6 +9,7 @@ import {
   Query,
   DefaultValuePipe,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BlogsService } from './blogs.service';
@@ -16,6 +17,7 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { Blog } from './entities/blog.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { JwtAuthGuard } from '../users/auth/auth.guard';
 
 @Controller('blogs')
 @ApiTags('Blog Related Routes')
@@ -24,6 +26,7 @@ export class BlogsController {
 
   @Post()
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create New Blog' })
   async create(@Body() createBlogDto: CreateBlogDto) {
     return await this.blogsService.create(createBlogDto);
@@ -47,6 +50,7 @@ export class BlogsController {
 
   @Patch(':id')
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: 'Edit Blog by id. Can only be accessed by Admin Token.',
   })
@@ -56,6 +60,7 @@ export class BlogsController {
 
   @Delete(':id')
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete blog by id.' })
   async remove(@Param('id') id: string) {
     return this.blogsService.remove(id);

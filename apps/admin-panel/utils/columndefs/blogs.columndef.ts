@@ -3,6 +3,7 @@ export const defaultColumnDef = {
   flex: 1,
   sortable: true,
   filter: true,
+  checkboxSelection: true,
   floatingFilter: true,
   resizable: true,
 };

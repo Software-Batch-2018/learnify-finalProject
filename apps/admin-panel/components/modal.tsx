@@ -15,7 +15,7 @@ export function Modal({
       {modal && (
         <div className="">
           <Overlay />
-          <div className="fixed flex h-full w-full  z-40  items-center justify-center top-0 left-0">
+          <div className="fixed flex h-full overflow-y-scroll w-full  z-40  items-center justify-center top-0 left-0">
             <motion.div
               initial={{ y: 50, opacity: 0 }}
               animate={{

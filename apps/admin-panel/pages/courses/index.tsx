@@ -5,8 +5,15 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { useGetAllCourses } from '../../utils/queryfn/courses';
 import { defaultColumnDef } from '../../utils/columndefs/blogs.columndef';
+import { Modal } from '../../components/modal';
+import { QuizBuilder } from '../../components/quiz/quiz';
 
 const GridExample = () => {
+  const [quizModal, setQuizModal] = React.useState(false);
+  const [contentDetail, setContentDetail] = React.useState({
+    course_id: '',
+    course_name: '',
+  });
   const { data, isLoading } = useGetAllCourses();
   const containerStyle = useMemo(() => ({ width: '100%', height: '80vh' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
@@ -79,6 +86,36 @@ const GridExample = () => {
                   );
                 },
               },
+              {
+                headerName: 'Action',
+                floatingFilter: false,
+                cellRenderer: (param: any) => {
+                  return (
+                    <div className="flex gap-2 justify-center items-center mt-2">
+                      <button
+                        onClick={() => {
+                          console.log(param.data);
+                          setContentDetail({
+                            course_id: param.data.content_id,
+                            course_name: param.data.content_title,
+                          });
+                          setQuizModal(true);
+                        }}
+                        className="btn bg-green-600 text-white btn-xxs"
+                      >
+                        Add Quiz
+                      </button>
+                      <button className="btn btn-fill-gray btn-xxs">
+                        View Content
+                      </button>
+
+                      <button className="btn btn-fill-danger btn-xxs">
+                        Delete
+                      </button>
+                    </div>
+                  );
+                },
+              },
             ],
             defaultColDef: {
               flex: 1,
@@ -110,6 +147,15 @@ const GridExample = () => {
           ></AgGridReact>
         )}
       </div>
+
+      <Modal modal={quizModal} setModal={setQuizModal}>
+        <div className="h-[90vh] w-[60vw] p-6 overflow-y-scroll">
+          <QuizBuilder
+            course_id={contentDetail.course_id}
+            course_name={contentDetail.course_name}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };

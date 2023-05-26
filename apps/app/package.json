@@ -5,9 +5,13 @@
   "dependencies": {
     "@testing-library/jest-native": "*",
     "@testing-library/react-native": "*",
-    "react": "*",
     "react-native": "*",
+    "expo": "*",
     "react-native-svg": "*",
-    "metro-config": "*"
+    "react-native-web": "*"
+  },
+  "scripts": {
+    "eas-build-pre-install": "cd ../../ && node tools/scripts/eas-build-pre-install.mjs . apps/app && cp yarn.lock apps/app",
+    "eas-build-post-install": "cd ../../ && node tools/scripts/eas-build-post-install.mjs . apps/app"
   }
 }

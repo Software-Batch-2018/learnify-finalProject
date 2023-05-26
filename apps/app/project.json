@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "start": {
-      "executor": "@nx/react-native:start",
+      "executor": "@nx/expo:start",
       "options": {
         "port": 8081
       }
@@ -17,55 +17,63 @@
       }
     },
     "run-ios": {
-      "executor": "@nx/react-native:run-ios",
-      "options": {}
-    },
-    "bundle-ios": {
-      "executor": "@nx/react-native:bundle",
-      "outputs": ["{options.bundleOutput}"],
+      "executor": "@nx/expo:run",
       "options": {
-        "entryFile": "src/main.tsx",
-        "platform": "ios",
-        "bundleOutput": "dist/apps/app/ios/main.jsbundle"
+        "platform": "ios"
       }
     },
     "run-android": {
-      "executor": "@nx/react-native:run-android",
-      "options": {}
-    },
-    "build-android": {
-      "executor": "@nx/react-native:build-android",
-      "outputs": [
-        "{projectRoot}/android/app/build/outputs/bundle",
-        "{projectRoot}/android/app/build/outputs/apk"
-      ],
-      "options": {}
-    },
-    "build-ios": {
-      "executor": "@nx/react-native:build-ios",
-      "outputs": ["{projectRoot}/ios/build/Build"],
-      "options": {}
-    },
-    "pod-install": {
-      "executor": "@nx/react-native:pod-install",
-      "options": {}
-    },
-    "bundle-android": {
-      "executor": "@nx/react-native:bundle",
-      "outputs": ["{options.bundleOutput}"],
+      "executor": "@nx/expo:run",
       "options": {
-        "entryFile": "src/main.tsx",
-        "platform": "android",
-        "bundleOutput": "dist/apps/app/android/main.jsbundle"
+        "platform": "android"
+      }
+    },
+    "build": {
+      "executor": "@nx/expo:build",
+      "options": {}
+    },
+    "build-list": {
+      "executor": "@nx/expo:build-list",
+      "options": {}
+    },
+    "download": {
+      "executor": "@nx/expo:download",
+      "options": {
+        "output": "apps/app/dist"
       }
     },
     "sync-deps": {
-      "executor": "@nx/react-native:sync-deps",
+      "executor": "@nx/expo:sync-deps",
       "options": {}
     },
     "ensure-symlink": {
-      "executor": "@nx/react-native:ensure-symlink",
+      "executor": "@nx/expo:ensure-symlink",
       "options": {}
+    },
+    "prebuild": {
+      "executor": "@nx/expo:prebuild",
+      "options": {}
+    },
+    "install": {
+      "executor": "@nx/expo:install",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nx/expo:update",
+      "options": {}
+    },
+    "export": {
+      "executor": "@nx/expo:export",
+      "options": {
+        "platform": "all",
+        "outputDir": "../../dist/apps/app"
+      }
+    },
+    "export-web": {
+      "executor": "@nx/expo:export",
+      "options": {
+        "bundler": "metro"
+      }
     },
     "lint": {
       "executor": "@nx/linter:eslint",

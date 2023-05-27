@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AccountScreen } from '../screens/AccountScreen';
 import MainStackNavigator from './stack.navigation';
+import CoursesScreen from '../screens/courses.screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,6 +27,21 @@ export default function BottomNavigation() {
           name="Home"
           component={MainStackNavigator}
         />
+        <Tab.Screen
+          options={{
+            tabBarIcon: (props) => (
+              <Icon
+                mt="1"
+                as={<MaterialIcons name="library-books" />}
+                color="gray.500"
+                size="lg"
+              />
+            ),
+          }}
+          name="Courses"
+          component={CoursesScreen}
+        />
+
         <Tab.Screen
           options={{
             tabBarIcon: (props) => (

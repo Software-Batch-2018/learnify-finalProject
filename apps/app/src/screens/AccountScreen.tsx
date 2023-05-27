@@ -1,3 +1,4 @@
+import { NavigationProp } from '@react-navigation/native';
 import {
   Box,
   Button,
@@ -10,8 +11,13 @@ import {
   Text,
   VStack,
 } from 'native-base';
+import { RootStackParamList } from '../types';
 
-export function AccountScreen({ navigation }: any) {
+type AccountScreenProps = {
+  navigation: NavigationProp<RootStackParamList, 'Signup'>;
+};
+
+export function AccountScreen({ navigation }: AccountScreenProps) {
   return (
     <Center w="100%">
       <Box safeArea p="2" py="8" w="90%" maxW="290">

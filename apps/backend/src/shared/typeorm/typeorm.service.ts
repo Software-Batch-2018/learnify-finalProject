@@ -1,8 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Blog } from '../../app/api/blogs/entities/blog.entity';
-import { join } from 'path';
+
 import { getMetadataArgsStorage } from 'typeorm';
 
 @Injectable()

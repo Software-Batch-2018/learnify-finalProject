@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AccountScreen } from '../screens/AccountScreen';
 import MainStackNavigator from './stack.navigation';
 import CoursesScreen from '../screens/courses.screen';
+import BlogScreen from '../screens/blog.screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -55,6 +56,20 @@ export default function BottomNavigation() {
           }}
           name="Account"
           component={AccountScreen}
+        />
+        <Tab.Screen
+          options={{
+            tabBarIcon: (props) => (
+              <Icon
+                mt="1"
+                as={<MaterialIcons name="collections-bookmark" />}
+                color="gray.500"
+                size="lg"
+              />
+            ),
+          }}
+          name="Blogs"
+          component={BlogScreen}
         />
       </Tab.Navigator>
     </NavigationContainer>

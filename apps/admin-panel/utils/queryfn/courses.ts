@@ -1,6 +1,5 @@
-import { useMutation, useQuery } from 'react-query';
+import {  useQuery } from 'react-query';
 import { axios } from '../axios-inteceptor';
-import toast from 'react-hot-toast';
 
 async function getCourses() {
   try {

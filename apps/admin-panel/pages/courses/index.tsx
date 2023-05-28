@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useCallback, useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-enterprise';
@@ -9,10 +10,11 @@ import { QuizBuilder } from '../../components/quiz/quiz';
 import { createLevelMutation } from '../../utils/queryfn/mutation';
 import { toast } from 'react-hot-toast';
 
-const GridExample = () => {
+const CourseTable = () => {
   const [quizModal, setQuizModal] = React.useState(false);
   const [, setRowData] = useState<any[]>([]);
   const [inputRow, setInputRow] = useState<any>({});
+  const [nestedInputRow, setNestedInputRow] = useState<any>({});
 
   const [contentDetail, setContentDetail] = React.useState({
     course_id: '',
@@ -21,11 +23,14 @@ const GridExample = () => {
   const { data, isLoading, refetch } = useGetAllCourses();
   const containerStyle = useMemo(() => ({ width: '100%', height: '80vh' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-
+  const extraRow: any = {
+    subject_name: 'Pinned Row',
+    isNonExpandable: true,
+    subject_image: nestedInputRow.subject_image || '', // Use the value from state or an empty string
+  };
   const [columnDefs] = useState([
     {
       field: 'level',
-
       cellRenderer: 'agGroupCellRenderer',
     },
     {
@@ -67,6 +72,10 @@ const GridExample = () => {
         ],
         defaultColDef: {
           flex: 1,
+          sortable: true,
+          filter: true,
+          resizable: true,
+          editable: true,
         },
         masterDetail: true,
         // detailRowHeight: 240,
@@ -78,7 +87,7 @@ const GridExample = () => {
               {
                 field: 'title_image',
                 headerName: 'Image',
-                cellRenderer: (param: any) => {
+                cellRenderer: (param: { value: string }) => {
                   return (
                     <div>
                       <img
@@ -93,12 +102,13 @@ const GridExample = () => {
               {
                 headerName: 'Action',
                 floatingFilter: false,
-                cellRenderer: (param: any) => {
+                cellRenderer: (param: {
+                  data: { content_id: string; content_title: string };
+                }) => {
                   return (
                     <div className="flex gap-2 justify-center items-center mt-2">
                       <button
                         onClick={() => {
-                          console.log(param.data);
                           setContentDetail({
                             course_id: param.data.content_id,
                             course_name: param.data.content_title,
@@ -126,17 +136,21 @@ const GridExample = () => {
             },
           },
           getDetailRowData: (params: any) => {
+            if (params.data.isExpandable) return;
             params.successCallback(params.data.contents);
           },
         },
       },
       getDetailRowData: (params: any) => {
-        params.successCallback(params.data.subjects);
+        params.successCallback([extraRow, ...params.data.subjects]);
       },
     };
   }, []);
 
-  function isEmptyPinnedCell(params: any) {
+  function isEmptyPinnedCell(params: {
+    value: null | string;
+    node: { rowPinned: string };
+  }) {
     return (
       params.node.rowPinned === 'top' &&
       (params.value === null || params.value === '')
@@ -149,9 +163,11 @@ const GridExample = () => {
   }
 
   const isPinnedRowDataCompleted = useCallback(
-    (params: any) => {
+    (params: { rowPinned: string }) => {
       if (params.rowPinned !== 'top') return false;
-      return columnDefs.every((def: any) => inputRow[def.field] !== undefined);
+      return columnDefs.every(
+        (def: { field?: any }) => inputRow[def.field] !== undefined
+      );
     },
     [columnDefs, inputRow]
   );
@@ -171,7 +187,7 @@ const GridExample = () => {
         }
       }
     },
-    [inputRow, isPinnedRowDataCompleted]
+    [inputRow, isPinnedRowDataCompleted, refetch]
   );
 
   const defaultColumnDef = {
@@ -217,4 +233,4 @@ const GridExample = () => {
     </div>
   );
 };
-export default GridExample;
+export default CourseTable;

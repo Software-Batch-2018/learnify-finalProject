@@ -5,6 +5,7 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { SignupScreen } from '../screens/Signup.screen';
 import { AccountScreen } from '../screens/login.screen';
 import { LevelScreen } from '../screens/levels.screen';
+import { SubjectScreen } from '../screens/subject.screen';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,11 @@ export function CoursesStackNavigator() {
       <Stack.Screen
         name="Levels"
         component={LevelScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Subjects"
+        component={SubjectScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

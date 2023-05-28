@@ -105,7 +105,7 @@ export default function BlogScreen() {
           </Box>
         )}
       </ScrollView>
-      <Actionsheet isOpen={isOpen} onClose={onClose}>
+      <Actionsheet h={'100%'} isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <ScrollView>
             <Box w="100%" h={'full'} px={4}>
@@ -136,13 +136,8 @@ export default function BlogScreen() {
                   >
                     {blog.author}
                   </Text>
+                  <Text fontWeight="400">{blog.content}</Text>
                 </Stack>
-                <Text fontWeight="400">
-                  <RenderHtml
-                    contentWidth={width}
-                    source={{ html: blog.content }}
-                  />
-                </Text>
               </Stack>
             </Box>
           </ScrollView>

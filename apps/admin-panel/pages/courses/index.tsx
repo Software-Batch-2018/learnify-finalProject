@@ -1,24 +1,28 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-enterprise';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { useGetAllCourses } from '../../utils/queryfn/courses';
-import { defaultColumnDef } from '../../utils/columndefs/blogs.columndef';
 import { Modal } from '../../components/modal';
 import { QuizBuilder } from '../../components/quiz/quiz';
+import { createLevelMutation } from '../../utils/queryfn/mutation';
+import { toast } from 'react-hot-toast';
 
 const GridExample = () => {
   const [quizModal, setQuizModal] = React.useState(false);
+  const [, setRowData] = useState<any[]>([]);
+  const [inputRow, setInputRow] = useState<any>({});
+
   const [contentDetail, setContentDetail] = React.useState({
     course_id: '',
     course_name: '',
   });
-  const { data, isLoading } = useGetAllCourses();
+  const { data, isLoading, refetch } = useGetAllCourses();
   const containerStyle = useMemo(() => ({ width: '100%', height: '80vh' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
 
-  const [columnDefs, setColumnDefs] = useState([
+  const [columnDefs] = useState([
     {
       field: 'level',
 
@@ -132,6 +136,58 @@ const GridExample = () => {
     };
   }, []);
 
+  function isEmptyPinnedCell(params: any) {
+    return (
+      params.node.rowPinned === 'top' &&
+      (params.value === null || params.value === '')
+    );
+  }
+
+  function createPinnedCellPlaceholder({ colDef }: any) {
+    const data = colDef.field[0].toUpperCase() + colDef.field.slice(1) + '...';
+    return data;
+  }
+
+  const isPinnedRowDataCompleted = useCallback(
+    (params: any) => {
+      if (params.rowPinned !== 'top') return false;
+      return columnDefs.every((def: any) => inputRow[def.field] !== undefined);
+    },
+    [columnDefs, inputRow]
+  );
+
+  const onCellEditingStopped = useCallback(
+    async (params: any) => {
+      if (isPinnedRowDataCompleted(params)) {
+        setRowData((prevRowData) => [...prevRowData, inputRow]);
+        const data = await createLevelMutation(inputRow);
+        console.log(data);
+        if (!data.status) {
+          toast.success('Successfully Added Level!');
+          setInputRow({});
+          refetch();
+        } else {
+          toast.error('Something Wrong Happened!');
+        }
+      }
+    },
+    [inputRow, isPinnedRowDataCompleted]
+  );
+
+  const defaultColumnDef = {
+    width: 150,
+    flex: 1,
+    sortable: true,
+    filter: true,
+    floatingFilter: true,
+    resizable: true,
+    editable: true,
+    valueFormatter: (params: any) =>
+      isEmptyPinnedCell(params)
+        ? createPinnedCellPlaceholder(params)
+        : params.value,
+  };
+
   return (
     <div style={containerStyle}>
       <div style={gridStyle} className="ag-theme-alpine">
@@ -143,7 +199,9 @@ const GridExample = () => {
             columnDefs={columnDefs}
             defaultColDef={defaultColumnDef}
             masterDetail={true}
+            pinnedTopRowData={[inputRow]}
             detailCellRendererParams={detailCellRendererParams}
+            onCellEditingStopped={onCellEditingStopped}
           ></AgGridReact>
         )}
       </div>

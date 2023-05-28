@@ -6,7 +6,7 @@ import { SignupScreen } from '../screens/Signup.screen';
 
 const Stack = createStackNavigator();
 
-export default function MainStackNavigator() {
+export default function MainStackNavigator({ navigation }: any) {
   return (
     <Stack.Navigator>
       <Stack.Screen

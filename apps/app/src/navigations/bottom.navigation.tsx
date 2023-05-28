@@ -3,9 +3,12 @@ import { Icon } from 'native-base';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AccountScreen } from '../screens/AccountScreen';
-import MainStackNavigator from './stack.navigation';
-import CoursesScreen from '../screens/courses.screen';
+import { AccountScreen } from '../screens/login.screen';
+import {
+  AccountStackNavigator,
+  CoursesStackNavigator,
+  MainStackNavigator,
+} from './stack.navigation';
 import BlogScreen from '../screens/blog.screen';
 
 const Tab = createBottomTabNavigator();
@@ -40,7 +43,7 @@ export default function BottomNavigation() {
             ),
           }}
           name="Courses"
-          component={CoursesScreen}
+          component={CoursesStackNavigator}
         />
 
         <Tab.Screen
@@ -55,7 +58,7 @@ export default function BottomNavigation() {
             ),
           }}
           name="Account"
-          component={AccountScreen}
+          component={AccountStackNavigator}
         />
         <Tab.Screen
           options={{

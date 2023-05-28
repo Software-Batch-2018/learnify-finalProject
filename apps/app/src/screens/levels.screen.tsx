@@ -63,7 +63,7 @@ const Example = ({ data }: { data: any[] }) => {
   );
 };
 
-export default () => {
+export const LevelScreen = () => {
   const { isLoading, data } = GetAllLevels();
   return (
     <Box p={3}>{isLoading ? <Spinner /> : <Example data={data.items} />}</Box>

@@ -3,10 +3,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AboutScreen from '../screens/AboutScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { SignupScreen } from '../screens/Signup.screen';
+import { AccountScreen } from '../screens/login.screen';
+import { LevelScreen } from '../screens/levels.screen';
 
 const Stack = createStackNavigator();
 
-export default function MainStackNavigator({ navigation }: any) {
+export function MainStackNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -19,9 +21,33 @@ export default function MainStackNavigator({ navigation }: any) {
         component={AboutScreen}
         options={{ headerShown: false }}
       />
+    </Stack.Navigator>
+  );
+}
+
+export function AccountStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Login"
+        component={AccountScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Signup"
         component={SignupScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export function CoursesStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Levels"
+        component={LevelScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

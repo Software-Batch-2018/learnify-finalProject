@@ -18,13 +18,6 @@ type AccountScreenProps = {
 };
 
 export function AccountScreen({ navigation }: AccountScreenProps) {
-  const navigateToSignupScreen = () => {
-    navigation.navigate('Signup');
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'AccountScreen' }],
-    });
-  };
   return (
     <Center w="100%">
       <Box safeArea p="2" py="8" w="90%" maxW="290">
@@ -92,7 +85,7 @@ export function AccountScreen({ navigation }: AccountScreenProps) {
                 fontWeight: 'medium',
                 fontSize: 'sm',
               }}
-              onPress={navigateToSignupScreen}
+              onPress={() => navigation.navigate('Signup')}
             >
               Sign Up
             </Link>

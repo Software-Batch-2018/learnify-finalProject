@@ -18,7 +18,12 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
       <FlatList
         data={data}
         renderItem={({ item }) => (
-          <Pressable onPress={() => navigation.navigate('Subjects')}>
+          <Pressable
+            key={item.level_id}
+            onPress={() =>
+              navigation.navigate('Subjects', { level_id: item.level_id })
+            }
+          >
             <Box
               borderBottomWidth="1"
               _dark={{
@@ -69,7 +74,7 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
 export const LevelScreen = ({ navigation }: any) => {
   const { isLoading, data } = GetAllLevels();
   return (
-    <Box p={3}>
+    <Box p={3} height={'full'}>
       {isLoading ? (
         <Spinner />
       ) : (

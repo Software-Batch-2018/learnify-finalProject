@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
   Box,
   FlatList,
@@ -11,8 +11,8 @@ import {
   CheckIcon,
   Pressable,
 } from 'native-base';
-import { GetAllSubjects } from '../query/subjects';
 import { InfoBox } from '../components/info';
+import { GetAllContents } from '../query/content';
 
 const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
   return (
@@ -23,7 +23,11 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
           <Pressable
             key={item.subject_id}
             onPress={() =>
-              navigation.navigate('Contents', { subject_id: item.subject_id })
+              navigation.navigate('MainContent', {
+                title: item.content_title,
+                content: item.content,
+                image: item.title_image,
+              })
             }
           >
             <Box
@@ -40,7 +44,7 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                 <Avatar
                   size="48px"
                   source={{
-                    uri: item.subject_img,
+                    uri: item.title_image,
                   }}
                 />
                 <VStack>
@@ -51,7 +55,7 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                     color="coolGray.800"
                     bold
                   >
-                    {item.subject_name}
+                    {item.content_title}
                   </Text>
                   <Text
                     color="coolGray.600"
@@ -61,7 +65,7 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                   >
                     <HStack mt={2} space={1}>
                       <Text color="emerald.500" fontSize="sm">
-                        Learnify Verfied Subjects
+                        Learnify Verfied
                       </Text>
                       <CheckIcon size="3" mt="1" color="emerald.500" />
                     </HStack>
@@ -79,10 +83,10 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
   );
 };
 
-export const SubjectScreen = ({ route, navigation }: any) => {
+export const ContentScreen = ({ route, navigation }: any) => {
   const { params } = route;
-  const { isLoading, data } = GetAllSubjects(params.level_id);
-  console.log(data);
+  const { isLoading, data } = GetAllContents(params.subject_id);
+
   return (
     <Box p={3}>
       {isLoading ? (
@@ -90,11 +94,11 @@ export const SubjectScreen = ({ route, navigation }: any) => {
       ) : (
         <>
           {data && data.items.length > 0 ? (
-            <Example navigation={navigation} data={data.items} />
+            <Example data={data.items} navigation={navigation} />
           ) : (
             <InfoBox
-              title="No Subjects!"
-              description="There is no subject for this level currently. We will be adding soon!"
+              title="No Contents!"
+              description="There is no contents for this subjects currently. We will be adding soon!"
             />
           )}
         </>

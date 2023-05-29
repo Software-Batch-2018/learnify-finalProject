@@ -12,11 +12,44 @@ import {
   useDisclose,
   Pressable,
   Actionsheet,
+  Alert,
+  VStack,
 } from 'native-base';
 import React from 'react';
 import { GetAllBlogs } from '../query/blog';
 import { useWindowDimensions } from 'react-native';
-import RenderHtml from 'react-native-render-html';
+
+function AlertBox() {
+  return (
+    <Center mt={5}>
+      <Alert maxW="400" status="info" colorScheme="info">
+        <VStack space={2} flexShrink={1} w="100%">
+          <HStack
+            flexShrink={1}
+            space={2}
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <HStack flexShrink={1} space={2} alignItems="center">
+              <Alert.Icon />
+              <Text fontSize="md" fontWeight="medium" color="coolGray.800">
+                There is no blogs currently.
+              </Text>
+            </HStack>
+          </HStack>
+          <Box
+            pl="6"
+            _text={{
+              color: 'coolGray.600',
+            }}
+          >
+            Please wait for more blogs or send your blogs at blogs@learnify.com.
+          </Box>
+        </VStack>
+      </Alert>
+    </Center>
+  );
+}
 
 function getTimeAgo(dateString: string) {
   const date = new Date(dateString);
@@ -80,28 +113,32 @@ export default function BlogScreen() {
           <Spinner />
         ) : (
           <Box>
-            {data.items.map((blog: any) => (
-              <Pressable
-                onPress={() => {
-                  setBlog({
-                    title: blog.title,
-                    image: blog.blog_img,
-                    content: blog.content,
-                    author: blog.author.name,
-                  });
-                  onOpen();
-                }}
-                key={blog.blog_id}
-              >
-                <BlogCard
-                  image={blog.blog_img}
-                  timeAgo={getTimeAgo(blog.updated_at)}
-                  title={blog.title}
-                  author={blog.author.name}
-                  content={truncateString(blog.content)}
-                />
-              </Pressable>
-            ))}
+            {data && data.length > 0 ? (
+              data.items.map((blog: any) => (
+                <Pressable
+                  onPress={() => {
+                    setBlog({
+                      title: blog.title,
+                      image: blog.blog_img,
+                      content: blog.content,
+                      author: blog.author.name,
+                    });
+                    onOpen();
+                  }}
+                  key={blog.blog_id}
+                >
+                  <BlogCard
+                    image={blog.blog_img}
+                    timeAgo={getTimeAgo(blog.updated_at)}
+                    title={blog.title}
+                    author={blog.author.name}
+                    content={truncateString(blog.content)}
+                  />
+                </Pressable>
+              ))
+            ) : (
+              <AlertBox />
+            )}
           </Box>
         )}
       </ScrollView>

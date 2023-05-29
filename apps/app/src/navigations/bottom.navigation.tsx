@@ -33,6 +33,7 @@ export default function BottomNavigation() {
         />
         <Tab.Screen
           options={{
+            headerShown: false,
             tabBarIcon: (props) => (
               <Icon
                 mt="1"
@@ -48,6 +49,7 @@ export default function BottomNavigation() {
 
         <Tab.Screen
           options={{
+            headerShown: false,
             tabBarIcon: (props) => (
               <Icon
                 mt="1"

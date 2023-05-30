@@ -10,6 +10,8 @@ import dynamic from 'next/dynamic';
 import { domAnimation } from 'framer-motion';
 import 'react-quill/dist/quill.snow.css';
 import { useRouter } from 'next/router';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primereact/resources/primereact.min.css';
 const Toaster = dynamic(
   () => import('react-hot-toast').then((c) => c.Toaster),
   {

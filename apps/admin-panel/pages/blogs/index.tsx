@@ -1,7 +1,6 @@
-import 'ag-grid-community/styles//ag-grid.css';
-import 'ag-grid-community/styles//ag-theme-alpine.css';
-import { AgGridReact } from 'ag-grid-react';
-import { defaultColumnDef } from '../../utils/columndefs/blogs.columndef';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
 import { useFindAllBlogs } from '../../utils/query';
 import { useMutation } from 'react-query';
 import {
@@ -16,7 +15,6 @@ import { Modal } from '../../components/modal';
 import { useForm } from 'react-hook-form';
 import RichTextEditor from '../../components/RichTextEditor';
 import { AlertDialog } from '../../components/alert-dialog';
-
 export function Index() {
   const [addBlogModal, setAddBlogModal] = React.useState(false);
   const [viewBlogContent, setViewBlogContent] = React.useState(false);
@@ -89,68 +87,62 @@ export function Index() {
     setViewBlogContent(false);
   };
 
-  const blogColumnDefs = [
-    {
-      headerName: 'Title',
-      field: 'title',
-      editable: true,
-      onCellValueChanged: (param: any) => {
-        editMutate({
-          id: param.data.blog_id,
-          payload: {
-            title: param.newValue,
-          },
-        });
-      },
-    },
-    {
-      headerName: 'Image',
-      field: 'blog_img',
-      floatingFilter: false,
-      cellRenderer: (param: any) => {
-        return (
-          <div>
-            <img alt={param.value} className="w-12" src={param.value} />
-          </div>
-        );
-      },
-    },
-    {
-      headerName: 'Author',
-      field: 'author.name',
-      floatingFilter: true,
-    },
-    {
-      headerName: 'Action',
-      floatingFilter: false,
-      cellRenderer: (param: any) => {
-        return (
-          <div className="flex gap-2 justify-center items-center mt-2">
-            <button
-              className="btn btn-fill-gray btn-xxs"
-              onClick={() => {
-                editSetContent(param.data.content);
-                setEditId(param.data.blog_id);
-                setViewBlogContent(true);
-              }}
-            >
-              View Content
-            </button>
+  const imageBodyTemplate = (blog: any) => {
+    return <img src={blog.blog_img} alt={blog.blog_img} className="w-14" />;
+  };
 
-            <button
-              onClick={() => {
-                setEditId(param.data.blog_id);
-                setDeleteBlog(true);
-              }}
-              className="btn btn-fill-danger btn-xxs"
-            >
-              Delete
-            </button>
-          </div>
-        );
+  const actionBodyTemplate = (blog: any) => {
+    return (
+      <div className="flex gap-2 justify-center items-center mt-2">
+        <button
+          className="btn btn-fill-gray btn-xxs"
+          onClick={() => {
+            editSetContent(blog.content);
+            setEditId(blog.blog_id);
+            setViewBlogContent(true);
+          }}
+        >
+          View Content
+        </button>
+
+        <button
+          onClick={() => {
+            setEditId(blog.blog_id);
+            setDeleteBlog(true);
+          }}
+          className="btn btn-fill-danger btn-xxs"
+        >
+          Delete
+        </button>
+      </div>
+    );
+  };
+
+  const cellEditor = (options: any) => {
+    return textEditor(options);
+  };
+  const textEditor = (options: any) => {
+    return (
+      <InputText
+        type="text"
+        value={options.value}
+        onChange={(e) => options.editorCallback(e.target.value)}
+      />
+    );
+  };
+
+  const onCellEditComplete = (e: any) => {
+    const { rowData, newValue, originalEvent: event } = e;
+    if (rowData.title === newValue) return;
+    event.preventDefault();
+    editMutate({
+      id: rowData.blog_id,
+      payload: {
+        title: newValue,
       },
-    },
-  ];
+    });
+  };
+
   return (
     <div className="p-4 space-y-6">
       <div className="flex justify-between">
@@ -172,11 +164,29 @@ export function Index() {
         {isLoading ? (
           'Loading'
         ) : (
-          <AgGridReact
-            defaultColDef={defaultColumnDef}
-            columnDefs={blogColumnDefs}
-            rowData={data.items}
-          />
+          <DataTable
+            value={data.items}
+            removableSort
+            resizableColumns
+            tableStyle={{ minWidth: '45rem' }}
+          >
+            <Column
+              field="title"
+              header="Title"
+              filter
+              sortable
+              filterPlaceholder="Search by name"
+              style={{ minWidth: '12rem' }}
+              editor={(options) => cellEditor(options)}
+              onCellEditComplete={onCellEditComplete}
+            />
+            <Column header="Image" body={imageBodyTemplate}></Column>
+            <Column
+              body={actionBodyTemplate}
+              exportable={false}
+              style={{ minWidth: '12rem' }}
+            ></Column>
+          </DataTable>
         )}
       </div>
       <Modal modal={viewBlogContent} setModal={setViewBlogContent}>

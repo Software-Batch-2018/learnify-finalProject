@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { BlogsModule } from './api/blogs/blogs.module';
 import { UsersModule } from './api/users/users.module';
 import { CoursesModule } from './api/courses/courses.module';
+import { QuizModule } from './api/quiz/quiz.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CoursesModule } from './api/courses/courses.module';
     BlogsModule,
     UsersModule,
     CoursesModule,
+    QuizModule,
   ],
   controllers: [AppController],
   providers: [AppService],

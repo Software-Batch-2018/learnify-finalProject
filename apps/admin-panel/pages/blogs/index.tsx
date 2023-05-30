@@ -185,6 +185,14 @@ export function Index() {
               editor={(options) => cellEditor(options)}
               onCellEditComplete={onCellEditComplete}
             />
+            <Column
+              field="author.name"
+              header="Author"
+              filter
+              sortable
+              filterPlaceholder="Search by author"
+              style={{ minWidth: '12rem' }}
+            />
             <Column header="Image" body={imageBodyTemplate}></Column>
             <Column
               body={actionBodyTemplate}

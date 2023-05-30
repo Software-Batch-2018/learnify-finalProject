@@ -19,7 +19,7 @@ interface QuizBuilderProps {
 }
 
 export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
-  const storageKey = `STORED_QUIZ_${course_id}`; // Use course_id in the storage key
+  const storageKey = `STORED_QUIZ_${course_id}`;
 
   const [quiz, setQuiz] = useState<IQuiz>(() => {
     try {

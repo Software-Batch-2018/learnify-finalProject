@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Quiz } from '../../quiz/entities/quiz.entity';
 import { Subjects } from './subject.entity';
 
 @Entity()
@@ -30,4 +32,7 @@ export class Content {
 
   @UpdateDateColumn()
   updated_at!: Date;
+
+  @OneToOne(() => Quiz)
+  quiz: Quiz;
 }

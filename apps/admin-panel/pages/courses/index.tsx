@@ -1,20 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useCallback, useMemo, useState } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-enterprise';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
+import React, { useMemo, useState } from 'react';
+
 import { useGetAllCourses } from '../../utils/queryfn/courses';
 import { Modal } from '../../components/modal';
 import { QuizBuilder } from '../../components/quiz/quiz';
 import { createLevelMutation } from '../../utils/queryfn/mutation';
 import { toast } from 'react-hot-toast';
 
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+
 const CourseTable = () => {
   const [quizModal, setQuizModal] = React.useState(false);
-  const [, setRowData] = useState<any[]>([]);
-  const [inputRow, setInputRow] = useState<any>({});
-  const [nestedInputRow, setNestedInputRow] = useState<any>({});
+  const [expandedRows, setExpandedRows] = useState<any>(null);
+  const [subjectExpandedRows, setSubjectExpandedRows] = useState<any>(null);
 
   const [contentDetail, setContentDetail] = React.useState({
     course_id: '',
@@ -23,202 +22,113 @@ const CourseTable = () => {
   const { data, isLoading, refetch } = useGetAllCourses();
   const containerStyle = useMemo(() => ({ width: '100%', height: '80vh' }), []);
   const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-  const extraRow: any = {
-    subject_name: 'Pinned Row',
-    isNonExpandable: true,
-    subject_image: nestedInputRow.subject_image || '', // Use the value from state or an empty string
-  };
-  const [columnDefs] = useState([
-    {
-      field: 'level',
-      cellRenderer: 'agGroupCellRenderer',
-    },
-    {
-      headerName: 'Level Image',
-      field: 'level_img',
-      floatingFilter: false,
 
-      cellRenderer: (param: any) => {
-        return (
-          <div>
-            <img alt={param.value} className="w-12" src={param.value} />
-          </div>
-        );
-      },
-    },
-  ]);
-
-  const detailCellRendererParams = useMemo(() => {
-    return {
-      // level 2 grid options
-      detailGridOptions: {
-        columnDefs: [
-          {
-            headerName: 'Subject Name',
-            field: 'subject_name',
-            cellRenderer: 'agGroupCellRenderer',
-          },
-          {
-            headerName: 'Subject Image',
-            field: 'subject_img',
-            cellRenderer: (param: any) => {
-              return (
-                <div>
-                  <img alt={param.value} className="w-12" src={param.value} />
-                </div>
-              );
-            },
-          },
-        ],
-        defaultColDef: {
-          flex: 1,
-          sortable: true,
-          filter: true,
-          resizable: true,
-          editable: true,
-        },
-        masterDetail: true,
-        // detailRowHeight: 240,
-        detailCellRendererParams: {
-          // level 3 grid options
-          detailGridOptions: {
-            columnDefs: [
-              { field: 'content_title', cellRenderer: 'agGroupCellRenderer' },
-              {
-                field: 'title_image',
-                headerName: 'Image',
-                cellRenderer: (param: { value: string }) => {
-                  return (
-                    <div>
-                      <img
-                        alt={param.value}
-                        className="w-12"
-                        src={param.value}
-                      />
-                    </div>
-                  );
-                },
-              },
-              {
-                headerName: 'Action',
-                floatingFilter: false,
-                cellRenderer: (param: {
-                  data: { content_id: string; content_title: string };
-                }) => {
-                  return (
-                    <div className="flex gap-2 justify-center items-center mt-2">
-                      <button
-                        onClick={() => {
-                          setContentDetail({
-                            course_id: param.data.content_id,
-                            course_name: param.data.content_title,
-                          });
-                          setQuizModal(true);
-                        }}
-                        className="btn bg-green-600 text-white btn-xxs"
-                      >
-                        Add Quiz
-                      </button>
-                      <button className="btn btn-fill-gray btn-xxs">
-                        View Content
-                      </button>
-
-                      <button className="btn btn-fill-danger btn-xxs">
-                        Delete
-                      </button>
-                    </div>
-                  );
-                },
-              },
-            ],
-            defaultColDef: {
-              flex: 1,
-            },
-          },
-          getDetailRowData: (params: any) => {
-            if (params.data.isExpandable) return;
-            params.successCallback(params.data.contents);
-          },
-        },
-      },
-      getDetailRowData: (params: any) => {
-        params.successCallback([extraRow, ...params.data.subjects]);
-      },
-    };
-  }, []);
-
-  function isEmptyPinnedCell(params: {
-    value: null | string;
-    node: { rowPinned: string };
-  }) {
+  const actionBodyTemplate = (data: any) => {
     return (
-      params.node.rowPinned === 'top' &&
-      (params.value === null || params.value === '')
+      <div className="flex gap-2 justify-center items-center mt-2">
+        <button
+          onClick={() => {
+            setContentDetail({
+              course_id: data.content_id,
+              course_name: data.content_title,
+            });
+            setQuizModal(true);
+          }}
+          className="btn bg-green-600 text-white btn-xxs"
+        >
+          Add Quiz
+        </button>
+        <button className="btn btn-fill-gray btn-xxs">View Content</button>
+
+        <button className="btn btn-fill-danger btn-xxs">Delete</button>
+      </div>
     );
-  }
-
-  function createPinnedCellPlaceholder({ colDef }: any) {
-    const data = colDef.field[0].toUpperCase() + colDef.field.slice(1) + '...';
-    return data;
-  }
-
-  const isPinnedRowDataCompleted = useCallback(
-    (params: { rowPinned: string }) => {
-      if (params.rowPinned !== 'top') return false;
-      return columnDefs.every(
-        (def: { field?: any }) => inputRow[def.field] !== undefined
-      );
-    },
-    [columnDefs, inputRow]
-  );
-
-  const onCellEditingStopped = useCallback(
-    async (params: any) => {
-      if (isPinnedRowDataCompleted(params)) {
-        setRowData((prevRowData) => [...prevRowData, inputRow]);
-        const data = await createLevelMutation(inputRow);
-        console.log(data);
-        if (!data.status) {
-          toast.success('Successfully Added Level!');
-          setInputRow({});
-          refetch();
-        } else {
-          toast.error('Something Wrong Happened!');
-        }
-      }
-    },
-    [inputRow, isPinnedRowDataCompleted, refetch]
-  );
-
-  const defaultColumnDef = {
-    width: 150,
-    flex: 1,
-    sortable: true,
-    filter: true,
-    floatingFilter: true,
-    resizable: true,
-    editable: true,
-    valueFormatter: (params: any) =>
-      isEmptyPinnedCell(params)
-        ? createPinnedCellPlaceholder(params)
-        : params.value,
   };
 
+  const imageBodyTemplate = (data: any) => {
+    return (
+      <img
+        src={data.level_img || data.subject_img}
+        alt={data.level_img}
+        className="w-14"
+      />
+    );
+  };
+  const subjectAllowExpansion = (rowData: any) => {
+    return rowData.contents.length > 0;
+  };
+  const allowExpansion = (rowData: any) => {
+    return rowData.subjects.length > 0;
+  };
+
+  const contentExpansionTemplate = (data: any) => {
+    return (
+      <div className="p-3 bg-blue-100">
+        <p className="font-semibold text-lg text-blue-500">
+          Content for {data.subject_name}
+        </p>
+        <DataTable removableSort value={data.contents}>
+          <Column
+            field="content_title"
+            header="Content Title"
+            sortable
+          ></Column>
+          <Column
+            body={actionBodyTemplate}
+            exportable={false}
+            style={{ minWidth: '12rem' }}
+          ></Column>
+        </DataTable>
+      </div>
+    );
+  };
+
+  const subjectExpansionTemplate = (data: any) => {
+    return (
+      <div className="p-3 bg-green-100">
+        <p className="font-semibold text-lg text-green-500">
+          Subjects for {data.level}
+        </p>
+        <DataTable
+          removableSort
+          value={data.subjects}
+          expandedRows={subjectExpandedRows}
+          onRowToggle={(e) => setSubjectExpandedRows(e.data)}
+          // onRowExpand={onRowExpand}
+          // onRowCollapse={onRowCollapse}
+          rowExpansionTemplate={contentExpansionTemplate}
+          dataKey="subject_id"
+          tableStyle={{ minWidth: '60rem' }}
+        >
+          <Column expander={subjectAllowExpansion} style={{ width: '5rem' }} />
+
+          <Column field="subject_name" header="Subject Name" sortable></Column>
+          <Column header="Image" body={imageBodyTemplate}></Column>
+        </DataTable>
+      </div>
+    );
+  };
   return (
     <div style={containerStyle}>
       <div style={gridStyle} className="ag-theme-alpine">
         {isLoading ? (
           'Loading'
         ) : (
-          <AgGridReact
-            rowData={data.items}
-            columnDefs={columnDefs}
-            defaultColDef={defaultColumnDef}
-            masterDetail={true}
-            pinnedTopRowData={[inputRow]}
-            detailCellRendererParams={detailCellRendererParams}
-            onCellEditingStopped={onCellEditingStopped}
-          ></AgGridReact>
+          <DataTable
+            removableSort
+            value={data.items}
+            expandedRows={expandedRows}
+            onRowToggle={(e) => setExpandedRows(e.data)}
+            // onRowExpand={onRowExpand}
+            // onRowCollapse={onRowCollapse}
+            rowExpansionTemplate={subjectExpansionTemplate}
+            dataKey="level_id"
+            tableStyle={{ minWidth: '60rem' }}
+          >
+            <Column expander={allowExpansion} style={{ width: '5rem' }} />
+            <Column field="level" header="Level" sortable />
+            <Column header="Image" body={imageBodyTemplate}></Column>
+          </DataTable>
         )}
       </div>
 

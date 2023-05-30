@@ -133,7 +133,6 @@ export function Index() {
 
   const onCellEditComplete = (e: any) => {
     const { rowData, newValue, originalEvent: event } = e;
-    if (rowData.title === newValue) return;
     event.preventDefault();
     editMutate({
       id: rowData.blog_id,

@@ -4,11 +4,12 @@ import React, { useMemo, useState } from 'react';
 import { useGetAllCourses } from '../../utils/queryfn/courses';
 import { Modal } from '../../components/modal';
 import { QuizBuilder } from '../../components/quiz/quiz';
-import { createLevelMutation } from '../../utils/queryfn/mutation';
-import { toast } from 'react-hot-toast';
 
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { AddLevelModal } from '../../components/courses/addlevel.modal';
+import { AddSubjectModal } from '../../components/courses/addSubject.modal';
+import { AddContentModal } from '../../components/courses/addContent.modal';
 
 const CourseTable = () => {
   const [quizModal, setQuizModal] = React.useState(false);
@@ -54,19 +55,22 @@ const CourseTable = () => {
       />
     );
   };
-  const subjectAllowExpansion = (rowData: any) => {
-    return rowData.contents.length > 0;
-  };
-  const allowExpansion = (rowData: any) => {
-    return rowData.subjects.length > 0;
-  };
 
+  const [addContentModal, setAddContentModal] = React.useState(false);
   const contentExpansionTemplate = (data: any) => {
     return (
       <div className="p-3 bg-blue-100">
-        <p className="font-semibold text-lg text-blue-500">
-          Content for {data.subject_name}
-        </p>
+        <div className="gap-2 p-2 flex flex-wrap items-center justify-between">
+          <p className="font-semibold text-lg text-blue-500">
+            Contents for {data.subject_name}
+          </p>
+          <button
+            onClick={() => setAddContentModal(true)}
+            className="btn btn-xs btn-fill-gray"
+          >
+            Add Content
+          </button>
+        </div>
         <DataTable removableSort value={data.contents}>
           <Column
             field="content_title"
@@ -83,12 +87,22 @@ const CourseTable = () => {
     );
   };
 
+  const [addSubjectModal, setAddSubjectModal] = React.useState(false);
+
   const subjectExpansionTemplate = (data: any) => {
     return (
       <div className="p-3 bg-green-100">
-        <p className="font-semibold text-lg text-green-500">
-          Subjects for {data.level}
-        </p>
+        <div className="gap-2 p-2 flex flex-wrap items-center justify-between">
+          <p className="font-semibold text-lg text-green-500">
+            Subjects for {data.level}
+          </p>
+          <button
+            onClick={() => setAddSubjectModal(true)}
+            className="btn btn-xs btn-fill-gray"
+          >
+            Add Subjects
+          </button>
+        </div>
         <DataTable
           removableSort
           value={data.subjects}
@@ -100,7 +114,7 @@ const CourseTable = () => {
           dataKey="subject_id"
           tableStyle={{ minWidth: '60rem' }}
         >
-          <Column expander={subjectAllowExpansion} style={{ width: '5rem' }} />
+          <Column expander style={{ width: '5rem' }} />
 
           <Column field="subject_name" header="Subject Name" sortable></Column>
           <Column header="Image" body={imageBodyTemplate}></Column>
@@ -108,6 +122,21 @@ const CourseTable = () => {
       </div>
     );
   };
+
+  const [addLevelModal, setAddLevelModal] = React.useState(false);
+
+  const header = (
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <span className="text-xl text-900 font-bold">Levels</span>
+      <button
+        onClick={() => setAddLevelModal(true)}
+        className="btn btn-xs btn-fill-gray"
+      >
+        Add Level
+      </button>
+    </div>
+  );
+
   return (
     <div style={containerStyle}>
       <div style={gridStyle} className="ag-theme-alpine">
@@ -115,6 +144,7 @@ const CourseTable = () => {
           'Loading'
         ) : (
           <DataTable
+            header={header}
             removableSort
             value={data.items}
             expandedRows={expandedRows}
@@ -125,7 +155,7 @@ const CourseTable = () => {
             dataKey="level_id"
             tableStyle={{ minWidth: '60rem' }}
           >
-            <Column expander={allowExpansion} style={{ width: '5rem' }} />
+            <Column expander style={{ width: '5rem' }} />
             <Column field="level" header="Level" sortable />
             <Column header="Image" body={imageBodyTemplate}></Column>
           </DataTable>
@@ -140,6 +170,26 @@ const CourseTable = () => {
           />
         </div>
       </Modal>
+
+      <AddLevelModal
+        addLevelModal={addLevelModal}
+        setAddLevelModal={setAddLevelModal}
+        refetch={refetch}
+      />
+
+      <AddSubjectModal
+        addSubjectModal={addSubjectModal}
+        setAddSubjectModal={setAddSubjectModal}
+        refetch={refetch}
+        subjectData={expandedRows}
+      />
+
+      <AddContentModal
+        addContentModal={addContentModal}
+        setAddContentModal={setAddContentModal}
+        contentData={subjectExpandedRows}
+        refetch={refetch}
+      />
     </div>
   );
 };

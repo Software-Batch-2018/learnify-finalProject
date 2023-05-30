@@ -88,7 +88,13 @@ export function Index() {
   };
 
   const imageBodyTemplate = (blog: any) => {
-    return <img src={blog.blog_img} alt={blog.blog_img} className="w-14" />;
+    return (
+      <img
+        src={blog.blog_img}
+        alt={blog.blog_img}
+        className="w-32 drop-shadow-2xl rounded-md"
+      />
+    );
   };
 
   const actionBodyTemplate = (blog: any) => {

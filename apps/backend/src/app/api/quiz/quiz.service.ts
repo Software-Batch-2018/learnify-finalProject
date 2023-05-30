@@ -24,4 +24,16 @@ export class QuizService {
     await this.contentRepository.save(course);
     return 'Successfully Added Quiz';
   }
+
+  async findQuiz(course_id: string) {
+    const data = await this.contentRepository
+      .createQueryBuilder('u')
+      .leftJoinAndSelect('u.quiz', 'quiz')
+      .leftJoinAndSelect('quiz.questions', 'questions')
+      .leftJoinAndSelect('questions.answerOptions', 'answer')
+      .where('u.content_id = :id', { id: course_id })
+      .getOne();
+
+    return data;
+  }
 }

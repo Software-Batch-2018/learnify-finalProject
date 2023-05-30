@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -34,5 +35,6 @@ export class Content {
   updated_at!: Date;
 
   @OneToOne(() => Quiz)
+  @JoinColumn()
   quiz: Quiz;
 }

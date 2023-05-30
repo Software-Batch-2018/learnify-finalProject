@@ -17,12 +17,11 @@ export class QuizService {
   async createQuiz(body: CreateQuizDTO, course_id: string) {
     const data = this.quizRepository.create(body);
     const res = await this.quizRepository.save(data);
-    return res;
-    // const course = await this.contentRepository.findOne({
-    //   where: { content_id: course_id },
-    // });
-    // course.quiz = quiz;
-    // await this.contentRepository.save(course);
-    // return 'Successfully Added Quiz';
+    const course = await this.contentRepository.findOne({
+      where: { content_id: course_id },
+    });
+    course.quiz = res;
+    await this.contentRepository.save(course);
+    return 'Successfully Added Quiz';
   }
 }

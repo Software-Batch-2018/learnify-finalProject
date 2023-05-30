@@ -11,7 +11,7 @@ const BLANK_QUESTION: IQuestion = {
   answerIndex: -1, // TODO: make UI say that an answer index needs to be selected
   answerOptions: [],
 };
-const BLANK_QUIZ: IQuiz = { title: '', subtitle: '', questions: [] };
+const BLANK_QUIZ: IQuiz = { title: '', questions: [] };
 
 interface QuizBuilderProps {
   course_id: string;
@@ -19,11 +19,12 @@ interface QuizBuilderProps {
 }
 
 export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
-  console.log(course_id, course_name);
+  const storageKey = `STORED_QUIZ_${course_id}`; // Use course_id in the storage key
+
   const [quiz, setQuiz] = useState<IQuiz>(() => {
     try {
       const parsedCachedQuiz = JSON.parse(
-        localStorage.getItem('STORED_QUIZ')!
+        localStorage.getItem(storageKey)!
       ) as unknown as IQuiz;
       if (!parsedCachedQuiz) return BLANK_QUIZ;
       return parsedCachedQuiz;
@@ -69,7 +70,7 @@ export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
 
   useEffect(() => {
     setTimeout(() => {
-      localStorage.setItem('STORED_QUIZ', JSON.stringify(quiz));
+      localStorage.setItem(storageKey, JSON.stringify(quiz));
     }, 0);
   }, [quiz]);
 
@@ -114,7 +115,7 @@ export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
           ))}
         </section>
         <button
-          className="p-[10px] flex justify-center bg-gray-100 text-gray-500 text-[12px] rounded w-full shadow"
+          className="p-[10px] flex justify-center bg-gray-100 text-gray-500 text-lg font-semibold rounded w-full shadow"
           onClick={onNewQuestionClick}
         >
           Add Question

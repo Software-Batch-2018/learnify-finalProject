@@ -24,7 +24,6 @@ export class QuizService {
       .getOne();
 
     if (course.quiz) {
-      // Update existing quiz
       const mergedQuestions = course.quiz.questions.map((question, index) => {
         const mergedQuestion = { ...question, ...body.questions[index] };
         return {
@@ -44,6 +43,9 @@ export class QuizService {
       };
       course.quiz = quiz;
       await this.quizRepository.save(course.quiz);
+      return {
+        message: 'Successfully Updated Quiz',
+      };
     } else {
       // Create new quiz
       const quiz = this.quizRepository.create(body);
@@ -52,7 +54,9 @@ export class QuizService {
       await this.contentRepository.save(course);
     }
 
-    return 'Successfully Added Quiz';
+    return {
+      message: 'Successfully Added Quiz',
+    };
   }
 
   async findQuiz(course_id: string) {

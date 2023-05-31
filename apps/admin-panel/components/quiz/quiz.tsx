@@ -4,7 +4,11 @@ import { LabelAndInput } from './builder/labelandInput';
 import { IAnswerOption, IQuestion, IQuiz } from './builder/types';
 import { BuilderQuestion } from './builder/builderQuestion';
 import { BuilderAnswerSet } from './builder/builderAnswerSet';
-import { SchemaViewer } from './builder/schemaViewer';
+// import { SchemaViewer } from './builder/schemaViewer';
+import { useMutation } from 'react-query';
+import { AddOrEditQuiz } from '../../utils/queryfn/quiz';
+import toast from 'react-hot-toast';
+import { Button } from '@finalproject/ui';
 
 const BLANK_QUESTION: IQuestion = {
   questionTitle: '',
@@ -74,6 +78,22 @@ export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
     }, 0);
   }, [quiz]);
 
+  const { mutate, isLoading } = useMutation({
+    mutationFn: async (payload: any) => {
+      const data = await AddOrEditQuiz(payload, course_id);
+      if (data.error) {
+        toast.error(data.message);
+      } else {
+        toast.success('Successfully Added!');
+      }
+    },
+  });
+
+  const handleSubmit = () => {
+    console.log('click');
+    mutate(quiz);
+  };
+
   return (
     <>
       <header className="flex justify-between items-center mb-[20px]">
@@ -122,7 +142,15 @@ export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
         </button>
       </form>
 
-      <SchemaViewer quiz={quiz} />
+      {/* <SchemaViewer quiz={quiz} /> */}
+      <button
+        className="btn btn-xs w-full flex items-center justify-center bg-green-600 text-white mt-6"
+        type="submit"
+        onClick={() => handleSubmit()}
+        disabled={isLoading}
+      >
+        Submit Quiz
+      </button>
     </>
   );
 }

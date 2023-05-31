@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsString, IsNumber, ValidateNested, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  ValidateNested,
+  IsArray,
+  IsOptional,
+  ArrayMinSize,
+} from 'class-validator';
 
 class AnswerDTO {
   @ApiProperty()
@@ -20,6 +27,7 @@ class QuestionDTO {
   @ApiProperty({ type: AnswerDTO, isArray: true })
   @IsArray()
   @ValidateNested({ each: true })
+  @ArrayMinSize(4)
   @Type(() => AnswerDTO)
   answerOptions: AnswerDTO[];
 }
@@ -32,6 +40,7 @@ export class CreateQuizDTO {
   @ApiProperty({ type: QuestionDTO, isArray: true })
   @IsArray()
   @ValidateNested({ each: true })
+  @ArrayMinSize(4)
   @Type(() => QuestionDTO)
   questions: QuestionDTO[];
 }

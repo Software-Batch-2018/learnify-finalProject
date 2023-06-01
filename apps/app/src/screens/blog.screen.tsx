@@ -18,6 +18,7 @@ import {
 import React from 'react';
 import { GetAllBlogs } from '../query/blog';
 import { useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 
 function AlertBox() {
   return (
@@ -90,22 +91,25 @@ function truncateString(text: string) {
   }
 }
 
+function removeHtmlTags(text: string) {
+  return text.replace(/<.*?>/g, '');
+}
 export default function BlogScreen() {
   const { data, isLoading } = GetAllBlogs();
   const { isOpen, onOpen, onClose } = useDisclose();
-
+  const { width } = useWindowDimensions();
   const [blog, setBlog] = React.useState({
     title: '',
     author: '',
-    image: '',
+    image:
+      'https://images.unsplash.com/photo-1685432051879-31fa592be8a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     content: '',
   });
-  const { width } = useWindowDimensions();
 
   return (
     <Center mt={2} p={1}>
       <ScrollView>
-        <Heading>
+        <Heading mx={5}>
           A Collection of blog from
           <Text color="emerald.500"> Learnify</Text>
         </Heading>
@@ -113,7 +117,7 @@ export default function BlogScreen() {
           <Spinner />
         ) : (
           <Box>
-            {data && data.length > 0 ? (
+            {data && data.items.length > 0 ? (
               data.items.map((blog: any) => (
                 <Pressable
                   onPress={() => {
@@ -132,7 +136,7 @@ export default function BlogScreen() {
                     timeAgo={getTimeAgo(blog.updated_at)}
                     title={blog.title}
                     author={blog.author.name}
-                    content={truncateString(blog.content)}
+                    content={truncateString(removeHtmlTags(blog.content))}
                   />
                 </Pressable>
               ))
@@ -145,7 +149,7 @@ export default function BlogScreen() {
       <Actionsheet h={'100%'} isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <ScrollView>
-            <Box w="100%" h={'full'} px={4}>
+            <Box w="92%" h={'full'} px={4}>
               <AspectRatio w="100%" ratio={16 / 9}>
                 <Image
                   source={{
@@ -154,8 +158,8 @@ export default function BlogScreen() {
                   alt="image"
                 />
               </AspectRatio>
-              <Stack mt={4} space={3}>
-                <Stack space={2}>
+              <Stack mt={4} space={3} overflowX={'-moz-hidden-unscrollable'}>
+                <Stack overflowX={'-moz-hidden-unscrollable'} space={2}>
                   <Heading size="md" ml="-1">
                     {blog.title}
                   </Heading>
@@ -173,7 +177,10 @@ export default function BlogScreen() {
                   >
                     {blog.author}
                   </Text>
-                  <Text fontWeight="400">{blog.content}</Text>
+                  <RenderHtml
+                    contentWidth={width}
+                    source={{ html: blog.content }}
+                  />
                 </Stack>
               </Stack>
             </Box>
@@ -202,7 +209,7 @@ const BlogCard = ({
   return (
     <Box alignItems="center">
       <Box
-        maxW="80"
+        m={4}
         mt={2}
         rounded="lg"
         overflow="hidden"

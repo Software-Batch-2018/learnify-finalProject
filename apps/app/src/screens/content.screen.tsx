@@ -25,8 +25,8 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
             onPress={() =>
               navigation.navigate('MainContent', {
                 title: item.content_title,
-                content: item.content,
                 image: item.title_image,
+                course_id: item.content_id,
               })
             }
           >

@@ -82,7 +82,6 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
 export const SubjectScreen = ({ route, navigation }: any) => {
   const { params } = route;
   const { isLoading, data } = GetAllSubjects(params.level_id);
-  console.log(data);
   return (
     <Box p={3}>
       {isLoading ? (

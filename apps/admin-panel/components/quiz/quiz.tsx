@@ -90,7 +90,6 @@ export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
   });
 
   const handleSubmit = () => {
-    console.log('click');
     mutate(quiz);
   };
 

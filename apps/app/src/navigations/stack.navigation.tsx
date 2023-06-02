@@ -8,6 +8,7 @@ import { LevelScreen } from '../screens/levels.screen';
 import { SubjectScreen } from '../screens/subject.screen';
 import { ContentScreen } from '../screens/content.screen';
 import { MainContentScreen } from '../screens/maincontent.screen';
+import ProfilePage from '../screens/profile.screen';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,11 @@ export function AccountStackNavigator() {
         component={SignupScreen}
         options={{ headerShown: true }}
       />
+      <Stack.Screen
+        name="Profile"
+        component={ProfilePage}
+        options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 }
@@ -71,6 +77,11 @@ export function CoursesStackNavigator() {
       <Stack.Screen
         name="Login"
         component={AccountScreen}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfilePage}
         options={{ headerShown: true }}
       />
     </Stack.Navigator>

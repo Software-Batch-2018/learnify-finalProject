@@ -28,7 +28,7 @@ export function MainContentScreen({ route, navigation }: any) {
 
   const getData = async () => {
     try {
-      const value = await AsyncStorage.getItem('@storage_Key');
+      const value = await AsyncStorage.getItem('token');
       if (value !== null) {
         setToken(value);
       }

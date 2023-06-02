@@ -12,12 +12,82 @@ import {
   VStack,
 } from 'native-base';
 import { RootStackParamList } from '../types';
+import { useForm, Controller } from 'react-hook-form';
+import { useMutation } from 'react-query';
+import { loginUser } from '../query/auth';
+import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CommonActions } from '@react-navigation/native';
 
-type AccountScreenProps = {
-  navigation: NavigationProp<RootStackParamList, 'Signup'>;
+type FormValues = {
+  email: string;
+  password: string;
 };
 
-export function AccountScreen({ navigation }: AccountScreenProps) {
+export function AccountScreen({ navigation }: any) {
+  const { handleSubmit, control } = useForm();
+
+  const [error, setError] = React.useState({
+    status: false,
+    message: '',
+  });
+
+  const { mutate, data, isLoading } = useMutation({
+    mutationFn: async (payload: any) => {
+      const data = await loginUser(payload);
+      if (data.error) {
+        setError({
+          status: true,
+          message: data.message,
+        });
+      } else {
+        setError({
+          status: false,
+          message: '',
+        });
+      }
+      return data;
+    },
+  });
+
+  const storeData = async (value: string) => {
+    try {
+      await AsyncStorage.setItem('token', value);
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  const getData = React.useCallback(async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Profile' }],
+          })
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [navigation]);
+
+  const onSubmit = (formData: any) => {
+    formData.email = formData.email.toLowerCase();
+    mutate(formData);
+  };
+
+  React.useEffect(() => {
+    getData();
+    if (data && data.token) {
+      storeData(data.token).then(() => {
+        navigation.navigate('Profile');
+      });
+    }
+  }, [data, getData, navigation]);
+
   return (
     <Center w="100%">
       <Box safeArea p="2" py="8" w="90%" maxW="290">
@@ -49,26 +119,54 @@ export function AccountScreen({ navigation }: AccountScreenProps) {
         <VStack space={3} mt="5">
           <FormControl>
             <FormControl.Label>Email ID</FormControl.Label>
-            <Input />
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  type="text"
+                />
+              )}
+              name="email"
+              rules={{ required: true }}
+            />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
-            <Input type="password" />
-            <Link
-              _text={{
-                fontSize: 'xs',
-                fontWeight: '500',
-                color: 'indigo.500',
-              }}
-              alignSelf="flex-end"
-              mt="1"
-            >
-              Forget Password?
-            </Link>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  type="password"
+                />
+              )}
+              name="password"
+              rules={{ required: true }}
+            />
           </FormControl>
-          <Button mt="2" colorScheme="indigo">
-            Sign in
+          {error.status && (
+            <Box
+              bg={'red.200'}
+              p={1}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              <Text>{error.message}</Text>
+            </Box>
+          )}
+          <Button
+            onPress={handleSubmit(onSubmit)}
+            isLoading={isLoading}
+            isLoadingText="Submitting"
+          >
+            Submit
           </Button>
+
           <HStack mt="6" justifyContent="center">
             <Text
               fontSize="sm"

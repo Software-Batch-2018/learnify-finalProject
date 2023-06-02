@@ -14,6 +14,7 @@ export function QuizResults({ correct, incorrect, percentage }: Props) {
       borderRadius={2}
       rounded={'lg'}
       borderWidth={1}
+      w={'100%'}
     >
       <Text fontSize={'xl'}>Results</Text>
       <HStack
@@ -25,6 +26,7 @@ export function QuizResults({ correct, incorrect, percentage }: Props) {
         rounded={'lg'}
         borderWidth={1}
         bg={'red.100'}
+        w={'80'}
       >
         <HStack
           style={{ position: 'relative' }}

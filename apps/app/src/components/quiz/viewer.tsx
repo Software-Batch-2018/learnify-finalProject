@@ -78,7 +78,6 @@ export function ViewerPage({ data }: { data: IQuiz }) {
           <Heading mt={2} style={{ marginBottom: 10 }}>
             {parsedQuiz.title}
           </Heading>
-        </Center>
 
         <ViewerQuestions
           quiz={parsedQuiz}
@@ -91,6 +90,7 @@ export function ViewerPage({ data }: { data: IQuiz }) {
             m={3}
             colorScheme="success"
             size="lg"
+            width={'80'}
             onPress={onFinishClick}
             shadow={'4'}
           >
@@ -99,6 +99,8 @@ export function ViewerPage({ data }: { data: IQuiz }) {
         ) : (
           <QuizResults {...quizResults} />
         )}
+      </Center>
+
       </Box>
     );
   } else {

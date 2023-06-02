@@ -30,6 +30,7 @@
     "expo-status-bar": "~1.4.4",
     "framer-motion": "^10.12.12",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "native-base": "^3.4.28",
     "nestjs-typeorm-paginate": "^4.0.3",

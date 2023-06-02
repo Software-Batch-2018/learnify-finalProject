@@ -2,7 +2,7 @@ import React from 'react';
 import { ViewerAnswer } from './viewer.answer';
 import { IQuiz } from './viewer';
 import { View, StyleSheet } from 'react-native';
-import { Box, Radio, Text, useToast } from 'native-base';
+import { Box,  Text, useToast } from 'native-base';
 
 type Props = {
   quiz: IQuiz;
@@ -14,7 +14,6 @@ type Props = {
 const styles = StyleSheet.create({
   container: {
     padding: 25,
-    margin: 10,
     width: 380,
     borderRadius: 4,
     backgroundColor: '#F8F8F8',
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    marginBottom: 20,
   },
   title: {
     marginBottom: 10,
@@ -48,7 +46,7 @@ export function ViewerQuestions({
     <Box>
       {quiz.questions.map((question, questionIndex) => {
         return (
-          <View style={styles.container}>
+          <View key={`${question.questionTitle}`} style={styles.container}>
             <Text style={styles.title}>{question.questionTitle}</Text>
             {question.answerOptions.map((answerOption, answerIndex) => {
               const answerStatus = statusFromAnswerOption(
@@ -59,6 +57,7 @@ export function ViewerQuestions({
 
               return (
                 <ViewerAnswer
+                  key={`${answerOption.label}-${answerIndex}`}
                   label={answerOption.label}
                   groupName={question.questionTitle}
                   answerStatus={answerStatus}

@@ -16,6 +16,7 @@ import { useMutation } from 'react-query';
 import { loginUser } from '../query/auth';
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { hasToken } from '../utils/auth.check';
 
 export function AccountScreen({ navigation }: any) {
   const { handleSubmit, control } = useForm();
@@ -61,6 +62,11 @@ export function AccountScreen({ navigation }: any) {
       storeData(data.token);
       navigation.replace('Profile');
     }
+    hasToken().then((value)=>{
+      if(value){
+        navigation.replace('Profile')
+      }
+    })
   }, [data, navigation]);
 
   return (
@@ -74,7 +80,7 @@ export function AccountScreen({ navigation }: any) {
             color: 'warmGray.50',
           }}
         >
-          Welcome to{' '}
+          Welcome to
           <Text color={'blue.400'} fontWeight={'bold'}>
             Learnify
           </Text>

@@ -73,7 +73,7 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
             </Box>
           </Pressable>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.subject_id}
       />
     </Box>
   );

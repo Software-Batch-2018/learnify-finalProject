@@ -2,13 +2,11 @@ import {
   AspectRatio,
   Box,
   Button,
-  Flex,
   HStack,
   Heading,
   Image,
   ScrollView,
   Spinner,
-  Text,
   useDisclose,
 } from 'native-base';
 import { useWindowDimensions } from 'react-native';

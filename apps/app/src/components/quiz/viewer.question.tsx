@@ -2,7 +2,7 @@ import React from 'react';
 import { ViewerAnswer } from './viewer.answer';
 import { IQuiz } from './viewer';
 import { View, StyleSheet } from 'react-native';
-import { Box, Text, useToast } from 'native-base';
+import { Box, Radio, Text, useToast } from 'native-base';
 
 type Props = {
   quiz: IQuiz;
@@ -62,6 +62,7 @@ export function ViewerQuestions({
                   label={answerOption.label}
                   groupName={question.questionTitle}
                   answerStatus={answerStatus}
+                  index={answerIndex}
                   onClick={() => onClickAnswer?.(questionIndex, answerIndex)}
                 />
               );

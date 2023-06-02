@@ -1,66 +1,62 @@
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
 import { ResultsFromQuiz } from './resultsfromquiz';
-import { StyleSheet, View, Text } from 'react-native';
+import { Box, HStack, Text, View } from 'native-base';
+
 type Props = ResultsFromQuiz;
 
 export function QuizResults({ correct, incorrect, percentage }: Props) {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Results</Text>
-      </View>
-
-      <View style={styles.footer}>
-        <View style={styles.resultText}>
+    <Box
+      m={4}
+      p={4}
+      borderColor={'gray.200'}
+      borderRadius={2}
+      rounded={'lg'}
+      borderWidth={1}
+    >
+      <Text fontSize={'xl'}>Results</Text>
+      <HStack
+        mt={2}
+        p={2}
+        justifyContent={'space-between'}
+        borderColor={'gray.200'}
+        borderRadius={2}
+        rounded={'lg'}
+        borderWidth={1}
+        bg={'red.100'}
+      >
+        <HStack
+          style={{ position: 'relative' }}
+          alignItems={'center'}
+          space={'2'}
+          zIndex={10}
+        >
           <Feather name="check" size={14} />
-          <Text>{correct} correct</Text>
-        </View>
+          <Text zIndex={50}>{correct} correct</Text>
+        </HStack>
 
-        <View style={styles.resultText}>
-          <Feather name="x" size={14} />
+        <HStack
+          style={{ position: 'relative', left: 55 }}
+          zIndex={10}
+          alignItems={'center'}
+          space={'2'}
+        >
           <Text>{incorrect} incorrect</Text>
-        </View>
-
-        <View style={[styles.progressBar, { width: percentage }]} />
-      </View>
-    </View>
+          <Feather name="x" size={14} />
+        </HStack>
+        <Box
+          bg={'green.100'}
+          style={{
+            width: percentage,
+            alignItems: 'center',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+          }}
+        />
+      </HStack>
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    borderWidth: 1,
-    padding: 40,
-    borderRadius: 4,
-  },
-  header: {
-    marginBottom: 10,
-  },
-  title: {
-    fontWeight: 'bold',
-  },
-  footer: {
-    backgroundColor: '#FFCDD2',
-    borderRadius: 4,
-    overflow: 'hidden',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 30,
-  },
-  resultText: {
-    fontSize: 14,
-    marginLeft: 10,
-    zIndex: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  progressBar: {
-    height: 30,
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-  },
-});

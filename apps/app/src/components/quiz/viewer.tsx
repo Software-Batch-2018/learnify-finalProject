@@ -67,7 +67,6 @@ export function ViewerPage({ data }: { data: IQuiz }) {
     const newAnswers = [...answers];
     newAnswers[questionIndex] = answerIndex;
     setAnswers(newAnswers);
-    console.log(answers, 'what is here');
   }
 
   if (initialized.error === undefined) {

@@ -1,51 +1,40 @@
 import React from 'react';
 import { IAnswerStatus } from './viewer.question';
-import { Feather } from '@expo/vector-icons';
-import { Box, Icon, Text } from 'native-base';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Box, Text } from 'native-base';
+import { TouchableOpacity } from 'react-native';
 type Props = {
   answerStatus: IAnswerStatus;
   groupName: string;
   label: string;
-
+  index: number;
   onClick?: () => void;
 };
-
-const styles = StyleSheet.create({
-  baseContainer: {
-    height: 20,
-    marginBottom: 10,
-    borderRadius: 4,
-    borderWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    fontSize: 16,
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  baseIcon: {
-    width: 10,
-    marginRight: 10,
-  },
-});
 
 export function ViewerAnswer({
   answerStatus,
   groupName,
   label,
+  index,
   onClick,
 }: Props): React.ReactElement {
+  const [bgIndex, setBgIndex] = React.useState<number | undefined>(undefined);
+  const handleClick = (index: number) => {
+    setBgIndex(index);
+    if (onClick) {
+      onClick();
+    }
+  };
   const variants: Record<IAnswerStatus, React.ReactElement> = {
     unanswered: (
-      <TouchableOpacity onPress={onClick}>
+      <TouchableOpacity onPress={() => handleClick(index)}>
         <Box
           m={1}
           borderColor={'gray.200'}
           borderRadius={2}
           rounded={'lg'}
+          w={'80'}
           borderWidth={1}
+          backgroundColor={bgIndex === index ? 'gray.300' : undefined}
         >
           <Text textAlign={'center'} fontSize={'lg'}>
             {label}
@@ -53,11 +42,13 @@ export function ViewerAnswer({
         </Box>
       </TouchableOpacity>
     ),
+
     correct: (
       <Box
         m={1}
         borderColor={'gray.200'}
         borderRadius={2}
+        bg={'green.300'}
         rounded={'lg'}
         borderWidth={1}
       >
@@ -72,6 +63,7 @@ export function ViewerAnswer({
         borderColor={'gray.200'}
         borderRadius={2}
         rounded={'lg'}
+        bg={'red.300'}
         borderWidth={1}
       >
         <Text textAlign={'center'} fontSize={'lg'}>
@@ -86,13 +78,26 @@ export function ViewerAnswer({
         borderRadius={2}
         rounded={'lg'}
         borderWidth={1}
+        bg={'green.400'}
       >
         <Text textAlign={'center'} fontSize={'lg'}>
           {label}
         </Text>
       </Box>
     ),
-    answered: <Text color={'blue.400'}>{label}</Text>,
+    answered: (
+      <Box
+        m={1}
+        borderColor={'gray.200'}
+        borderRadius={2}
+        rounded={'lg'}
+        borderWidth={1}
+      >
+        <Text textAlign={'center'} fontSize={'lg'}>
+          {label}
+        </Text>
+      </Box>
+    ),
   };
 
   return variants[answerStatus];

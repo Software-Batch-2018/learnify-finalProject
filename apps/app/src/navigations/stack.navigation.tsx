@@ -74,16 +74,6 @@ export function CoursesStackNavigator() {
         component={MainContentScreen}
         options={{ headerShown: true }}
       />
-      <Stack.Screen
-        name="Login"
-        component={AccountScreen}
-        options={{ headerShown: true }}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={ProfilePage}
-        options={{ headerShown: true }}
-      />
     </Stack.Navigator>
   );
 }

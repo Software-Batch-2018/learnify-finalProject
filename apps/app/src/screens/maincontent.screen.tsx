@@ -16,6 +16,7 @@ import { Actionsheet } from 'native-base';
 import { ViewerPage } from '../components/quiz/viewer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import { hasToken } from '../utils/auth.check';
 export function MainContentScreen({ route, navigation }: any) {
   const { params } = route;
   const { width } = useWindowDimensions();
@@ -41,11 +42,13 @@ export function MainContentScreen({ route, navigation }: any) {
   }, []);
 
   const handleOpenQuiz = () => {
-    if (!token) {
-      navigation.navigate('Login');
-    } else {
-      onOpen();
-    }
+    hasToken().then((value) => {
+      if (value) {
+        onOpen();
+      } else {
+        navigation.jumpTo('Account');
+      }
+    });
   };
   return (
     <Box p={3}>

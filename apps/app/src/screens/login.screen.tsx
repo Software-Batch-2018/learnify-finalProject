@@ -11,18 +11,11 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import { RootStackParamList } from '../types';
 import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { loginUser } from '../query/auth';
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CommonActions } from '@react-navigation/native';
-
-type FormValues = {
-  email: string;
-  password: string;
-};
 
 export function AccountScreen({ navigation }: any) {
   const { handleSubmit, control } = useForm();
@@ -58,35 +51,17 @@ export function AccountScreen({ navigation }: any) {
     }
   };
 
-  const getData = React.useCallback(async () => {
-    try {
-      const value = await AsyncStorage.getItem('token');
-      if (value !== null) {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'Profile' }],
-          })
-        );
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }, [navigation]);
-
   const onSubmit = (formData: any) => {
     formData.email = formData.email.toLowerCase();
     mutate(formData);
   };
 
   React.useEffect(() => {
-    getData();
     if (data && data.token) {
-      storeData(data.token).then(() => {
-        navigation.navigate('Profile');
-      });
+      storeData(data.token);
+      navigation.replace('Profile');
     }
-  }, [data, getData, navigation]);
+  }, [data, navigation]);
 
   return (
     <Center w="100%">

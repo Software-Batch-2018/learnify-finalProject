@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -22,4 +23,7 @@ export class ForumReply {
   @ManyToOne(() => User)
   @JoinColumn()
   replied_by: User;
+
+  @CreateDateColumn()
+  created_at: Date;
 }

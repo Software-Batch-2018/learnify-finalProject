@@ -28,7 +28,7 @@ export class ForumService {
     forum.asked_by = user;
     return await this.forumRepository.save(forum);
   }
-  async reply(payload: ReplyDTO, user_id: number, question_id: number) {
+  async reply(payload: ReplyDTO, user_id: number, question_id: string) {
     const user = await this.userRepository.findOne({ where: { id: user_id } });
     const question = await this.forumRepository.findOne({
       where: { id: question_id },

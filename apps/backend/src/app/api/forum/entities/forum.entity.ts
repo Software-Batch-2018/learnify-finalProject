@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
@@ -10,8 +11,8 @@ import { ForumReply } from './replies.entity';
 
 @Entity()
 export class Forum {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   question: string;
@@ -24,4 +25,7 @@ export class Forum {
 
   @OneToMany(() => ForumReply, (forum) => forum.question)
   replies: ForumReply[];
+
+  @CreateDateColumn()
+  created_at: Date;
 }

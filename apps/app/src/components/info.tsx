@@ -3,13 +3,15 @@ import { Alert, Center, HStack, Text, VStack, Box } from 'native-base';
 export function InfoBox({
   title,
   description,
+  children,
 }: {
   title: string;
   description: string;
+  children?: React.ReactNode;
 }) {
   return (
-    <Center mt={5}>
-      <Alert maxW="400" status="info" colorScheme="info">
+    <Alert mt={5} maxW="400" status="info" colorScheme="info">
+      <Center>
         <VStack space={2} flexShrink={1} w="100%">
           <HStack
             flexShrink={1}
@@ -33,7 +35,8 @@ export function InfoBox({
             {description}
           </Box>
         </VStack>
-      </Alert>
-    </Center>
+      </Center>
+      <Box>{children}</Box>
+    </Alert>
   );
 }

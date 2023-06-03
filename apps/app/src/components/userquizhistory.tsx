@@ -1,11 +1,6 @@
 import React from 'react';
 import { Box, Stack, Heading, HStack, useColorModeValue } from 'native-base';
-import {
-  VictoryBar,
-  VictoryChart,
-  VictoryLabel,
-  VictoryTooltip,
-} from 'victory-native';
+import { VictoryBar, VictoryChart, VictoryLabel } from 'victory-native';
 
 export const UserHistoryCard = ({
   title,
@@ -22,7 +17,7 @@ export const UserHistoryCard = ({
       borderWidth="1"
       borderColor="coolGray.300"
       shadow="3"
-      bg="coolGray.100"
+      bg="green.100"
     >
       <Stack px={5} pt={5} space={3}>
         <Heading

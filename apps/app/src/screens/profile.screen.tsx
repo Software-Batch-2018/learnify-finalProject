@@ -11,6 +11,7 @@ import {
 import React from 'react';
 import { returnToken } from '../utils/auth.check';
 import jwt_decode from 'jwt-decode';
+import { InfoBox } from '../components/info';
 export default function ProfilePage({ navigation }: any) {
   const clearAll = async () => {
     try {
@@ -83,10 +84,20 @@ export default function ProfilePage({ navigation }: any) {
           </Box>
         </Box>
       </Box>
-      <Box mt={2} mx={2}>
-        <Button onPress={() => navigation.navigate('QuizHistory')} size={'sm'}>
-          Quiz History
-        </Button>
+      <Box mt={2}>
+        <InfoBox
+          title="Quiz History"
+          description="Comprehensive log of your past quiz attempts and performance records."
+        >
+          <Button
+            mt={2}
+            alignItems={'flex-end'}
+            onPress={() => navigation.navigate('QuizHistory')}
+            size={'sm'}
+          >
+            View History
+          </Button>
+        </InfoBox>
       </Box>
     </Box>
   );

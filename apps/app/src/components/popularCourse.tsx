@@ -17,23 +17,22 @@ const Cards = ({
   title_image,
   content_id,
   content_title,
-  navigation
+  navigation,
 }: {
   title_image: string;
   content_title: string;
   content_id: string;
-  navigation:any
+  navigation: any;
 }) => {
   return (
     <Pressable
-    onPress={() =>
-      navigation.navigate('MainContent', {
-        title: content_title,
-        image: title_image,
-        course_id: content_id,
-      })
-    }
-    
+      onPress={() =>
+        navigation.navigate('MainContent', {
+          title: content_title,
+          image: title_image,
+          course_id: content_id,
+        })
+      }
     >
       <Box mr={2} p={1} bg={'blue.100'} h={32} w={'32'}>
         <AspectRatio rounded={'md'} w="100%" ratio={16 / 9}>
@@ -84,11 +83,11 @@ const SkeletonComponent = () => {
   );
 };
 
-export  function PopularCourses({navigation}:any) {
+export function PopularCourses({ navigation, heading = true }: any) {
   const { isLoading, data } = GetAllPopularCourses();
   return (
     <Box mb={2} mx={6}>
-      <Heading mb={2}>Popular courses</Heading>
+      {heading && <Heading mb={2}>Popular courses</Heading>}
       {isLoading ? (
         <SkeletonComponent />
       ) : (

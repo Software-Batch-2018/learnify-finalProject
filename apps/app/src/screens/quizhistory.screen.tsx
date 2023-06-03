@@ -3,6 +3,7 @@ import React from 'react';
 import { VictoryPie } from 'victory-native';
 import { GetUserQuizHistories } from '../query/user';
 import { UserHistoryCard } from '../components/userquizhistory';
+import { PopularCourses } from '../components/popularCourse';
 export interface QuizHistoryType {
   id: number;
   numberOfCorrectAnswers: number;
@@ -16,8 +17,8 @@ export interface QuizHistoryType {
 export default function UserQuizHistory({ navigation }: any) {
   const { isLoading, data } = GetUserQuizHistories();
   return (
-    <Box mt={4}>
-      <ScrollView>
+    <Box bg={'blue.100'} h={'100%'}>
+      <ScrollView mt={4}>
         <Center>
           <Heading>Overall History</Heading>
         </Center>
@@ -25,17 +26,44 @@ export default function UserQuizHistory({ navigation }: any) {
           <Spinner />
         ) : (
           <Box>
-            <VictoryPie
-              data={[
-                { x: 'Correct', y: data.corrects },
-                { x: 'Incorrect', y: data.incorrects },
-              ]}
-              labels={({ datum }) => `${datum.x}: ${datum.y}`}
-              colorScale={['#478036', '#265182']}
-            />
+            {data.total === 0 ? (
+              <Box>
+                <Center mx={4} mt={4}>
+                  <Text textAlign={'center'} fontSize={'md'}>
+                    Looks like you haven't played any quizzes yet! Start playing
+                    to unlock your statistics.
+                  </Text>
+                </Center>
+              </Box>
+            ) : (
+              <Box>
+                <VictoryPie
+                  data={[
+                    { x: 'Correct', y: data.corrects },
+                    { x: 'Incorrect', y: data.incorrects },
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  colorScale={['#478036', '#265182']}
+                  style={{ labels: { fill: 'white' } }}
+                  labelRadius={({ innerRadius }) =>
+                    (innerRadius as number) + 30
+                  }
+                />
+                <Center>
+                  <Text fontWeight={'semibold'} fontSize={'lg'}>
+                    Total Quiz Played: {data.total}
+                  </Text>
+                </Center>
+              </Box>
+            )}
+
             <Box m={3}>
               {data.quizHistory.map((quiz: QuizHistoryType) => (
-                <UserHistoryCard quizData={quiz} title={quiz.quiz.title} />
+                <UserHistoryCard
+                  key={quiz.id}
+                  quizData={quiz}
+                  title={quiz.quiz.title}
+                />
               ))}
             </Box>
           </Box>

@@ -56,7 +56,6 @@ const CourseTable = () => {
           View Content
         </button>
 
-        <button className="btn btn-fill-danger btn-xxs">Delete</button>
       </div>
     );
   };

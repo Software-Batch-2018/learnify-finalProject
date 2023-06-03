@@ -11,7 +11,7 @@ import {
 } from 'native-base';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import {  registerUser } from '../query/auth';
+import {  registerUser } from '../query/user';
 import { useMutation } from 'react-query';
 import { validatePassword } from '../utils/check';
 

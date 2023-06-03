@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { loginUser } from '../query/auth';
+import { loginUser } from '../query/user';
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { hasToken } from '../utils/auth.check';

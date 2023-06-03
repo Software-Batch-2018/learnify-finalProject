@@ -23,6 +23,7 @@ async function bootstrap() {
     .setDescription('The Learnify API swagger endpoint.')
     .setVersion('1.0')
     .addTag('learnify')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

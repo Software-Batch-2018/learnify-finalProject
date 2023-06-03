@@ -5,10 +5,12 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { QuizHistory } from './quizHistory.entity';
 
 export enum Roles {
   ADMIN = 'admin',
@@ -40,6 +42,9 @@ export class User extends BaseEntity {
 
   @Exclude()
   private tempPassword!: string;
+
+  @OneToMany(() => QuizHistory, quizHistory => quizHistory.user)
+  quizHistories: QuizHistory[];
 
   @BeforeInsert()
   @BeforeUpdate()

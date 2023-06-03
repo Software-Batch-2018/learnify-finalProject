@@ -4,6 +4,8 @@ import { ResultsFromQuiz, resultsFromQuiz } from './resultsfromquiz';
 import { QuizResults } from './viewer.result';
 import { InfoBox } from '../info';
 import { Box, Button, Center, Heading, useToast } from 'native-base';
+import { useMutation } from 'react-query';
+import { loginUser, updateQuizRecord } from '../../query/user';
 
 export interface IAnswerOption {
   label: string;
@@ -21,6 +23,7 @@ export interface IQuiz {
   questions: IQuestion[];
   author?: string;
   backLink?: string;
+  quiz_id?: string
 }
 
 export function ViewerPage({ data }: { data: IQuiz }) {
@@ -48,6 +51,14 @@ export function ViewerPage({ data }: { data: IQuiz }) {
     }
   );
 
+  const { mutate,  isLoading } = useMutation({
+    mutationFn: async (submitData: {payload:{correct:number, incorrect:number}, quiz_id: string}) => {
+      const data = await updateQuizRecord(submitData.payload, submitData.quiz_id);
+      
+      return data;
+    },
+  });
+
   const [quizResults, setQuizResults] = useState<ResultsFromQuiz>();
   const [answers, setAnswers] = useState<number[]>([]);
   function onFinishClick() {
@@ -59,7 +70,16 @@ export function ViewerPage({ data }: { data: IQuiz }) {
       });
       return null;
     } else {
+
+      
       setQuizResults(result);
+      mutate({
+        payload:{
+          correct: result.correct!,
+          incorrect: result.incorrect!
+        },
+        quiz_id: data.quiz_id!
+      })
     }
   }
 

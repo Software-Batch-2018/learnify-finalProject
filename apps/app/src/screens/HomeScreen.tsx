@@ -1,5 +1,4 @@
 import {
-  AspectRatio,
   Box,
   Button,
   Center,
@@ -7,55 +6,25 @@ import {
   ScrollView,
   Text,
   View,
-  Image,
-  HStack,
+
 } from 'native-base';
 import React from 'react';
+import  {PopularCourses}  from '../components/popularCourse';
 
-export function HomeScreen() {
+export function HomeScreen({navigation}:any) {
   return (
     <ScrollView w={'100%'}>
       <FabSection />
       <ViewSection />
-      <Box mb={2} mx={6}>
-        <Heading mb={2}>Popular courses</Heading>
-        <ScrollView horizontal={true}>
-        <HStack>
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-          <Cards />
-        </HStack>
-        </ScrollView>
-      </Box>
+      <PopularCourses
+        navigation={navigation}
+      />
+    
     </ScrollView>
   );
 }
 
-const Cards = () => {
-  return (
-    <Box mr={2} p={1} bg={'blue.100'} h={32} w={'32'}>
-      <AspectRatio w="100%" ratio={16 / 9}>
-        <Image
-          source={{
-            uri: "https://res.cloudinary.com/dpessyoae/image/upload/v1494083335/linkedlist3_fsadk8.png"
-          }}
-          alt="image"
-        />
-      </AspectRatio>
-      <Text p={1}  fontSize={'md'} fontWeight={'bold'}>
-        Linked List
-      </Text>
-      <Text px={1}  fontSize={'sm'} >
-        Learnify verified
-      </Text>
-    </Box>
-  );
-};
+
 
 const ViewSection = () => {
   return (

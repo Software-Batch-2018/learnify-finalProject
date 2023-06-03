@@ -25,6 +25,11 @@ export function MainStackNavigator() {
         component={AboutScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="MainContent"
+        component={MainContentScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

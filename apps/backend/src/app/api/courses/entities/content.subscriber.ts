@@ -9,12 +9,15 @@ export class ContentSubscriber implements EntitySubscriberInterface<Content> {
 
   async afterLoad(entity: Content, event: LoadEvent<Content>): Promise<void> {
     const { entity: e, manager } = event;
-    await manager
+    if(e.quiz){
+      await manager
       .getRepository(Content)
       .createQueryBuilder()
       .update()
       .set({ view: () => 'view + 1' })
       .where("content_id =  :id", {id: e.content_id})
       .execute()
+    }
+
   }
 }

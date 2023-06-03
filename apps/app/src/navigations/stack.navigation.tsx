@@ -9,6 +9,7 @@ import { SubjectScreen } from '../screens/subject.screen';
 import { ContentScreen } from '../screens/content.screen';
 import { MainContentScreen } from '../screens/maincontent.screen';
 import ProfilePage from '../screens/profile.screen';
+import UserQuizHistory from '../screens/quizhistory.screen';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,11 @@ export function AccountStackNavigator() {
       <Stack.Screen
         name="Profile"
         component={ProfilePage}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="QuizHistory"
+        component={UserQuizHistory}
         options={{ headerShown: true }}
       />
     </Stack.Navigator>

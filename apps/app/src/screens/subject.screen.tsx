@@ -61,11 +61,10 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                   >
                     <HStack mt={2} space={1}>
                       <Text color="emerald.500" fontSize="sm">
-                        Learnify Verfied Subjects
+                        Learnify Verfied
                       </Text>
                       <CheckIcon size="3" mt="1" color="emerald.500" />
                     </HStack>
-                    ;
                   </Text>
                 </VStack>
                 <Spacer />

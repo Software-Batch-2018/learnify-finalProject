@@ -1,5 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Badge, Box, HStack, Pressable, Spacer, Text } from 'native-base';
+import {
+  Badge,
+  Box,
+  Button,
+  HStack,
+  Pressable,
+  Spacer,
+  Text,
+} from 'native-base';
 import React from 'react';
 import { returnToken } from '../utils/auth.check';
 import jwt_decode from 'jwt-decode';
@@ -75,7 +83,11 @@ export default function ProfilePage({ navigation }: any) {
           </Box>
         </Box>
       </Box>
-      <Box mt={2}></Box>
+      <Box mt={2} mx={2}>
+        <Button onPress={() => navigation.navigate('QuizHistory')} size={'sm'}>
+          Quiz History
+        </Button>
+      </Box>
     </Box>
   );
 }

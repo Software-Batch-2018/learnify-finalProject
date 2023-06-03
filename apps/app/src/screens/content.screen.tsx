@@ -69,7 +69,6 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                       </Text>
                       <CheckIcon size="3" mt="1" color="emerald.500" />
                     </HStack>
-                    ;
                   </Text>
                 </VStack>
                 <Spacer />

@@ -24,6 +24,20 @@ export class UsersService {
     user_id: number,
     payload: UpdateQuizRecordDTO
   ) {
+    const quizExists = await this.quizHistory
+      .createQueryBuilder('q')
+      .leftJoinAndSelect('q.quiz', 'quiz')
+      .leftJoinAndSelect('q.user', 'user')
+      .where('user.id = :user_id', { user_id })
+      .andWhere('quiz.quiz_id = :quiz_id', { quiz_id })
+      .getOne();
+
+    if (quizExists) {
+      quizExists.numberOfCorrectAnswers = payload.correct;
+      quizExists.numberOfWrongAnswers = payload.incorrect;
+
+      return await this.quizHistory.save(quizExists);
+    }
     const user = await this.userRepository.findOne({ where: { id: user_id } });
     const quiz = await this.quizRepository.findOne({ where: { quiz_id } });
     const userHistory = new QuizHistory();
@@ -36,11 +50,30 @@ export class UsersService {
   }
 
   async getUserQuizRecord(user_id: number) {
-    return await this.userRepository
+    const quizzes = await this.userRepository
       .createQueryBuilder('q')
       .leftJoinAndSelect('q.quizHistories', 'his')
       .leftJoinAndSelect('his.quiz', 'quiz')
       .where('q.id = :user_id', { user_id })
       .getMany();
+
+    let corrects = 0;
+    let incorrects = 0;
+    let total = 0;
+
+    quizzes.map((quiz) => {
+      total = quiz.quizHistories.length;
+      quiz.quizHistories.map((his) => {
+        corrects += his.numberOfCorrectAnswers;
+        incorrects += his.numberOfWrongAnswers;
+      });
+    });
+
+    return {
+      quizHistory: quizzes[0].quizHistories,
+      total,
+      corrects,
+      incorrects,
+    };
   }
 }

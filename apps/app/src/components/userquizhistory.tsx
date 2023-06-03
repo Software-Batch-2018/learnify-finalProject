@@ -1,79 +1,59 @@
 import React from 'react';
+import { Box, Stack, Heading, HStack, useColorModeValue } from 'native-base';
 import {
-  Box,
-  Stack,
-  Heading,
-  Icon,
-  Text,
-  HStack,
-  Avatar,
-  useColorModeValue,
-} from 'native-base';
-import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
-export const UserHistoryCard = () => {
+  VictoryBar,
+  VictoryChart,
+  VictoryLabel,
+  VictoryTooltip,
+} from 'victory-native';
+
+export const UserHistoryCard = ({
+  title,
+  quizData,
+}: {
+  title: string;
+  quizData: any;
+}) => {
   return (
     <Box
+      my={2}
       rounded="8"
       overflow="hidden"
       borderWidth="1"
       borderColor="coolGray.300"
-      maxW="96"
       shadow="3"
       bg="coolGray.100"
-      p="5"
     >
-      <Stack space={6}>
-        <Stack space={3}>
-          <Heading
-            size="lg"
-            color={useColorModeValue('blueGray.700', 'blueGray.100')}
-          >
-            Dressing room
-          </Heading>
-          <Text
-            color={useColorModeValue('blueGray.500', 'blueGray.200')}
-            fontWeight="medium"
-            fontSize="xs"
-          >
-            Design the new dressing room for the upcoming tour.
-          </Text>
-        </Stack>
-        <HStack
-          justifyContent="space-between"
-          alignItems="flex-end"
-          flexShrink={1}
+      <Stack px={5} pt={5} space={3}>
+        <Heading
+          size="lg"
+          color={useColorModeValue('blueGray.700', 'blueGray.100')}
         >
-          <Stack space={3}>
-            <HStack space={3} alignItems="center" flexShrink={1}>
-              <Icon
-                name="grid"
-                as={MaterialCommunityIcons}
-                color="blueGray.700"
-              />
-              <Text
-                flexShrink={1}
-                fontWeight="medium"
-                color={useColorModeValue('blueGray.500', 'blueGray.200')}
-              >
-                Task: KitchenSink
-              </Text>
-            </HStack>
-            <HStack space={3} alignItems="center">
-              <Icon
-                name="calendar"
-                as={MaterialCommunityIcons}
-                color="blueGray.700"
-              />
-              <Text
-                color={useColorModeValue('blueGray.500', 'blueGray.200')}
-                fontWeight="medium"
-              >
-                Date: 10.04.2021
-              </Text>
-            </HStack>
-          </Stack>
-        </HStack>
+          {title}
+        </Heading>
       </Stack>
+      <VictoryChart domain={{ x: [0, 11], y: [-5, 5] }}>
+        <VictoryBar
+          data={[
+            {
+              x: 2,
+              y: quizData.numberOfCorrectAnswers,
+              label: `Correct: ${quizData.numberOfCorrectAnswers}`,
+            },
+            {
+              x: 4,
+              y: -quizData.numberOfWrongAnswers,
+              label: `Incorrect: ${quizData.numberOfWrongAnswers}`,
+            },
+          ]}
+          labels={({ datum }) => datum.y}
+          style={{
+            data: { fill: '#265182' },
+            labels: { fill: 'black' },
+          }}
+          labelComponent={<VictoryLabel />}
+        />
+      </VictoryChart>
     </Box>
   );
 };

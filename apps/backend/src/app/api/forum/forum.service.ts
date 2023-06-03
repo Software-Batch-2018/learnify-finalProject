@@ -6,6 +6,7 @@ import { ForumReply } from './entities/replies.entity';
 import { AskQuestionDTO } from './dto/ask.dto';
 import { User } from '../users/entities/user.entity';
 import { ReplyDTO } from './dto/reply.dto';
+import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ForumService {
@@ -39,5 +40,23 @@ export class ForumService {
     forum.replied_by = user;
     forum.question = question;
     return await this.forumReplyRepository.save(forum);
+  }
+
+  async getAllForumQuestions(options: IPaginationOptions) {
+    const query = this.forumRepository
+      .createQueryBuilder('q')
+      .leftJoinAndSelect('q.asked_by', 'user');
+
+    return paginate<Forum>(query, options);
+  }
+
+  async getForumQuestionReplies(forum_id: string) {
+    return this.forumRepository
+      .createQueryBuilder('q')
+      .leftJoinAndSelect('q.asked_by', 'asker')
+      .leftJoinAndSelect('q.replies', 'replies')
+      .leftJoinAndSelect('replies.replied_by', 'replier')
+      .where('q.id = :forum_id', { forum_id })
+      .getOne();
   }
 }

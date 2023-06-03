@@ -37,4 +37,10 @@ export class Content {
   @OneToOne(() => Quiz)
   @JoinColumn()
   quiz: Quiz;
+
+
+  @Column({default: 1})
+  view: number;
+
+
 }

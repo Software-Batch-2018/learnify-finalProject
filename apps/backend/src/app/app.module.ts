@@ -10,6 +10,7 @@ import { UsersModule } from './api/users/users.module';
 import { CoursesModule } from './api/courses/courses.module';
 import { QuizModule } from './api/quiz/quiz.module';
 import { Content } from './api/courses/entities/content.entity';
+import { ForumModule } from './api/forum/forum.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { Content } from './api/courses/entities/content.entity';
     UsersModule,
     CoursesModule,
     QuizModule,
+    ForumModule,
   ],
   controllers: [AppController],
   providers: [AppService],

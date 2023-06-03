@@ -8,28 +8,39 @@ import { Quiz } from '../quiz/entities/quiz.entity';
 
 @Injectable()
 export class UsersService {
-    constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
-        
-        @InjectRepository(QuizHistory)
-        private quizHistory: Repository<QuizHistory>,
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
 
-        @InjectRepository(Quiz)
-        private quizRepository: Repository<Quiz>
-    ){}
+    @InjectRepository(QuizHistory)
+    private quizHistory: Repository<QuizHistory>,
 
-    async updateUserQuizHistory(quiz_id: string, user_id: number, payload:UpdateQuizRecordDTO){
-        const user = await this.userRepository.findOne({where:{id: user_id}})
-        const quiz = await this.quizRepository.findOne({where: {quiz_id}})
-        const userHistory = new QuizHistory()
-        userHistory.quiz = quiz
-        userHistory.user = user
-        userHistory.numberOfCorrectAnswers =  payload.correct
-        userHistory.numberOfWrongAnswers = payload.incorrect
+    @InjectRepository(Quiz)
+    private quizRepository: Repository<Quiz>
+  ) {}
 
-        return await this.quizHistory.save(userHistory)
-        
-        
-    }
+  async updateUserQuizHistory(
+    quiz_id: string,
+    user_id: number,
+    payload: UpdateQuizRecordDTO
+  ) {
+    const user = await this.userRepository.findOne({ where: { id: user_id } });
+    const quiz = await this.quizRepository.findOne({ where: { quiz_id } });
+    const userHistory = new QuizHistory();
+    userHistory.quiz = quiz;
+    userHistory.user = user;
+    userHistory.numberOfCorrectAnswers = payload.correct;
+    userHistory.numberOfWrongAnswers = payload.incorrect;
+
+    return await this.quizHistory.save(userHistory);
+  }
+
+  async getUserQuizRecord(user_id: number) {
+    return await this.userRepository
+      .createQueryBuilder('q')
+      .leftJoinAndSelect('q.quizHistories', 'his')
+      .leftJoinAndSelect('his.quiz', 'quiz')
+      .where('q.id = :user_id', { user_id })
+      .getMany();
+  }
 }

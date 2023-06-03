@@ -64,3 +64,20 @@ export async function CreateContent(payload: CreateContenPayload) {
     };
   }
 }
+
+
+export async function editCourseContent({ content_id, payload }: any) {
+  try {
+    const response = await axios.patch(
+      `http://localhost:3334/api/courses/edit/content/${content_id}`,
+      payload
+    );
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      error: true,
+      message: error.message,
+    };
+  }
+}

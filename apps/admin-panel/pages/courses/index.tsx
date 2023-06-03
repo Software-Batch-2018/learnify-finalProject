@@ -10,6 +10,12 @@ import { Column } from 'primereact/column';
 import { AddLevelModal } from '../../components/courses/addlevel.modal';
 import { AddSubjectModal } from '../../components/courses/addSubject.modal';
 import { AddContentModal } from '../../components/courses/addContent.modal';
+import RichTextEditor from '../../components/RichTextEditor';
+import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
+import { editCourseContent } from '../../utils/courses';
+import toast from 'react-hot-toast';
+import { Button } from '@finalproject/ui';
 
 const CourseTable = () => {
   const [quizModal, setQuizModal] = React.useState(false);
@@ -39,7 +45,16 @@ const CourseTable = () => {
         >
           Add Quiz
         </button>
-        <button className="btn btn-fill-gray btn-xxs">View Content</button>
+        <button
+          onClick={() => {
+            editSetContent(data.content);
+            setEditId(data.content_id);
+            setViewCourseContent(true);
+          }}
+          className="btn btn-fill-gray btn-xxs"
+        >
+          View Content
+        </button>
 
         <button className="btn btn-fill-danger btn-xxs">Delete</button>
       </div>
@@ -137,6 +152,30 @@ const CourseTable = () => {
     </div>
   );
 
+  const [editContent, editSetContent] = React.useState('');
+  const [editId, setEditId] = React.useState('');
+  const [viewCourseContent, setViewCourseContent] = React.useState(false);
+  const { handleSubmit: handleEdit } = useForm();
+  const { mutate: editMutate, isLoading: editLoading } = useMutation({
+    mutationFn: async ({ id, payload }: any) => {
+      const data = await editCourseContent({ content_id: id, payload });
+      if (data.error) {
+        toast.error(data.message);
+      } else {
+        toast.success('Successfully Edited!');
+        refetch();
+      }
+    },
+  });
+  const editBlog = (data: any) => {
+    editMutate({
+      id: editId,
+      payload: {
+        content: editContent,
+      },
+    });
+    setViewCourseContent(false);
+  };
   return (
     <div style={containerStyle}>
       <div style={gridStyle} className="ag-theme-alpine">
@@ -190,6 +229,17 @@ const CourseTable = () => {
         contentData={subjectExpandedRows}
         refetch={refetch}
       />
+      <Modal modal={viewCourseContent} setModal={setViewCourseContent}>
+        <div className="max-w-3xl p-5 ">
+          <form className="space-y-3" onSubmit={handleEdit(editBlog)}>
+            <RichTextEditor
+              defaultValue={editContent}
+              onChange={editSetContent}
+            />
+            <Button name="Submit" isLoading={editLoading} type="submit" />
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };

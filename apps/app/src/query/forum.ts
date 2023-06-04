@@ -35,3 +35,38 @@ async function getAllForumReplies(forum_id: string) {
 export const GetAllForumReplies = (forum_id: string) => {
   return useQuery('getAllForumReplies', () => getAllForumReplies(forum_id));
 };
+
+export async function replyForum(
+  payload: { comment: string },
+  question_id: string
+) {
+  try {
+    const response = await axios.post(
+      `${API}forum/reply/${question_id}`,
+      payload
+    );
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      error: true,
+      message: error.response.data.message,
+    };
+  }
+}
+
+export async function askQuestion(payload: {
+  question: string;
+  description: string;
+}) {
+  try {
+    const response = await axios.post(`${API}forum/ask`, payload);
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      error: true,
+      message: error.response.data.message,
+    };
+  }
+}

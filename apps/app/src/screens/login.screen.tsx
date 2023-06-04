@@ -110,6 +110,7 @@ export function AccountScreen({ navigation }: any) {
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
             <Controller
+              defaultValue=""
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input

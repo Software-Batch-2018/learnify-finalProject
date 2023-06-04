@@ -16,17 +16,20 @@ import {
   Input,
   TextArea,
 } from 'native-base';
-import { GetAllForumQuestion } from '../query/forum';
+import { GetAllForumQuestion, askQuestion } from '../query/forum';
 import { getTimeAgo } from '../utils/date';
 import React, { useContext } from 'react';
 import { hasToken } from '../utils/auth.check';
 import { AuthContext } from '../components/AuthProvider';
+import { Controller, useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 
 interface AskQuestionModalProps {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   initialRef: React.MutableRefObject<null>;
   finalRef: React.MutableRefObject<null>;
+  refetch: any;
 }
 
 const AskQuestionModal = ({
@@ -34,7 +37,38 @@ const AskQuestionModal = ({
   setModalVisible,
   initialRef,
   finalRef,
+  refetch,
 }: AskQuestionModalProps) => {
+  const { handleSubmit, control, reset } = useForm();
+
+  const [error, setError] = React.useState({
+    status: false,
+    message: '',
+  });
+  const { mutate, isLoading: submitting } = useMutation({
+    mutationFn: async (payload: any) => {
+      const data = await askQuestion(payload);
+      if (data.error) {
+        setError({
+          status: true,
+          message: data.message,
+        });
+      } else {
+        setError({
+          status: false,
+          message: '',
+        });
+        refetch();
+      }
+      return data;
+    },
+  });
+  const onSubmit = (formData: any) => {
+    console.log(formData);
+    mutate(formData);
+    reset();
+    setModalVisible(false);
+  };
   return (
     <Modal
       isOpen={modalVisible}
@@ -49,11 +83,42 @@ const AskQuestionModal = ({
         <Modal.Body>
           <FormControl>
             <FormControl.Label>Question</FormControl.Label>
-            <Input ref={initialRef} />
+            <Controller
+              defaultValue={''}
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  ref={initialRef}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  type="text"
+                  placeholder="Write a question...."
+                />
+              )}
+              name="question"
+              rules={{ required: true }}
+            />
           </FormControl>
           <FormControl mt="3">
             <FormControl.Label>Description</FormControl.Label>
-            <TextArea autoCompleteType={undefined} />
+            <Controller
+              defaultValue={''}
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextArea
+                  ref={finalRef}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  type="text"
+                  placeholder="Write a description...."
+                  autoCompleteType={undefined}
+                />
+              )}
+              name="description"
+              rules={{ required: true }}
+            />
           </FormControl>
         </Modal.Body>
         <Modal.Footer>
@@ -67,12 +132,8 @@ const AskQuestionModal = ({
             >
               Cancel
             </Button>
-            <Button
-              onPress={() => {
-                console.log('hello');
-              }}
-            >
-              Submit
+            <Button isLoading={submitting} onPress={handleSubmit(onSubmit)}>
+              Reply
             </Button>
           </Button.Group>
         </Modal.Footer>
@@ -82,7 +143,7 @@ const AskQuestionModal = ({
 };
 
 export default function ForumScreen({ navigation }: any) {
-  const { isLoading, data } = GetAllForumQuestion();
+  const { isLoading, data, refetch } = GetAllForumQuestion();
   const [modalVisible, setModalVisible] = React.useState(false);
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
@@ -96,6 +157,7 @@ export default function ForumScreen({ navigation }: any) {
       navigation.jumpTo('Account');
     }
   };
+
   return (
     <ScrollView>
       {isLoading ? (
@@ -147,6 +209,7 @@ export default function ForumScreen({ navigation }: any) {
         </Box>
       )}
       <AskQuestionModal
+        refetch={refetch}
         finalRef={finalRef}
         initialRef={initialRef}
         modalVisible={modalVisible}

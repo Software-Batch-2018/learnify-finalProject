@@ -51,12 +51,12 @@ export function MainContentScreen({ route, navigation }: any) {
     },
   });
   return (
-    <Box p={3}>
+    <ScrollView p={3}>
       <Heading>{params.title}</Heading>
       {isLoading ? (
         <Spinner />
       ) : (
-        <ScrollView>
+        <Box>
           <AspectRatio mt={3} w="100%" ratio={16 / 9}>
             <Image
               source={{
@@ -88,8 +88,8 @@ export function MainContentScreen({ route, navigation }: any) {
               </Actionsheet.Content>
             </Actionsheet>
           )}
-        </ScrollView>
+        </Box>
       )}
-    </Box>
+    </ScrollView>
   );
 }

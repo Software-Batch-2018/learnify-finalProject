@@ -10,6 +10,7 @@ import {
   Spinner,
   CheckIcon,
   Pressable,
+  ScrollView,
 } from 'native-base';
 import { InfoBox } from '../components/info';
 import { GetAllContents } from '../query/content';
@@ -87,11 +88,11 @@ export const ContentScreen = ({ route, navigation }: any) => {
   const { isLoading, data } = GetAllContents(params.subject_id);
 
   return (
-    <Box p={3}>
+    <ScrollView p={3}>
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
+        <Box>
           {data && data.items.length > 0 ? (
             <Example data={data.items} navigation={navigation} />
           ) : (
@@ -100,8 +101,8 @@ export const ContentScreen = ({ route, navigation }: any) => {
               description="There is no contents for this subjects currently. We will be adding soon!"
             />
           )}
-        </>
+        </Box>
       )}
-    </Box>
+    </ScrollView>
   );
 };

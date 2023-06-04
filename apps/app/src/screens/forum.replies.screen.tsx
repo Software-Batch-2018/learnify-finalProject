@@ -11,15 +11,47 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import { GetAllForumReplies } from '../query/forum';
+import { GetAllForumReplies, replyForum } from '../query/forum';
 import { getTimeAgo } from '../utils/date';
 import React from 'react';
 import { AuthContext } from '../components/AuthProvider';
+import { Controller, useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 export default function ForumRepliesScreen({ route, navigation }: any) {
   const { params } = route;
 
-  const { isLoading, data } = GetAllForumReplies(params.forum_id);
+  const { isLoading, data, refetch } = GetAllForumReplies(params.forum_id);
   const { isAuth } = React.useContext(AuthContext);
+
+  const { handleSubmit, control, reset } = useForm();
+  const [error, setError] = React.useState({
+    status: false,
+    message: '',
+  });
+
+  const { mutate, isLoading: submitting } = useMutation({
+    mutationFn: async (payload: any) => {
+      const data = await replyForum(payload, params.forum_id);
+      if (data.error) {
+        setError({
+          status: true,
+          message: data.message,
+        });
+      } else {
+        setError({
+          status: false,
+          message: '',
+        });
+        refetch();
+      }
+      return data;
+    },
+  });
+  const onSubmit = (formData: any) => {
+    console.log(formData);
+    mutate(formData);
+    reset();
+  };
   return (
     <ScrollView>
       {isLoading ? (
@@ -46,8 +78,25 @@ export default function ForumRepliesScreen({ route, navigation }: any) {
               style={{ gap: 5 }}
               m={4}
             >
-              <Input width={'75%'} placeholder="Write a reply....." />
-              <Button>Reply</Button>
+              <Controller
+                defaultValue={''}
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    w={'75%'}
+                    onBlur={onBlur}
+                    onChangeText={(value) => onChange(value)}
+                    value={value}
+                    type="text"
+                    placeholder="Write a reply...."
+                  />
+                )}
+                name="comment"
+                rules={{ required: true }}
+              />
+              <Button isLoading={submitting} onPress={handleSubmit(onSubmit)}>
+                Reply
+              </Button>
             </Box>
           ) : (
             <Button onPress={() => navigation.jumpTo('Account')} m={4}>

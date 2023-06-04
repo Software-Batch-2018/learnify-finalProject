@@ -48,19 +48,16 @@ export function AccountScreen({ navigation }: any) {
     mutate(formData);
   };
 
-  const { login } = React.useContext(AuthContext);
-
+  const { login, isAuth } = React.useContext(AuthContext);
   React.useEffect(() => {
     if (data && data.token) {
       login(data.token);
       navigation.replace('Profile');
     }
-    hasToken().then((value) => {
-      if (value) {
-        navigation.replace('Profile');
-      }
-    });
-  }, [data, login, navigation]);
+    if (isAuth) {
+      navigation.replace('Profile');
+    }
+  }, [data, isAuth, login, navigation]);
 
   return (
     <Center w="100%">

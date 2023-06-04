@@ -5,6 +5,7 @@ import {
   HStack,
   Heading,
   Input,
+  ScrollView,
   Spacer,
   Spinner,
   Text,
@@ -23,7 +24,7 @@ export default function ForumRepliesScreen({ route, navigation }: any) {
     hasToken().then((value) => setIsAuth(value));
   }, []);
   return (
-    <Box>
+    <ScrollView>
       {isLoading ? (
         <Spinner />
       ) : (
@@ -40,8 +41,32 @@ export default function ForumRepliesScreen({ route, navigation }: any) {
             <Divider />
             <Text>{data.description}</Text>
           </VStack>
+          {isAuth ? (
+            <Box
+              display={'flex'}
+              flexDir={'row'}
+              width={'100%'}
+              style={{ gap: 5 }}
+              m={4}
+            >
+              <Input width={'75%'} placeholder="Write a reply....." />
+              <Button>Reply</Button>
+            </Box>
+          ) : (
+            <Button onPress={() => navigation.jumpTo('Account')} m={4}>
+              Sign in to Reply
+            </Button>
+          )}
+
           {data.replies.map((reply: any) => (
-            <VStack m={4} space={4} bg={'blue.100'} rounded={'md'} p={5}>
+            <VStack
+              key={reply.id}
+              m={4}
+              space={4}
+              bg={'green.100'}
+              rounded={'md'}
+              p={5}
+            >
               <VStack space={2}>
                 <Text fontSize={'md'}>{reply.comment}</Text>
                 <HStack>
@@ -49,25 +74,13 @@ export default function ForumRepliesScreen({ route, navigation }: any) {
                     By {reply.replied_by.name}
                   </Text>
                   <Spacer />
-                  <Text color={'green.700'}>
-                    {getTimeAgo(reply.created_at)}
-                  </Text>
+                  <Text color={'blue.700'}>{getTimeAgo(reply.created_at)}</Text>
                 </HStack>
               </VStack>
             </VStack>
           ))}
-          {isAuth ? (
-            <HStack width={'100%'} space={2} m={4}>
-              <Input placeholder="Write a reply....." />
-              <Button>Reply</Button>
-            </HStack>
-          ) : (
-            <Button onPress={() => navigation.jumpTo('Account')} m={4}>
-              Sign in to Reply
-            </Button>
-          )}
         </Box>
       )}
-    </Box>
+    </ScrollView>
   );
 }

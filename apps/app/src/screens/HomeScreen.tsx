@@ -6,27 +6,21 @@ import {
   ScrollView,
   Text,
   View,
-
 } from 'native-base';
 import React from 'react';
-import  {PopularCourses}  from '../components/popularCourse';
+import { PopularCourses } from '../components/popularCourse';
 
-export function HomeScreen({navigation}:any) {
+export function HomeScreen({ navigation }: any) {
   return (
     <ScrollView w={'100%'}>
       <FabSection />
-      <ViewSection />
-      <PopularCourses
-        navigation={navigation}
-      />
-    
+      <ViewSection navigation={navigation} />
+      <PopularCourses navigation={navigation} />
     </ScrollView>
   );
 }
 
-
-
-const ViewSection = () => {
+const ViewSection = ({ navigation }: any) => {
   return (
     <View p={6}>
       <Heading>
@@ -39,7 +33,11 @@ const ViewSection = () => {
         Engage in meaningful discussions, ask questions, and share knowledge
         with fellow learners.
       </Text>
-      <Button mt={3} bg={'green.600'}>
+      <Button
+        onPress={() => navigation.jumpTo('Forum')}
+        mt={3}
+        bg={'green.600'}
+      >
         Join Now
       </Button>
     </View>

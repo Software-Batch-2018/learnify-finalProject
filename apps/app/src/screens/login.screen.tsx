@@ -14,7 +14,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { loginUser } from '../query/user';
 import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { hasToken } from '../utils/auth.check';
 import { AuthContext } from '../components/AuthProvider';
 

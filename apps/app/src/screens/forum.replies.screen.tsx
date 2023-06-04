@@ -13,16 +13,13 @@ import {
 } from 'native-base';
 import { GetAllForumReplies } from '../query/forum';
 import { getTimeAgo } from '../utils/date';
-import React, { useState } from 'react';
-import { hasToken } from '../utils/auth.check';
+import React from 'react';
+import { AuthContext } from '../components/AuthProvider';
 export default function ForumRepliesScreen({ route, navigation }: any) {
   const { params } = route;
 
   const { isLoading, data } = GetAllForumReplies(params.forum_id);
-  const [isAuth, setIsAuth] = useState(false);
-  React.useEffect(() => {
-    hasToken().then((value) => setIsAuth(value));
-  }, []);
+  const { isAuth } = React.useContext(AuthContext);
   return (
     <ScrollView>
       {isLoading ? (

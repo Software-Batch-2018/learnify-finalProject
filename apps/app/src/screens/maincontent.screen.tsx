@@ -14,11 +14,11 @@ import RenderHtml from 'react-native-render-html';
 import { GetContentAndQuiz } from '../query/quiz';
 import { Actionsheet } from 'native-base';
 import { ViewerPage } from '../components/quiz/viewer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
-import { hasToken } from '../utils/auth.check';
 import { useMutation } from 'react-query';
 import { updateQuizRecord } from '../query/user';
+import { AuthContext } from '../components/AuthProvider';
+
 export function MainContentScreen({ route, navigation }: any) {
   const { params } = route;
   const { width } = useWindowDimensions();
@@ -27,30 +27,14 @@ export function MainContentScreen({ route, navigation }: any) {
 
   const { isOpen, onOpen, onClose } = useDisclose();
 
-  const [token, setToken] = React.useState<string | undefined>(undefined);
-
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('token');
-      if (value !== null) {
-        setToken(value);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  React.useEffect(() => {
-    getData().then();
-  }, []);
+  const { isAuth } = React.useContext(AuthContext);
 
   const handleOpenQuiz = () => {
-    hasToken().then((value) => {
-      if (value) {
-        onOpen();
-      } else {
-        navigation.jumpTo('Account');
-      }
-    });
+    if (isAuth) {
+      onOpen();
+    } else {
+      navigation.jumpTo('Account');
+    }
   };
 
   const { mutate } = useMutation({

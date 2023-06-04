@@ -10,6 +10,8 @@ import { ContentScreen } from '../screens/content.screen';
 import { MainContentScreen } from '../screens/maincontent.screen';
 import ProfilePage from '../screens/profile.screen';
 import UserQuizHistory from '../screens/quizhistory.screen';
+import ForumScreen from '../screens/forum.screen';
+import ForumRepliesScreen from '../screens/forum.replies.screen';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +31,23 @@ export function MainStackNavigator() {
       <Stack.Screen
         name="MainContent"
         component={MainContentScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export function BlogStackNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Forum"
+        component={ForumScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ForumReply"
+        component={ForumRepliesScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -3,13 +3,14 @@ import { Icon } from 'native-base';
 import React from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AccountScreen } from '../screens/login.screen';
 import {
   AccountStackNavigator,
+  BlogStackNavigator,
   CoursesStackNavigator,
   MainStackNavigator,
 } from './stack.navigation';
 import BlogScreen from '../screens/blog.screen';
+import ForumScreen from '../screens/forum.screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -74,7 +75,7 @@ export default function BottomNavigation() {
             ),
           }}
           name="Blogs"
-          component={BlogScreen}
+          component={BlogStackNavigator}
         />
       </Tab.Navigator>
     </NavigationContainer>

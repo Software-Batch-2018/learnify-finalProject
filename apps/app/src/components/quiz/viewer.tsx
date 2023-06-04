@@ -4,8 +4,7 @@ import { ResultsFromQuiz, resultsFromQuiz } from './resultsfromquiz';
 import { QuizResults } from './viewer.result';
 import { InfoBox } from '../info';
 import { Box, Button, Center, Heading, useToast } from 'native-base';
-import { useMutation } from 'react-query';
-import { loginUser, updateQuizRecord } from '../../query/user';
+import { UseMutateFunction } from 'react-query';
 
 export interface IAnswerOption {
   label: string;
@@ -23,10 +22,26 @@ export interface IQuiz {
   questions: IQuestion[];
   author?: string;
   backLink?: string;
-  quiz_id?: string
+  quiz_id?: string;
 }
 
-export function ViewerPage({ data }: { data: IQuiz }) {
+interface ViewerPageProps {
+  data: IQuiz;
+  mutate: UseMutateFunction<
+    any,
+    unknown,
+    {
+      payload: {
+        correct: number;
+        incorrect: number;
+      };
+      quiz_id: string;
+    },
+    unknown
+  >;
+}
+
+export function ViewerPage({ data, mutate }: ViewerPageProps) {
   const toast = useToast();
 
   const [initialized] = useState(
@@ -51,14 +66,6 @@ export function ViewerPage({ data }: { data: IQuiz }) {
     }
   );
 
-  const { mutate,  isLoading } = useMutation({
-    mutationFn: async (submitData: {payload:{correct:number, incorrect:number}, quiz_id: string}) => {
-      const data = await updateQuizRecord(submitData.payload, submitData.quiz_id);
-      
-      return data;
-    },
-  });
-
   const [quizResults, setQuizResults] = useState<ResultsFromQuiz>();
   const [answers, setAnswers] = useState<number[]>([]);
   function onFinishClick() {
@@ -70,16 +77,14 @@ export function ViewerPage({ data }: { data: IQuiz }) {
       });
       return null;
     } else {
-
-      
       setQuizResults(result);
       mutate({
-        payload:{
+        payload: {
           correct: result.correct!,
-          incorrect: result.incorrect!
+          incorrect: result.incorrect!,
         },
-        quiz_id: data.quiz_id!
-      })
+        quiz_id: data.quiz_id!,
+      });
     }
   }
 
@@ -99,28 +104,27 @@ export function ViewerPage({ data }: { data: IQuiz }) {
             {parsedQuiz.title}
           </Heading>
 
-        <ViewerQuestions
-          quiz={parsedQuiz}
-          answers={quizResults ? answers : undefined}
-          onClickAnswer={onClickAnswer}
-        />
+          <ViewerQuestions
+            quiz={parsedQuiz}
+            answers={quizResults ? answers : undefined}
+            onClickAnswer={onClickAnswer}
+          />
 
-        {!quizResults ? (
-          <Button
-            m={3}
-            colorScheme="success"
-            size="lg"
-            width={'80'}
-            onPress={onFinishClick}
-            shadow={'4'}
-          >
-            Finish
-          </Button>
-        ) : (
-          <QuizResults {...quizResults} />
-        )}
-      </Center>
-
+          {!quizResults ? (
+            <Button
+              m={3}
+              colorScheme="success"
+              size="lg"
+              width={'80'}
+              onPress={onFinishClick}
+              shadow={'4'}
+            >
+              Finish
+            </Button>
+          ) : (
+            <QuizResults {...quizResults} />
+          )}
+        </Center>
       </Box>
     );
   } else {

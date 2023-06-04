@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Badge,
   Box,
@@ -8,22 +7,17 @@ import {
   Spacer,
   Text,
 } from 'native-base';
-import React from 'react';
+import React, { useContext } from 'react';
 import { returnToken } from '../utils/auth.check';
 import jwt_decode from 'jwt-decode';
 import { InfoBox } from '../components/info';
+import { AuthContext } from '../components/AuthProvider';
 export default function ProfilePage({ navigation }: any) {
-  const clearAll = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (e) {
-      // clear error
-    }
-    console.log('Done.');
-  };
+  const { logout } = useContext(AuthContext);
+
   const handleLogout = () => {
-    clearAll().then(() => {
-      navigation.replace('Login');
+    logout().then(() => {
+      return navigation.replace('Login');
     });
   };
 

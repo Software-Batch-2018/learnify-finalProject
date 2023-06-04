@@ -12,6 +12,7 @@ import ProfilePage from '../screens/profile.screen';
 import UserQuizHistory from '../screens/quizhistory.screen';
 import ForumScreen from '../screens/forum.screen';
 import ForumRepliesScreen from '../screens/forum.replies.screen';
+import { AuthProvider } from '../components/AuthProvider';
 
 const Stack = createStackNavigator();
 

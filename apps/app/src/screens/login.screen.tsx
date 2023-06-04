@@ -16,6 +16,7 @@ import { loginUser } from '../query/user';
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { hasToken } from '../utils/auth.check';
+import { AuthContext } from '../components/AuthProvider';
 
 export function AccountScreen({ navigation }: any) {
   const { handleSubmit, control } = useForm();
@@ -43,22 +44,16 @@ export function AccountScreen({ navigation }: any) {
     },
   });
 
-  const storeData = async (value: string) => {
-    try {
-      await AsyncStorage.setItem('token', value);
-    } catch (e) {
-      // saving error
-    }
-  };
-
   const onSubmit = (formData: any) => {
     formData.email = formData.email.toLowerCase();
     mutate(formData);
   };
 
+  const { login } = React.useContext(AuthContext);
+
   React.useEffect(() => {
     if (data && data.token) {
-      storeData(data.token);
+      login(data.token);
       navigation.replace('Profile');
     }
     hasToken().then((value) => {
@@ -66,7 +61,7 @@ export function AccountScreen({ navigation }: any) {
         navigation.replace('Profile');
       }
     });
-  }, [data, navigation]);
+  }, [data, login, navigation]);
 
   return (
     <Center w="100%">

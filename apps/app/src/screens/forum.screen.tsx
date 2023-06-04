@@ -18,8 +18,9 @@ import {
 } from 'native-base';
 import { GetAllForumQuestion } from '../query/forum';
 import { getTimeAgo } from '../utils/date';
-import React from 'react';
+import React, { useContext } from 'react';
 import { hasToken } from '../utils/auth.check';
+import { AuthContext } from '../components/AuthProvider';
 
 interface AskQuestionModalProps {
   modalVisible: boolean;
@@ -82,15 +83,13 @@ const AskQuestionModal = ({
 
 export default function ForumScreen({ navigation }: any) {
   const { isLoading, data } = GetAllForumQuestion();
-  const [isAuth, setIsAuth] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-  React.useEffect(() => {
-    hasToken().then((value) => setIsAuth(value));
-  }, []);
+  const { isAuth } = useContext(AuthContext);
 
   const handleAskQuestion = () => {
+    console.log(isAuth, 'is user authenticated?');
     if (isAuth) {
       setModalVisible(true);
     } else {

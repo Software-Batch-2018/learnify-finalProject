@@ -17,6 +17,8 @@ import { ViewerPage } from '../components/quiz/viewer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { hasToken } from '../utils/auth.check';
+import { useMutation } from 'react-query';
+import { updateQuizRecord } from '../query/user';
 export function MainContentScreen({ route, navigation }: any) {
   const { params } = route;
   const { width } = useWindowDimensions();
@@ -50,6 +52,20 @@ export function MainContentScreen({ route, navigation }: any) {
       }
     });
   };
+
+  const { mutate } = useMutation({
+    mutationFn: async (submitData: {
+      payload: { correct: number; incorrect: number };
+      quiz_id: string;
+    }) => {
+      const data = await updateQuizRecord(
+        submitData.payload,
+        submitData.quiz_id
+      );
+
+      return data;
+    },
+  });
   return (
     <Box p={3}>
       <Heading>{params.title}</Heading>
@@ -83,7 +99,7 @@ export function MainContentScreen({ route, navigation }: any) {
             <Actionsheet isOpen={isOpen} onClose={onClose}>
               <Actionsheet.Content>
                 <ScrollView w={'100%'}>
-                  <ViewerPage data={data.quiz} />
+                  <ViewerPage mutate={mutate} data={data.quiz} />
                 </ScrollView>
               </Actionsheet.Content>
             </Actionsheet>

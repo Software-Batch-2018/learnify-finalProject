@@ -1,4 +1,3 @@
-import { NavigationProp } from '@react-navigation/native';
 import {
   Box,
   Button,
@@ -62,11 +61,11 @@ export function AccountScreen({ navigation }: any) {
       storeData(data.token);
       navigation.replace('Profile');
     }
-    hasToken().then((value)=>{
-      if(value){
-        navigation.replace('Profile')
+    hasToken().then((value) => {
+      if (value) {
+        navigation.replace('Profile');
       }
-    })
+    });
   }, [data, navigation]);
 
   return (

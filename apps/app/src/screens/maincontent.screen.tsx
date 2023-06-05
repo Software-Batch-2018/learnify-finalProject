@@ -8,6 +8,7 @@ import {
   ScrollView,
   Spinner,
   useDisclose,
+  useToast,
 } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
@@ -50,6 +51,8 @@ export function MainContentScreen({ route, navigation }: any) {
       return data;
     },
   });
+  const toast = useToast();
+
   return (
     <ScrollView p={3}>
       <Heading>{params.title}</Heading>
@@ -66,7 +69,12 @@ export function MainContentScreen({ route, navigation }: any) {
             />
           </AspectRatio>
           <HStack alignItems={'center'} justifyContent={'space-between'}>
-            <Button mt={3}>Other Materials</Button>
+            <Button
+              onPress={() => toast.show({ description: 'Hello world' })}
+              mt={3}
+            >
+              Other Materials
+            </Button>
 
             <Button
               disabled={data.quiz === null}
@@ -80,7 +88,11 @@ export function MainContentScreen({ route, navigation }: any) {
             <RenderHtml contentWidth={width} source={{ html: data.content }} />
           </Box>
           {data.quiz !== null && (
-            <Actionsheet isOpen={isOpen} onClose={onClose}>
+            <Actionsheet
+              _backdrop={{ useRNModalOnAndroid: false, useRNModalOnIOS: false }}
+              isOpen={isOpen}
+              onClose={onClose}
+            >
               <Actionsheet.Content>
                 <ScrollView w={'100%'}>
                   <ViewerPage mutate={mutate} data={data.quiz} />

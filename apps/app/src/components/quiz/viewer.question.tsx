@@ -2,7 +2,7 @@ import React from 'react';
 import { ViewerAnswer } from './viewer.answer';
 import { IQuiz } from './viewer';
 import { View, StyleSheet } from 'react-native';
-import { Box,  Text, useToast } from 'native-base';
+import { Box, Text, useToast } from 'native-base';
 
 type Props = {
   quiz: IQuiz;
@@ -14,6 +14,7 @@ type Props = {
 const styles = StyleSheet.create({
   container: {
     padding: 25,
+    marginBottom: 10,
     width: 380,
     borderRadius: 4,
     backgroundColor: '#F8F8F8',
@@ -37,11 +38,6 @@ export function ViewerQuestions({
   onClickAnswer,
   quiz,
 }: Props): React.ReactElement {
-  const toast = useToast();
-  if (answers && answers.length !== quiz.questions.length) {
-    toast.show({ description: 'Something went wrong' });
-  }
-
   return (
     <Box>
       {quiz.questions.map((question, questionIndex) => {
@@ -87,7 +83,6 @@ function statusFromAnswerOption(
 ): IAnswerStatus {
   const isGuessedAnswer = guessedAnswerIndex === answerIndex;
   const isActualAnswer = actualAnswerIndex === answerIndex;
-
   if (guessedAnswerIndex === undefined) return 'unanswered';
   if (isActualAnswer && isGuessedAnswer) return 'correct';
   if (isActualAnswer) return 'actual';

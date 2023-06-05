@@ -29,6 +29,8 @@ export default function BottomNavigation() {
               bottom: 10,
               right: 25,
               marginTop: 20,
+              marginRight: 14,
+              marginLeft: 14,
               elevation: 15,
               backgroundColor: '#5856D6',
               borderRadius: 30,
@@ -98,7 +100,7 @@ export default function BottomNavigation() {
                     mt={3}
                     ml={3}
                     as={<MaterialIcons name="forum" />}
-                    size={Platform.OS === 'ios' ? 10 : 7}
+                    size={Platform.OS === 'ios' ? 7 : 7}
                     color={focused ? 'green.600' : 'blue.400'}
                   />
                 </View>

@@ -96,7 +96,6 @@ export function ViewerPage({ data, mutate }: ViewerPageProps) {
 
   if (initialized.error === undefined) {
     const { parsedQuiz } = initialized;
-
     return (
       <Box>
         <Center>
@@ -106,7 +105,7 @@ export function ViewerPage({ data, mutate }: ViewerPageProps) {
 
           <ViewerQuestions
             quiz={parsedQuiz}
-            answers={quizResults ? answers : undefined}
+            answers={answers}
             onClickAnswer={onClickAnswer}
           />
 

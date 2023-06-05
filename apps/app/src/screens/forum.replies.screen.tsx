@@ -17,6 +17,7 @@ import React from 'react';
 import { AuthContext } from '../components/AuthProvider';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import { SOCKET } from '../utils/socket.config';
 export default function ForumRepliesScreen({ route, navigation }: any) {
   const { params } = route;
 
@@ -42,16 +43,22 @@ export default function ForumRepliesScreen({ route, navigation }: any) {
           status: false,
           message: '',
         });
-        refetch();
       }
       return data;
     },
   });
   const onSubmit = (formData: any) => {
-    console.log(formData);
     mutate(formData);
     reset();
   };
+
+  const [messages, setMessages] = React.useState<any>([]);
+  React.useEffect(() => {
+    SOCKET.on(params.forum_id, (message: any) => {
+      setMessages([...messages, message]);
+    });
+  }, [messages, params.forum_id]);
+
   return (
     <ScrollView>
       {isLoading ? (
@@ -103,6 +110,28 @@ export default function ForumRepliesScreen({ route, navigation }: any) {
               Sign in to Reply
             </Button>
           )}
+
+          {messages.map((reply: any) => (
+            <VStack
+              key={reply.id}
+              m={4}
+              space={4}
+              bg={'green.100'}
+              rounded={'md'}
+              p={5}
+            >
+              <VStack space={2}>
+                <Text fontSize={'md'}>{reply.comment}</Text>
+                <HStack>
+                  <Text fontWeight={'semibold'}>
+                    By {reply.replied_by.name}
+                  </Text>
+                  <Spacer />
+                  <Text color={'blue.700'}>{getTimeAgo(reply.created_at)}</Text>
+                </HStack>
+              </VStack>
+            </VStack>
+          ))}
 
           {data.replies.map((reply: any) => (
             <VStack

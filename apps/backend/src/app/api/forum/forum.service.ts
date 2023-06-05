@@ -45,7 +45,9 @@ export class ForumService {
   async getAllForumQuestions(options: IPaginationOptions) {
     const query = this.forumRepository
       .createQueryBuilder('q')
-      .leftJoinAndSelect('q.asked_by', 'user');
+      .leftJoinAndSelect('q.asked_by', 'user')
+      .orderBy("q.created_at", "DESC")
+
 
     return paginate<Forum>(query, options);
   }
@@ -56,6 +58,7 @@ export class ForumService {
       .leftJoinAndSelect('q.asked_by', 'asker')
       .leftJoinAndSelect('q.replies', 'replies')
       .leftJoinAndSelect('replies.replied_by', 'replier')
+      .orderBy("replies.created_at", "DESC")
       .where('q.id = :forum_id', { forum_id })
       .getOne();
   }

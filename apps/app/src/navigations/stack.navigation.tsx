@@ -52,7 +52,7 @@ export function ForumStackNavigator() {
       }}
     >
       <Stack.Screen
-        name="Forum"
+        name="ForumHome"
         component={ForumScreen}
         options={{ headerShown: false }}
       />

@@ -55,7 +55,7 @@ export default function ForumRepliesScreen({ route, navigation }: any) {
   const [messages, setMessages] = React.useState<any>([]);
   React.useEffect(() => {
     SOCKET.on(params.forum_id, (message: any) => {
-      setMessages([...messages, message]);
+      setMessages([message, ...messages]);
     });
   }, [messages, params.forum_id]);
 

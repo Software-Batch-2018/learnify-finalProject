@@ -7,14 +7,11 @@ import { NestFactory, Reflector } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const cfg: ConfigService = app.get(ConfigService);
 
-  const port: number = cfg.get<number>('NEST_PORT');
-
+  const port = process.env.PORT || 3000;
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
@@ -34,8 +31,8 @@ async function bootstrap() {
 
   app.enableCors();
 
-  await app.listen(port, '0.0.0.0');
-  Logger.log(
+  await app.listen(port, "0.0.0.0");
+    Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
 }

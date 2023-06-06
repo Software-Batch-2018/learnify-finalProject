@@ -21,7 +21,7 @@ import { SOCKET } from '../utils/socket.config';
 export default function ForumRepliesScreen({ route, navigation }: any) {
   const { params } = route;
 
-  const { isLoading, data, refetch } = GetAllForumReplies(params.forum_id);
+  const { isLoading, data } = GetAllForumReplies(params.forum_id);
   const { isAuth } = React.useContext(AuthContext);
 
   const { handleSubmit, control, reset } = useForm();

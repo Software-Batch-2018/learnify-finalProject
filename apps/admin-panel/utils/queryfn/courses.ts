@@ -1,10 +1,11 @@
 import {  useQuery } from 'react-query';
 import { axios } from '../axios-inteceptor';
+import { API } from '../api';
 
 async function getCourses() {
   try {
     const response = await axios.get(
-      'http://localhost:3334/api/courses/all/levels'
+      `${API}/courses/all/levels`
     );
     const data = await response.data;
     return data;
@@ -23,7 +24,7 @@ interface AddLevelPayload{
 async function AddLevel(payload: AddLevelPayload){
   try {
     const response = await axios.post(
-      'http://localhost:3334/api/courses/level',
+      `${API}/courses/level`,
       payload
     );
     const data = await response.data;

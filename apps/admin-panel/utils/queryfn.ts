@@ -1,7 +1,8 @@
+import { API } from './api';
 import { axios } from './axios-inteceptor';
 async function getBlogs() {
   try {
-    const response = await axios.get('http://localhost:3334/api/blogs');
+    const response = await axios.get(`${API}/blogs`);
     const data = await response.data;
     return data;
   } catch (error: any) {
@@ -27,7 +28,7 @@ export interface CreatePayload {
 async function createBlogs(payload: CreatePayload) {
   try {
     const response = await axios.post(
-      `http://localhost:3334/api/blogs`,
+      `${API}/blogs`,
       payload
     );
     const data = await response.data;
@@ -43,7 +44,7 @@ async function createBlogs(payload: CreatePayload) {
 async function editBlogs({ id, payload }: EditPayload) {
   try {
     const response = await axios.patch(
-      `http://localhost:3334/api/blogs/${id}`,
+      `${API}/blogs/${id}`,
       payload
     );
     const data = await response.data;
@@ -59,7 +60,7 @@ async function editBlogs({ id, payload }: EditPayload) {
 async function deleteBlogs({ id }: { id: string }) {
   try {
     const response = await axios.delete(
-      `http://localhost:3334/api/blogs/${id}`
+      `${API}/blogs/${id}`
     );
     const data = await response.data;
     return data;

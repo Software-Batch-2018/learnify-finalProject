@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API } from './api';
 
 export interface CreateLevelPayload {
   level: string;
@@ -7,10 +8,7 @@ export interface CreateLevelPayload {
 
 export async function CreateLevel(payload: CreateLevelPayload) {
   try {
-    const response = await axios.post(
-      `http://localhost:3334/api/courses/level`,
-      payload
-    );
+    const response = await axios.post(`${API}/courses/level`, payload);
     const data = await response.data;
     return data;
   } catch (error: any) {
@@ -29,10 +27,7 @@ export interface CreateSubjectPayload {
 
 export async function CreateSubject(payload: CreateSubjectPayload) {
   try {
-    const response = await axios.post(
-      `http://localhost:3334/api/courses/subject`,
-      payload
-    );
+    const response = await axios.post(`${API}/courses/subject`, payload);
     const data = await response.data;
     return data;
   } catch (error: any) {
@@ -51,10 +46,7 @@ export interface CreateContenPayload {
 }
 export async function CreateContent(payload: CreateContenPayload) {
   try {
-    const response = await axios.post(
-      `http://localhost:3334/api/courses/content`,
-      payload
-    );
+    const response = await axios.post(`${API}/courses/content`, payload);
     const data = await response.data;
     return data;
   } catch (error: any) {
@@ -65,11 +57,10 @@ export async function CreateContent(payload: CreateContenPayload) {
   }
 }
 
-
 export async function editCourseContent({ content_id, payload }: any) {
   try {
     const response = await axios.patch(
-      `http://localhost:3334/api/courses/edit/content/${content_id}`,
+      `${API}/courses/edit/content/${content_id}`,
       payload
     );
     const data = await response.data;

@@ -1,13 +1,13 @@
 import axios, { AxiosError } from "axios";
+import { API } from "../api";
 
-const API = 'http://localhost:3334/api/'
 
 
 type Methods = "POST" | "PUT" | "DELETE" | "PATCH";
 const createMutation =
 (route: string, method: Methods = "POST") =>
         (body: any, headers = {}) =>
-            axios(`${API}${route}`, {
+            axios(`${API}/${route}`, {
                 data: body, method, headers: {
                     ...headers,
                     Authorization: `Bearer ${localStorage.getItem('token')}`

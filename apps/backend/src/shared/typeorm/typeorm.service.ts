@@ -19,7 +19,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.config.get<string>('POSTGRES_USER'),
       password: this.config.get<string>('POSTGRES_PASSWORD'),
       entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
-      subscribers:[ContentSubscriber],
+      subscribers: [ContentSubscriber],
       migrations: [],
       migrationsTableName: 'typeorm_migrations',
       logging: false,
@@ -28,9 +28,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       ssl: true,
       extra: {
         ssl: {
-          rejectUnauthorized: false
-        }
-      }
+          rejectUnauthorized: false,
+        },
+      },
     };
   }
 }

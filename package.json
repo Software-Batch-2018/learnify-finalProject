@@ -28,6 +28,7 @@
     "class-validator": "^0.14.0",
     "clsx": "^1.2.1",
     "expo": "48.0.16",
+    "expo-linear-gradient": "^12.1.2",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "framer-motion": "^10.12.12",

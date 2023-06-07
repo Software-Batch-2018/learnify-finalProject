@@ -2,20 +2,41 @@ import {
   Box,
   Button,
   Center,
+  HStack,
   Heading,
+  Icon,
+  Input,
   ScrollView,
   Text,
+  VStack,
   View,
 } from 'native-base';
 import React from 'react';
 import { PopularCourses } from '../components/popularCourse';
-
+import { MaterialIcons } from '@expo/vector-icons';
 export function HomeScreen({ navigation }: any) {
   return (
-    <ScrollView w={'100%'}>
-      <FabSection />
-      <ViewSection navigation={navigation} />
-      <PopularCourses navigation={navigation} />
+    <ScrollView bg={'#03001C'} w={'100%'}>
+      <VStack space={7} p={3} mt={20}>
+        <Input
+          bg={'white'}
+          height={10}
+          InputLeftElement={
+            <Icon
+              as={<MaterialIcons name="search" />}
+              size={5}
+              ml="2"
+              color="black"
+            />
+          }
+          color={'black'}
+          placeholder="Search Courses"
+        />
+        <PopularCourses navigation={navigation} />
+        <Heading fontSize={'3xl'} color={'white'}>
+          Top Subjects
+        </Heading>
+      </VStack>
     </ScrollView>
   );
 }

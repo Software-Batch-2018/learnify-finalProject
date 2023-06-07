@@ -22,7 +22,9 @@ export function MainStackNavigator() {
       <Stack.Screen
         name="HomePage"
         component={HomeScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="About"

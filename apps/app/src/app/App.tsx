@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeBaseProvider } from 'native-base';
+import { Box, NativeBaseProvider } from 'native-base';
 import BottomNavigation from '../navigations/bottom.navigation';
 import { QueryClient, QueryClientProvider } from 'react-query';
 

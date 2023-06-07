@@ -11,7 +11,7 @@ import {
   VStack,
 } from 'native-base';
 import { GetAllPopularCourses } from '../query/home';
-import { Pressable } from 'react-native';
+import { ImageBackground, Pressable, View, StyleSheet } from 'react-native';
 
 const Cards = ({
   title_image,
@@ -34,25 +34,48 @@ const Cards = ({
         })
       }
     >
-      <Box mr={2} p={1} bg={'blue.100'} h={32} w={'32'}>
-        <AspectRatio rounded={'md'} w="100%" ratio={16 / 9}>
-          <Image
-            source={{
-              uri: title_image,
-            }}
-            alt="image"
-          />
-        </AspectRatio>
-        <Text p={1} fontSize={'md'} fontWeight={'bold'}>
-          {content_title}
-        </Text>
-        <Text px={1} fontSize={'sm'}>
-          Learnify verified
-        </Text>
+      <Box rounded="2xl" overflow="hidden" h={'56'} w={'80'}>
+        <View style={styles.container}>
+          <ImageBackground
+            source={{ uri: title_image }}
+            resizeMode="cover"
+            blurRadius={10}
+            style={styles.image}
+          >
+            <View style={styles.backdrop} />
+            <Text style={styles.text}>{content_title}</Text>
+            <Text style={styles.subText}>Data Structure and Algorithm</Text>
+          </ImageBackground>
+        </View>
       </Box>
     </Pressable>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  text: {
+    color: 'white',
+    fontSize: 39,
+    lineHeight: 84,
+    fontWeight: 'bold',
+    marginLeft: 20,
+  },
+  subText: {
+    color: 'white',
+    marginLeft: 20,
+    fontSize: 20,
+  },
+});
 
 const SkeletonComponent = () => {
   return (
@@ -86,13 +109,17 @@ const SkeletonComponent = () => {
 export function PopularCourses({ navigation, heading = true }: any) {
   const { isLoading, data } = GetAllPopularCourses();
   return (
-    <Box mb={2} mx={6}>
-      {heading && <Heading mb={2}>Popular courses</Heading>}
+    <Box mb={2}>
+      {heading && (
+        <Heading fontSize={'3xl'} mb={5} color={'white'}>
+          Popular Courses
+        </Heading>
+      )}
       {isLoading ? (
         <SkeletonComponent />
       ) : (
         <ScrollView horizontal={true}>
-          <HStack>
+          <HStack space={5}>
             {data.map(
               (course: {
                 content_id: string;

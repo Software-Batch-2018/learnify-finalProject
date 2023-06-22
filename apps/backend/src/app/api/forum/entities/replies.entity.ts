@@ -11,7 +11,7 @@ import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class ForumReply {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()

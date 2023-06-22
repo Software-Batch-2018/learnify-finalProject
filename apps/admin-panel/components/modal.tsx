@@ -29,7 +29,9 @@ export function Modal({
               transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
               className="rounded-lg bg-gray-50 dark:bg-gray-900  z-50     dark:text-white text-black"
             >
-              {children}
+              <div className="max-w-3xl p-5 h-[80vh] overflow-y-auto">
+                {children}
+              </div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}

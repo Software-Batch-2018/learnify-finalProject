@@ -12,6 +12,8 @@ import {
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
 import { CreateSubjectDTO } from './dto/subject.dto';
+import { OpenAiService } from '../../../shared/openai/openai.service';
+import { QuizService } from '../quiz/quiz.service';
 
 @Injectable()
 export class CoursesService {
@@ -23,7 +25,11 @@ export class CoursesService {
     private subjectRepository: Repository<Subjects>,
 
     @InjectRepository(Content)
-    private contentRepository: Repository<Content>
+    private contentRepository: Repository<Content>,
+
+    private quizService: QuizService,
+
+    private readonly aiService: OpenAiService
   ) {}
 
   async createSubject(body: CreateSubjectDTO) {
@@ -53,7 +59,16 @@ export class CoursesService {
     content.content_title = body.content_title;
     content.content = body.content;
     content.subject = subject;
-    return await this.contentRepository.save(content);
+
+    const data = await this.contentRepository.save(content);
+
+    if (body.auto_quiz) {
+      const quiz = await this.aiService.autoQuiz(body.content);
+      console.log(quiz)
+      const final = await this.quizService.createQuiz(quiz, data.content_id);
+      console.log(final)
+    }
+    return data;
   }
 
   async listContentsofSubjects(
@@ -67,22 +82,34 @@ export class CoursesService {
     return paginate<Content>(queryBuilder, options);
   }
 
-  async listAllLevels(options: IPaginationOptions): Promise<Pagination<Level>> {
-    const queryBuilder = this.levelRepository.createQueryBuilder('l');
-    queryBuilder.leftJoinAndSelect('l.subjects', 's');
-    queryBuilder.leftJoinAndSelect('s.contents', 'c');
+  async listAllLevels(options: IPaginationOptions): Promise<any> {
+    // const queryBuilder = this.levelRepository.createQueryBuilder('l');
+    // queryBuilder.leftJoinAndSelect('l.subjects', 's');
+    // queryBuilder.leftJoinAndSelect('s.contents', 'c');
 
-    return paginate<Level>(queryBuilder, options);
+
+
+    // return {... paginate<Level>(queryBuilder, options)}
+
+    return await this.levelRepository.createQueryBuilder('level')
+    .leftJoinAndSelect('level.subjects', 'subjects')
+    .loadRelationCountAndMap('level.subjectsCount', 'level.subjects')
+    .getMany();
   }
 
   async listAllSubjects(
     options: IPaginationOptions,
     level_id: string
-  ): Promise<Pagination<Subjects>> {
-    const queryBuilder = this.subjectRepository.createQueryBuilder('c');
-    queryBuilder.where('c.level = :level_id', { level_id: level_id });
+  ): Promise<any> {
+    // const queryBuilder = this.subjectRepository.createQueryBuilder('c');
+    // queryBuilder.where('c.level = :level_id', { level_id: level_id });
 
-    return paginate<Subjects>(queryBuilder, options);
+    // return paginate<Subjects>(queryBuilder, options);
+    return await this.subjectRepository.createQueryBuilder('subjects')
+    .leftJoinAndSelect('subjects.contents', 'contents')
+    .loadRelationCountAndMap('subjects.contentsCount', 'subjects.contents')
+    .where('subjects.level = :level_id', { level_id: level_id })
+    .getMany();
   }
 
   async editContent(content_id: string, body: UpdateContentDTO) {

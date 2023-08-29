@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class AddNewContentDTO {
   @IsString()
@@ -20,6 +20,10 @@ export class AddNewContentDTO {
   @IsString()
   @ApiProperty()
   subject_id: string;
+
+  @IsBoolean()
+  @ApiProperty()
+  auto_quiz: boolean
 }
 
 export class UpdateContentDTO extends PartialType(AddNewContentDTO) {}

@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useMemo, useState } from 'react';
-
 import { useGetAllCourses } from '../../utils/queryfn/courses';
 import { Modal } from '../../components/modal';
 import { QuizBuilder } from '../../components/quiz/quiz';
@@ -55,7 +54,6 @@ const CourseTable = () => {
         >
           View Content
         </button>
-
       </div>
     );
   };
@@ -175,6 +173,8 @@ const CourseTable = () => {
     });
     setViewCourseContent(false);
   };
+
+
   return (
     <div style={containerStyle}>
       <div style={gridStyle} className="ag-theme-alpine">
@@ -231,6 +231,7 @@ const CourseTable = () => {
       <Modal modal={viewCourseContent} setModal={setViewCourseContent}>
         <div className="max-w-3xl p-5 ">
           <form className="space-y-3" onSubmit={handleEdit(editBlog)}>
+            
             <RichTextEditor
               defaultValue={editContent}
               onChange={editSetContent}

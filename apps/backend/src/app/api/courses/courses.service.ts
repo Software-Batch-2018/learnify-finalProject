@@ -14,6 +14,7 @@ import {
 import { CreateSubjectDTO } from './dto/subject.dto';
 import { OpenAiService } from '../../../shared/openai/openai.service';
 import { QuizService } from '../quiz/quiz.service';
+import { QaserviceService } from '../question-answer/qaservice.service';
 
 @Injectable()
 export class CoursesService {
@@ -29,7 +30,9 @@ export class CoursesService {
 
     private quizService: QuizService,
 
-    private readonly aiService: OpenAiService
+    private readonly aiService: OpenAiService,
+    private readonly qaService: QaserviceService
+
   ) {}
 
   async createSubject(body: CreateSubjectDTO) {
@@ -62,12 +65,15 @@ export class CoursesService {
 
     const data = await this.contentRepository.save(content);
 
-    if (body.auto_quiz) {
-      const quiz = await this.aiService.autoQuiz(body.content);
-      console.log(quiz)
-      const final = await this.quizService.createQuiz(quiz, data.content_id);
-      console.log(final)
+    // if (body.auto_quiz) {
+    //   const quiz = await this.aiService.autoQuiz(body.content);
+    //   await this.quizService.createQuiz(quiz, data.content_id);
+    // }
+    const qaJson = await this.aiService.autoQA(body.content)
+    const qaObj = {
+      questions: qaJson
     }
+     await this.qaService.createQA(qaObj, data.content_id)
     return data;
   }
 
@@ -93,6 +99,8 @@ export class CoursesService {
 
     return await this.levelRepository.createQueryBuilder('level')
     .leftJoinAndSelect('level.subjects', 'subjects')
+    .leftJoinAndSelect('subjects.contents', 'contents')
+
     .loadRelationCountAndMap('level.subjectsCount', 'level.subjects')
     .getMany();
   }

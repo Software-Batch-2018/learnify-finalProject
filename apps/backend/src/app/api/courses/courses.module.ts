@@ -8,10 +8,12 @@ import { CoursesService } from './courses.service';
 import { OpenAiService } from '../../../shared/openai/openai.service';
 import { QuizService } from '../quiz/quiz.service';
 import { Quiz } from '../quiz/entities/quiz.entity';
+import { QaserviceService } from '../question-answer/qaservice.service';
+import { QaEntity, QaQuestion } from '../question-answer/entities/qa.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Subjects, Content, Level, Quiz])],
+  imports: [TypeOrmModule.forFeature([Subjects, Content, Level, Quiz, QaEntity, QaQuestion])],
   controllers: [CoursesController],
-  providers: [CoursesService, OpenAiService, QuizService],
+  providers: [CoursesService, OpenAiService, QuizService, QaserviceService],
 })
 export class CoursesModule {}

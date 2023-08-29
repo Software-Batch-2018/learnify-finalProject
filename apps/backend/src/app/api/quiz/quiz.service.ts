@@ -65,6 +65,8 @@ export class QuizService {
       .leftJoinAndSelect('u.quiz', 'quiz')
       .leftJoinAndSelect('quiz.questions', 'questions')
       .leftJoinAndSelect('questions.answerOptions', 'answer')
+      .leftJoinAndSelect("u.qa", "qa")
+      .leftJoinAndSelect("qa.questions", "qaquestions")
       .where('u.content_id = :id', { id: course_id })
       .getOne();
 

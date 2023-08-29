@@ -51,4 +51,41 @@ export class OpenAiService {
       throw new Error('Error generating quiz');
     }
   }
+
+  async autoQA(content: string) {
+    const completion = await this.openAi.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: `
+          from this content generate me a question answer in this format in json, at least 5  questions answer, no other text straight in this format
+          class CreateQuestionDto {
+            @IsString()
+            @IsNotEmpty()
+            questionTitle: string;
+          
+            @IsString()
+            @IsNotEmpty()
+            answer: string;
+          }
+          
+          export class CreateQADto {
+            @ValidateNested({ each: true })
+            @Type(() => CreateQuestionDto)
+            @ArrayNotEmpty()
+            questions: CreateQuestionDto[];
+          }
+                the content is this
+      ${content}
+    `,
+        },
+      ],
+      model: 'gpt-3.5-turbo',
+    });
+    try {
+      return JSON.parse(completion.choices[0].message.content);
+    } catch (e: any) {
+      throw new Error('Error generating quiz');
+    }
+  }
 }

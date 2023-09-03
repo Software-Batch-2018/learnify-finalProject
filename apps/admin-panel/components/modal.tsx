@@ -15,7 +15,19 @@ export function Modal({
       {modal && (
         <div className="">
           <Overlay />
-          <div className="fixed flex h-full overflow-y-scroll w-full  z-40  items-center justify-center top-0 left-0">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{ type: 'spring', bounce: 0, duration: 0.2 }}
+            onClick={() => setModal((modal) => !modal)}
+            className="bg-transparent z-30 fixed  w-full  flex items-center justify-center top-0 left-0"
+          />
+          <div className="fixed inset-40  overflow-hidden z-40">
             <motion.div
               initial={{ y: 50, opacity: 0 }}
               animate={{
@@ -27,22 +39,10 @@ export function Modal({
                 opacity: 0,
               }}
               transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-              className="rounded-lg bg-gray-50 dark:bg-gray-900  z-50     dark:text-white text-black"
+              className="max-h-full z-50 overflow-auto rounded-lg bg-gray-50 dark:bg-gray-900       dark:text-white text-black"
             >
               {children}
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              transition={{ type: 'spring', bounce: 0, duration: 0.2 }}
-              onClick={() => setModal((modal) => !modal)}
-              className="bg-transparent fixed h-full w-full flex items-center justify-center top-0 left-0"
-            />
           </div>
         </div>
       )}

@@ -15,11 +15,13 @@ import { useMutation } from 'react-query';
 import { editCourseContent } from '../../utils/courses';
 import toast from 'react-hot-toast';
 import { Button } from '@finalproject/ui';
+import { MaterialModal } from '../../components/courses/material.modal';
 
 const CourseTable = () => {
   const [quizModal, setQuizModal] = React.useState(false);
   const [expandedRows, setExpandedRows] = useState<any>(null);
   const [subjectExpandedRows, setSubjectExpandedRows] = useState<any>(null);
+  const [materialModal, setMaterialModal] = React.useState<boolean>(false);
 
   const [contentDetail, setContentDetail] = React.useState({
     course_id: '',
@@ -53,6 +55,14 @@ const CourseTable = () => {
           className="btn btn-fill-gray btn-xxs"
         >
           View Content
+        </button>
+        <button
+          onClick={() => {
+            setMaterialModal(true);
+          }}
+          className="btn btn-fill-blue btn-xxs"
+        >
+          Materials
         </button>
       </div>
     );
@@ -174,7 +184,6 @@ const CourseTable = () => {
     setViewCourseContent(false);
   };
 
-
   return (
     <div style={containerStyle}>
       <div style={gridStyle} className="ag-theme-alpine">
@@ -200,8 +209,8 @@ const CourseTable = () => {
         )}
       </div>
 
-      <Modal modal={quizModal} setModal={setQuizModal}>
-        <div className="h-[90vh] w-[60vw] p-6 overflow-y-scroll">
+      <Modal height="full" modal={quizModal} setModal={setQuizModal}>
+        <div className=" p-6 overflow-y-scroll">
           <QuizBuilder
             course_id={contentDetail.course_id}
             course_name={contentDetail.course_name}
@@ -228,10 +237,15 @@ const CourseTable = () => {
         contentData={subjectExpandedRows}
         refetch={refetch}
       />
+
+      <MaterialModal
+        materialModal={materialModal}
+        setMaterialModal={setMaterialModal}
+      />
+
       <Modal modal={viewCourseContent} setModal={setViewCourseContent}>
-        <div className="max-w-3xl p-5 ">
+        <div className=" p-5 ">
           <form className="space-y-3" onSubmit={handleEdit(editBlog)}>
-            
             <RichTextEditor
               defaultValue={editContent}
               onChange={editSetContent}

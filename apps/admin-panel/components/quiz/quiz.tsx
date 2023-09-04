@@ -71,21 +71,19 @@ export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
 
     setQuiz({ ...quiz, questions: updatedQuestions });
   }
-  const { data, isLoading:quizLoading, refetch } = useGetQuiz(course_id);
+  const { data, isLoading: quizLoading, refetch } = useGetQuiz(course_id);
 
   useEffect(() => {
-    if(data && data.quiz){
+    if (data && data.quiz) {
       setTimeout(() => {
         localStorage.setItem(storageKey, JSON.stringify(data.quiz));
       }, 0);
-    }else{
-
+    } else {
       setTimeout(() => {
         localStorage.setItem(storageKey, JSON.stringify(quiz));
       }, 0);
     }
-
-  }, [quiz]);
+  }, [quiz, data, storageKey]);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (payload: any) => {

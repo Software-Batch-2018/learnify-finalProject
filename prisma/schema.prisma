@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DATABASE_URL")
+}
+
+model answer {
+  answer_id          Int       @id(map: "PK_26e548d2b73776a764f14c2d107") @default(autoincrement())
+  label              String    @db.VarChar
+  questionQuestionId Int?
+  question           question? @relation(fields: [questionQuestionId], references: [question_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_d6b11fa94dbccb3d64d31fb36c6")
+}
+
+model blog {
+  blog_id    String   @id(map: "PK_b7647f1f3b095a20e19c62ff529") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title      String   @db.VarChar
+  blog_img   String   @db.VarChar
+  content    String
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @default(now()) @db.Timestamp(6)
+  authorId   Int?
+  user       user?    @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_a001483d5ba65dad16557cd6ddb")
+}
+
+model content {
+  content_id       String     @id(map: "PK_20817ae3445d00a5bc50a58a144") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  content_title    String     @db.VarChar
+  title_image      String     @db.VarChar
+  content          String
+  created_at       DateTime   @default(now()) @db.Timestamp(6)
+  updated_at       DateTime   @default(now()) @db.Timestamp(6)
+  view             Int        @default(1)
+  subjectSubjectId String?    @db.Uuid
+  quizQuizId       String?    @unique(map: "REL_490cd38f370cf5bc4747d3e440") @db.Uuid
+  qaQaId           String?    @unique(map: "UQ_2b7a110d1405f06481095b7eb56") @db.Uuid
+  qa_entity        qa_entity? @relation(fields: [qaQaId], references: [qa_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_2b7a110d1405f06481095b7eb56")
+  subjects         subjects?  @relation(fields: [subjectSubjectId], references: [subject_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_427751958268dc09787a73bda29")
+  quiz             quiz?      @relation(fields: [quizQuizId], references: [quiz_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_490cd38f370cf5bc4747d3e4402")
+  material         material[]
+}
+
+model forum {
+  id          String        @id(map: "PK_ffd925a9b1fa44ab1ce26c9821c") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  question    String        @db.VarChar
+  description String        @db.VarChar
+  created_at  DateTime      @default(now()) @db.Timestamp(6)
+  askedById   Int?
+  user        user?         @relation(fields: [askedById], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_ce0af77cef138d0626c1f4a839f")
+  forum_reply forum_reply[]
+}
+
+model forum_reply {
+  id          Int      @id(map: "PK_c9f47f8daef489260b44991f82a") @default(autoincrement())
+  comment     String   @db.VarChar
+  created_at  DateTime @default(now()) @db.Timestamp(6)
+  questionId  String?  @db.Uuid
+  repliedById Int?
+  forum       forum?   @relation(fields: [questionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_50652884bffdab0c8f41e15c105")
+  user        user?    @relation(fields: [repliedById], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_9ab1aae4ddc684dac9dfedd36d4")
+}
+
+model level {
+  level_id  String     @id(map: "PK_055a611503ae5adb023e49d1881") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  level     String     @db.VarChar
+  level_img String     @db.VarChar
+  subjects  subjects[]
+}
+
+model material {
+  qa_id            String   @id(map: "PK_689a9890e3b3913c2da91f61c1d") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  material_link    String   @db.VarChar
+  contentContentId String?  @db.Uuid
+  content          content? @relation(fields: [contentContentId], references: [content_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c865e4553da7eabd94f462c843b")
+}
+
+model qa_entity {
+  qa_id       String        @id(map: "PK_9a12cab82002adb1b9fdf1950e2") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  content     content?
+  qa_question qa_question[]
+}
+
+model qa_question {
+  question_id   Int        @id(map: "PK_6911e3182847117ca94fdfffafa") @default(autoincrement())
+  questionTitle String     @db.VarChar
+  answer        String     @db.VarChar
+  qaQaId        String?    @db.Uuid
+  qa_entity     qa_entity? @relation(fields: [qaQaId], references: [qa_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_0138dc981f8baa89c1b2bc8bcfd")
+}
+
+model question {
+  question_id   Int      @id(map: "PK_7c755ccdc03ae2b6206ff00363a") @default(autoincrement())
+  questionTitle String   @db.VarChar
+  answerIndex   Int
+  quizQuizId    String?  @db.Uuid
+  answer        answer[]
+  quiz          quiz?    @relation(fields: [quizQuizId], references: [quiz_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_4766c8843ab702b5f56a504c5c6")
+}
+
+model quiz {
+  quiz_id      String         @id(map: "PK_27fd71399af3cba58196be3f507") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title        String         @db.VarChar
+  content      content?
+  question     question[]
+  quiz_history quiz_history[]
+}
+
+model quiz_history {
+  id                     Int     @id(map: "PK_08e9d1af1e52cc1c5f5d8700a7d") @default(autoincrement())
+  numberOfCorrectAnswers Int
+  numberOfWrongAnswers   Int
+  quizQuizId             String? @db.Uuid
+  userId                 Int?
+  quiz                   quiz?   @relation(fields: [quizQuizId], references: [quiz_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_7e6786147a8895de876f46e0bf5")
+  user                   user?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_e71a76a5c392d7c0c901b91e631")
+}
+
+model subjects {
+  subject_id   String    @id(map: "PK_3573ed298f466a8ba663579e077") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  subject_name String    @db.VarChar
+  subject_img  String    @db.VarChar
+  levelLevelId String?   @db.Uuid
+  content      content[]
+  level        level?    @relation(fields: [levelLevelId], references: [level_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c08e5a2438bdffb081669460f1b")
+}
+
+model user {
+  id           Int            @id(map: "PK_cace4a159ff9f2512dd42373760") @default(autoincrement())
+  email        String         @db.VarChar
+  password     String         @db.VarChar
+  name         String?        @db.VarChar
+  lastLoginAt  DateTime?      @db.Timestamp(6)
+  role         user_role_enum @default(user)
+  blog         blog[]
+  forum        forum[]
+  forum_reply  forum_reply[]
+  quiz_history quiz_history[]
+}
+
+enum user_role_enum {
+  admin
+  user
+  teacher
+}

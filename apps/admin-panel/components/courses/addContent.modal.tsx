@@ -8,7 +8,6 @@ import RichTextEditor from '../RichTextEditor';
 import toast from 'react-hot-toast';
 import { Checkbox } from 'primereact/checkbox';
 
-
 interface AddContentModalProps {
   addContentModal: boolean;
   setAddContentModal: Dispatch<SetStateAction<boolean>>;
@@ -54,7 +53,7 @@ export const AddContentModal = ({
 
   return (
     <Modal modal={addContentModal} setModal={setAddContentModal}>
-      <div className="p-5 w-[40vw]">
+      <div className="p-5 h-screen">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-3">
             <h1 className="font-semibold">Add Content</h1>
@@ -93,7 +92,6 @@ export const AddContentModal = ({
             </div>
             <div className="flex align-items-center">
               <Checkbox
-              
                 onChange={(e) => setChecked(e.checked)}
                 checked={checked}
               ></Checkbox>

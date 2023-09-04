@@ -48,7 +48,7 @@ export const AddSubjectModal = ({
 
   return (
     <Modal modal={addSubjectModal} setModal={setAddSubjectModal}>
-      <div className="p-5 w-[40vw]">
+      <div className="p-5">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-3">
             <h1 className="font-semibold">Add Subject</h1>

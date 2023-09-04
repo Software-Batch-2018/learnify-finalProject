@@ -5,12 +5,15 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { QuizHistory } from './quizHistory.entity';
+import { Level } from '../../courses/entities/level.entity';
 
 export enum Roles {
   ADMIN = 'admin',
@@ -36,15 +39,18 @@ export class User extends BaseEntity {
   @Column({ type: 'timestamp', nullable: true, default: null })
   public lastLoginAt: Date | null;
 
-  //add column type enum of roles
   @Column({ type: 'enum', enum: Roles, default: Roles.USER })
   public role: Roles;
 
   @Exclude()
   private tempPassword!: string;
 
-  @OneToMany(() => QuizHistory, quizHistory => quizHistory.user)
+  @OneToMany(() => QuizHistory, (quizHistory) => quizHistory.user)
   quizHistories: QuizHistory[];
+
+  @ManyToOne(() => Level)
+  @JoinColumn()
+  user_level: Level;
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -56,7 +56,8 @@ export class QaserviceService {
   async findCourseMaterial(course_id: string) {
     return this.materialRepository
       .createQueryBuilder('m')
-      .leftJoinAndSelect('q.content', 'content')
+      .leftJoinAndSelect('m.content', 'content')
+      .select('m')
       .where('content.content_id =  :id', { id: course_id })
       .getMany();
   }

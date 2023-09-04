@@ -5,11 +5,15 @@ import { LoginResponse } from '../dto/response.dto';
 import { User } from '../entities/user.entity';
 import { LoginDto, RegisterDto } from './auth.dto';
 import { AuthHelper } from './auth.helper';
+import { Level } from '../../courses/entities/level.entity';
 
 @Injectable()
 export class AuthService {
   @InjectRepository(User)
   private readonly repository: Repository<User>;
+
+  @InjectRepository(User)
+  private readonly levelRepo: Repository<Level>;
 
   @Inject(AuthHelper)
   private readonly helper: AuthHelper;
@@ -22,11 +26,18 @@ export class AuthService {
       throw new HttpException('Conflict', HttpStatus.CONFLICT);
     }
 
+    const level = await this.levelRepo.findOneOrFail({
+      where: {
+        level_id: body.user_level,
+      },
+    });
+
     user = new User();
 
     user.name = name;
     user.email = email;
     user.password = password;
+    user.user_level = level;
 
     return this.repository.save(user);
   }

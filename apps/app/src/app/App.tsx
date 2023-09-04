@@ -1,7 +1,8 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import { NativeBaseProvider } from 'native-base';
-import BottomNavigation from '../navigations/bottom.navigation';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import BottomNavigation from '../navigations/bottom.navigation';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +17,7 @@ export default function App() {
   return (
     <NativeBaseProvider>
       <QueryClientProvider client={queryClient}>
-        <BottomNavigation />
+        <BottomNavigation/>
       </QueryClientProvider>
     </NativeBaseProvider>
   );

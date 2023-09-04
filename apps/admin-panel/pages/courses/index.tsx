@@ -184,7 +184,7 @@ const CourseTable = () => {
           <DataTable
             header={header}
             removableSort
-            value={data.items}
+            value={data}
             expandedRows={expandedRows}
             onRowToggle={(e) => setExpandedRows(e.data)}
             // onRowExpand={onRowExpand}

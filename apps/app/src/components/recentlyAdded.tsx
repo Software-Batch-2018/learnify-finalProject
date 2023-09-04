@@ -4,11 +4,11 @@ import {
   Image,
   Text,
   Heading,
-  ScrollView,
   HStack,
   Center,
   Skeleton,
   VStack,
+  CheckIcon
 } from 'native-base';
 import { GetAllPopularCourses } from '../query/home';
 import { Pressable } from 'react-native';
@@ -34,8 +34,19 @@ const Cards = ({
         })
       }
     >
-      <Box mr={2} p={0} w={20}>
-        <AspectRatio rounded={'md'} w="100%" ratio={9/16}>
+      <Box mb={1} p={0} w={'100%'} style={{ flexDirection: 'row', flexWrap: 'wrap' }}
+        borderBottomWidth="1"
+        _dark={{
+          borderColor: 'gray.100',
+        }}
+        borderColor="gray.100"
+        pl='1'
+        pr='1'
+        py="2"
+        bg={'white'}
+        borderRadius={15}
+        shadow={1}>
+        <AspectRatio rounded={'md'} w={55} h={55} ml={1} ratio={1 / 1}>
           <Image
             source={{
               uri: title_image,
@@ -44,9 +55,21 @@ const Cards = ({
             borderRadius={10}
           />
         </AspectRatio>
-        <Text fontSize={'xs'} p={0} color={'#5d6065'}>
-          {content_title}
-        </Text>
+        <Box ml={5} >
+          <Text fontSize={'lg'} bold italic color={'#5d6065'}>
+            {content_title}
+          </Text>
+          <Text
+            color="coolGray.600"
+            _dark={{
+              color: 'warmGray.200',
+            }}
+          >
+            <Text color="emerald.500" fontSize="sm" ml={5}>
+              Learnify Verfied <CheckIcon size="3" mt="1" color="emerald.500" />
+            </Text>
+          </Text>
+        </Box>
       </Box>
     </Pressable>
   );
@@ -57,9 +80,8 @@ const SkeletonComponent = () => {
     <Center w="100%">
       <HStack
         w="90%"
-        maxW="400"
         borderWidth="1"
-        space={8}
+        space={0}
         rounded="md"
         _dark={{
           borderColor: 'coolGray.500',
@@ -81,33 +103,31 @@ const SkeletonComponent = () => {
   );
 };
 
-export function PopularCourses({ navigation, heading = true }: any) {
+export function RecentlyAdded({ navigation, heading = true }: any) {
   const { isLoading, data } = GetAllPopularCourses();
   return (
-    <Box mb={2} mx={2} mt={2} >
-      {heading && <Heading mb={2}>Popular courses for you</Heading>}
+    <Box mb={2} mx={2} mt={2}>
+      {heading && <Heading mb={2} >Recently Added to <Text color={'emerald.600'}>Learnify</Text></Heading>}
       {isLoading ? (
         <SkeletonComponent />
       ) : (
-        <ScrollView horizontal={true}>
-          <HStack>
-            {data.map(
-              (course: {
-                content_id: string;
-                content_title: string;
-                title_image: string;
-              }) => (
-                <Cards
-                  navigation={navigation}
-                  key={course.content_id}
-                  content_id={course.content_id}
-                  content_title={course.content_title}
-                  title_image={course.title_image}
-                />
-              )
-            )}
-          </HStack>
-        </ScrollView>
+        <VStack>
+          {data.map(
+            (course: {
+              content_id: string;
+              content_title: string;
+              title_image: string;
+            }) => (
+              <Cards
+                navigation={navigation}
+                key={course.content_id}
+                content_id={course.content_id}
+                content_title={course.content_title}
+                title_image={course.title_image}
+              />
+            )
+          )}
+        </VStack>
       )}
     </Box>
   );

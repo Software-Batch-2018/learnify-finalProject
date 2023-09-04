@@ -1,33 +1,48 @@
 import {
   Box,
   Button,
-  Center,
+  Divider,
   Heading,
   ScrollView,
   Text,
+  VStack,
   View,
 } from 'native-base';
 import React from 'react';
 import { PopularCourses } from '../components/popularCourse';
-
+import { RecentlyAdded } from '../components/recentlyAdded';
+import {  Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+const screenHeight = Dimensions.get('window').height;
 export function HomeScreen({ navigation }: any) {
   return (
-    <ScrollView w={'100%'}>
-      <FabSection />
-      <ViewSection navigation={navigation} />
-      <PopularCourses navigation={navigation} />
-    </ScrollView>
+    <SafeAreaView>
+    <Box p={1} bg={'white'} h={screenHeight - 60} >
+      <ScrollView w={'100%'} backgroundColor={'white'} >
+        <Text fontSize={'3xl'} bold bg={'white'}> Welcome to <Text color={'emerald.600'}>Learnify</Text></Text>
+        <ViewSection navigation={navigation} />
+        <Divider/>
+        <Divider/>
+        <PopularCourses navigation={navigation} />
+        <Divider/>
+        <Divider/>
+        <RecentlyAdded navigation={navigation} />
+      </ScrollView>
+    </Box>
+    </SafeAreaView>
   );
 }
 
+const image = { uri: "https://i.ibb.co/PQ4JD9c/top-image.png" };
+
 const ViewSection = ({ navigation }: any) => {
   return (
-    <View p={6}>
-      <Heading>
+    <View paddingTop={5} paddingLeft={2} paddingRight={2}>
+      <Heading color={'emerald.600'}>
         Join our{' '}
-        <Heading color="emerald.400">Learnify Discussion Forum</Heading>
+        <Heading color="#5d6065">Learnify Discussion Forum</Heading>
       </Heading>
-      <Text pt="3">
+      <Text pt="1" color={'#5d6065'}>
         The Learnify Discussion Forum is a vibrant community where students come
         together to help and support each other in their learning journey.
         Engage in meaningful discussions, ask questions, and share knowledge
@@ -36,7 +51,8 @@ const ViewSection = ({ navigation }: any) => {
       <Button
         onPress={() => navigation.jumpTo('Forum')}
         mt={3}
-        bg={'green.600'}
+        mb={2}
+        bg={'#5d6065'}
       >
         Join Now
       </Button>
@@ -44,33 +60,3 @@ const ViewSection = ({ navigation }: any) => {
   );
 };
 
-const FabSection = () => {
-  return (
-    <Center>
-      <Box
-        p={5}
-        height="205"
-        w={340}
-        mt={2}
-        shadow="1"
-        rounded="lg"
-        _dark={{
-          bg: 'coolGray.100:alpha.20',
-        }}
-        _light={{
-          bg: 'coolGray.100:alpha.20',
-        }}
-      >
-        <Heading color={'blue.500'} fontSize={'3xl'}>
-          Learnify
-        </Heading>
-        <Text mt={1}>
-          Learnify is a comprehensive educational app that empowers students to
-          learn, collaborate, and assess their knowledge. With interactive
-          quizzes, discussion forums, and a vast library of resources, it
-          facilitates a dynamic and engaging learning experience.
-        </Text>
-      </Box>
-    </Center>
-  );
-};

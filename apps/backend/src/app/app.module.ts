@@ -11,6 +11,7 @@ import { CoursesModule } from './api/courses/courses.module';
 import { QuizModule } from './api/quiz/quiz.module';
 import { Content } from './api/courses/entities/content.entity';
 import { ForumModule } from './api/forum/forum.module';
+import { QuestionAnswerModule } from './api/question-answer/question-answer.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ForumModule } from './api/forum/forum.module';
     CoursesModule,
     QuizModule,
     ForumModule,
+    QuestionAnswerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

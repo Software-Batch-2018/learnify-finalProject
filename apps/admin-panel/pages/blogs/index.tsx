@@ -203,7 +203,7 @@ export function Index() {
         )}
       </div>
       <Modal modal={viewBlogContent} setModal={setViewBlogContent}>
-        <div className="max-w-3xl p-5 ">
+        <div className="max-w-3xl  p-5 ">
           <form className="space-y-3" onSubmit={handleEdit(editBlog)}>
             <RichTextEditor
               defaultValue={editContent}
@@ -248,14 +248,17 @@ export function Index() {
                     Invalid URL provided!
                   </span>
                 )}
-                <img
-                  src={img}
-                  alt={img}
-                  className="w-60 h-auto m-2"
-                  onError={(e: any) =>
-                    (e.target.alt = 'Cannot render image right now!')
-                  }
-                />
+                {
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={img}
+                    alt={img}
+                    className="w-60 h-auto m-2"
+                    onError={(e: any) =>
+                      (e.target.alt = 'Cannot render image right now!')
+                    }
+                  />
+                }
               </div>
               <div className="">
                 <label>Blog Content</label>

@@ -1,11 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Repository } from 'typeorm';
 import { BlogsService } from './blogs.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { Blog } from './entities/blog.entity';
 import { User } from '../users/entities/user.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
-describe('BlogsService', () => {
-  let service: BlogsService;
+describe('BlogService', () => {
+  let blogService: BlogsService;
+  let blogRepository: Repository<Blog>;
+  let userRepository: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -13,19 +16,31 @@ describe('BlogsService', () => {
         BlogsService,
         {
           provide: getRepositoryToken(Blog),
-          useValue: {},
+          useClass: Repository,
         },
         {
           provide: getRepositoryToken(User),
-          useValue: {},
+          useClass: Repository,
         },
       ],
     }).compile();
 
-    service = module.get<BlogsService>(BlogsService);
+    blogService = module.get<BlogsService>(BlogsService);
+    blogRepository = module.get<Repository<Blog>>(getRepositoryToken(Blog));
+    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
+  const mockRepository = {
+    create: jest.fn(),
+    save: jest.fn(),
+    findOne: jest.fn(() => {
+      return null;
+    }),
+    update: jest.fn(),
+    delete: jest.fn(),
+  };
+
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(blogService).toBeDefined();
   });
 });

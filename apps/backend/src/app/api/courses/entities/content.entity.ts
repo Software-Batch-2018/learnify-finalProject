@@ -4,12 +4,15 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Quiz } from '../../quiz/entities/quiz.entity';
 import { Subjects } from './subject.entity';
+import { QaEntity } from '../../question-answer/entities/qa.entity';
+import { Material } from '../../question-answer/entities/material.entity';
 
 @Entity()
 export class Content {
@@ -37,6 +40,10 @@ export class Content {
   @OneToOne(() => Quiz)
   @JoinColumn()
   quiz: Quiz;
+
+  @OneToOne(() => QaEntity)
+  @JoinColumn()
+  qa: QaEntity;
 
 
   @Column({default: 1})

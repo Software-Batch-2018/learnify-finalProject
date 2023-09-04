@@ -6,7 +6,7 @@ import { BuilderQuestion } from './builder/builderQuestion';
 import { BuilderAnswerSet } from './builder/builderAnswerSet';
 // import { SchemaViewer } from './builder/schemaViewer';
 import { useMutation } from 'react-query';
-import { AddOrEditQuiz } from '../../utils/queryfn/quiz';
+import { AddOrEditQuiz, useGetQuiz } from '../../utils/queryfn/quiz';
 import toast from 'react-hot-toast';
 import { Button } from '@finalproject/ui';
 
@@ -71,12 +71,19 @@ export function QuizBuilder({ course_id, course_name }: QuizBuilderProps) {
 
     setQuiz({ ...quiz, questions: updatedQuestions });
   }
+  const { data, isLoading: quizLoading, refetch } = useGetQuiz(course_id);
 
   useEffect(() => {
-    setTimeout(() => {
-      localStorage.setItem(storageKey, JSON.stringify(quiz));
-    }, 0);
-  }, [quiz]);
+    if (data && data.quiz) {
+      setTimeout(() => {
+        localStorage.setItem(storageKey, JSON.stringify(data.quiz));
+      }, 0);
+    } else {
+      setTimeout(() => {
+        localStorage.setItem(storageKey, JSON.stringify(quiz));
+      }, 0);
+    }
+  }, [quiz, data, storageKey]);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (payload: any) => {

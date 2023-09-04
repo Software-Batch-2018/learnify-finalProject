@@ -25,12 +25,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       logging: false,
       dropSchema: false,
       synchronize: true,
-      // ssl: true,
-      // extra: {
-      //   ssl: {
-      //     rejectUnauthorized: false,
-      //   },
-      // },
+      ssl: true,
+
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     };
   }
 }

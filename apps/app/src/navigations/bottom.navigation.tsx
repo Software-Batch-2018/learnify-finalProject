@@ -20,22 +20,13 @@ export default function BottomNavigation() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <View style={{ flex: 1, backgroundColor: '#03001C' }}>
+        <View style={{ flex: 1 }}>
           <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarHideOnKeyboard: true,
               tabBarStyle: {
-                display: 'flex',
-                position: 'relative',
-                bottom: 15,
-                right: 25,
-                marginRight: 14,
-                marginTop: 20,
-                marginLeft: 14,
                 backgroundColor: '#301E67',
-                borderRadius: 30,
                 height: 60,
-                borderTopWidth: 0,
               },
               tabBarShowLabel: false,
               headerShown: false,

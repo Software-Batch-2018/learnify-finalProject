@@ -1,1 +1,1 @@
-export const API = 'https://learnify-finalproject-production.up.railway.app/api/';
+export const API = 'http://35.202.110.158:3000/api/';

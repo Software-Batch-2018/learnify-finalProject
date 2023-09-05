@@ -73,22 +73,22 @@ export function AccountStackNavigator() {
       <Stack.Screen
         name="Login"
         component={AccountScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Signup"
         component={SignupScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Profile"
         component={ProfilePage}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="QuizHistory"
         component={UserQuizHistory}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -100,22 +100,22 @@ export function CoursesStackNavigator() {
       <Stack.Screen
         name="Levels"
         component={LevelScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Subjects"
         component={SubjectScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Contents"
         component={ContentScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="MainContent"
         component={MainContentScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

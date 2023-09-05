@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { Box, Icon } from 'native-base';
 import React from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign, Ionicons, Feather , MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   AccountStackNavigator,
@@ -25,7 +25,7 @@ export default function BottomNavigation() {
             screenOptions={({ route }) => ({
               tabBarHideOnKeyboard: true,
               tabBarStyle: {
-                backgroundColor: '#301E67',
+                backgroundColor: 'white',
                 height: 60,
               },
               tabBarShowLabel: false,
@@ -37,13 +37,13 @@ export default function BottomNavigation() {
                 tabBarIcon: ({ focused }) => (
                   <View
                     style={{
-                      top: Platform.OS === 'ios' ? 10 : 0,
+                      top: Platform.OS === 'ios' ? 0 : 0,
                     }}
                   >
                     <Icon
-                      size={30}
-                      as={<MaterialIcons name="home" />}
-                      color={focused ? 'white' : '#9594e5'}
+                      size={29}
+                      as={<AntDesign name="home" />}
+                      color={focused ? 'emerald.600' : '#5d606599'}
                     />
                   </View>
                 ),
@@ -61,9 +61,9 @@ export default function BottomNavigation() {
                     }}
                   >
                     <Icon
-                      size={30}
-                      as={<MaterialIcons name="library-books" />}
-                      color={focused ? 'white' : '#9594e5'}
+                      size={29}
+                      as={<Ionicons name="book-outline" />}
+                      color={focused ? 'emerald.600' : '#5d606599'}
                     />
                   </View>
                 ),
@@ -72,48 +72,48 @@ export default function BottomNavigation() {
               component={CoursesStackNavigator}
             />
 
-            <Tab.Screen
+<Tab.Screen
               name="Forum"
               component={ForumStackNavigator}
               options={{
                 tabBarIcon: ({ focused }) => (
                   <View
                     style={{
-                      top: Platform.OS === 'ios' ? -10 : -20,
-                      width: Platform.OS === 'ios' ? 50 : 50,
-                      height: Platform.OS === 'ios' ? 50 : 50,
-                      borderRadius: Platform.OS === 'ios' ? 25 : 30,
-                      backgroundColor: 'white',
-                      shadowColor: 'black',
+                      top: Platform.OS === 'ios' ? 0 : 0,
+                      width: 50,
+                      height: 50,
+                      borderColor: '#5d606599',
+                      borderRadius: 50,
+                      backgroundColor: focused ? '#366735d5' : '#5d606599',
                     }}
                   >
                     <Icon
                       name="pluscircle"
-                      mt={3}
-                      ml={3}
-                      as={<MaterialIcons name="forum" />}
-                      size={Platform.OS === 'ios' ? 7 : 7}
-                      color={focused ? 'green.600' : 'blue.400'}
+                      mt={2.5}
+                      ml={2.5}
+                      as={<MaterialCommunityIcons name="forum-outline" />}
+                      size={29}
+                      color='white'
                     />
                   </View>
                 ),
-                headerShown: true,
+                headerShown: false,
                 tabBarIconStyle: {},
               }}
             />
 
-            <Tab.Screen
+<Tab.Screen
               options={{
                 tabBarIcon: ({ focused }) => (
                   <View
                     style={{
-                      top: Platform.OS === 'ios' ? 10 : 0,
+                      top: Platform.OS === 'ios' ? 0 : 0,
                     }}
                   >
                     <Icon
-                      size={30}
-                      as={<MaterialIcons name="account-circle" />}
-                      color={focused ? 'white' : '#9594e5'}
+                      size={29}
+                      as={<Feather name="user" />}
+                      color={focused ? 'emerald.600' : '#5d606599'}
                     />
                   </View>
                 ),
@@ -126,17 +126,17 @@ export default function BottomNavigation() {
                 tabBarIcon: ({ focused }) => (
                   <View
                     style={{
-                      top: Platform.OS === 'ios' ? 10 : 0,
+                      top: Platform.OS === 'ios' ? 0 : 0,
                     }}
                   >
                     <Icon
-                      size={30}
-                      as={<MaterialIcons name="collections-bookmark" />}
-                      color={focused ? 'white' : '#9594e5'}
+                      size={29}
+                      as={<Ionicons name="reader-outline" />}
+                      color={focused ? 'emerald.600' : '#5d606599'}
                     />
                   </View>
                 ),
-                headerShown: true,
+                headerShown: false,
               }}
               name="Blogs"
               component={BlogScreen}

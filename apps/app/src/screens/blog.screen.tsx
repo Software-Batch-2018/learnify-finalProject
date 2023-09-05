@@ -107,12 +107,14 @@ export default function BlogScreen() {
   });
 
   return (
-    <Center mt={2} p={1}>
-      <ScrollView>
-        <Heading mx={5}>
-          A Collection of blog from
+    <>
+    <Center backgroundColor={'#5d6065'}>
+        <Heading mt={7} pb={4} color={'white'} fontSize={'2xl'}>
+        Blogs from
           <Text color="emerald.500"> Learnify</Text>
         </Heading>
+      </Center>
+      <ScrollView bg={'white'}>
         {isLoading ? (
           <Spinner />
         ) : (
@@ -187,7 +189,7 @@ export default function BlogScreen() {
           </ScrollView>
         </Actionsheet.Content>
       </Actionsheet>
-    </Center>
+    </>
   );
 }
 
@@ -209,8 +211,9 @@ const BlogCard = ({
   return (
     <Box alignItems="center">
       <Box
-        m={4}
+        m={2}
         mt={2}
+        mb={0}
         rounded="lg"
         overflow="hidden"
         borderColor="coolGray.200"

@@ -1,7 +1,6 @@
 import {
   Box,
   AspectRatio,
-  Image,
   Text,
   Heading,
   ScrollView,
@@ -9,51 +8,18 @@ import {
   Center,
   Skeleton,
   VStack,
+  View,
+  Avatar,
 } from 'native-base';
 import { GetAllPopularCourses } from '../query/home';
-import { ImageBackground, Pressable, View, StyleSheet } from 'react-native';
+import { ImageBackground, Pressable, StyleSheet, Image } from 'react-native';
+import React from 'react';
+import Carousel from 'react-native-snap-carousel';
 
-const Cards = ({
-  title_image,
-  content_id,
-  content_title,
-  navigation,
-}: {
-  title_image: string;
-  content_title: string;
-  content_id: string;
-  navigation: any;
-}) => {
-  return (
-    <Pressable
-      onPress={() =>
-        navigation.navigate('MainContent', {
-          title: content_title,
-          image: title_image,
-          course_id: content_id,
-        })
-      }
-    >
-      <Box rounded="2xl" overflow="hidden" h={'56'} w={'80'}>
-        <View style={styles.container}>
-          <ImageBackground
-            source={{ uri: title_image }}
-            resizeMode="cover"
-            blurRadius={10}
-            style={styles.image}
-          >
-            <View style={styles.backdrop} />
-            <Text style={styles.text}>{content_title}</Text>
-            <Text style={styles.subText}>Data Structure and Algorithm</Text>
-          </ImageBackground>
-        </View>
-      </Box>
-    </Pressable>
-  );
-};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    borderRadius: 30,
   },
   image: {
     flex: 1,
@@ -108,36 +74,50 @@ const SkeletonComponent = () => {
 
 export function PopularCourses({ navigation, heading = true }: any) {
   const { isLoading, data } = GetAllPopularCourses();
-  return (
-    <Box mb={2}>
-      {heading && (
-        <Heading fontSize={'3xl'} mb={5} color={'white'}>
-          Popular Courses
-        </Heading>
-      )}
+  return (<>
+    <Text my={1} mx={5} fontSize={'2xl'} fontWeight={'bold'}>Recommended For You</Text>
+    <Box mt={2} mb={2}>
       {isLoading ? (
         <SkeletonComponent />
       ) : (
-        <ScrollView horizontal={true}>
-          <HStack space={5}>
-            {data.map(
-              (course: {
-                content_id: string;
-                content_title: string;
-                title_image: string;
-              }) => (
-                <Cards
-                  navigation={navigation}
-                  key={course.content_id}
-                  content_id={course.content_id}
-                  content_title={course.content_title}
-                  title_image={course.title_image}
-                />
-              )
-            )}
-          </HStack>
-        </ScrollView>
+        <Carousel style={{ overflow: 'visible' }} data={data} renderItem={({ item }: any) => <RecommendedCourses navigation={navigation} item={item} />}
+          firstItem={1}
+          inactiveSlideOpacity={0.75}
+          inactiveSlideScale={0.77}
+          sliderWidth={400}
+          itemWidth={260}
+          slideStyle={{ display: 'flex', alignItems: 'center' }}
+        />
       )}
     </Box>
+  </>
   );
+}
+
+export function RecommendedCourses({ item, navigation }: any) {
+  return (
+    <Pressable
+      onPress={() =>
+        navigation.navigate('MainContent', {
+          title: item.content_title,
+          image: item.title_image,
+          course_id: item.content_id,
+        })
+      }
+    >
+      <View borderRadius={40} backgroundColor={'warmGray.100'} h={200} w={290}>
+        <ImageBackground borderRadius={40}
+          source={{ uri: item.title_image }}
+          resizeMode="cover"
+          blurRadius={10}
+          style={styles.image}
+        >
+          <View borderRadius={40} style={styles.backdrop} />
+          <Center>
+            <Text style={styles.text}>{item.content_title}</Text>
+          </Center>
+        </ImageBackground>
+      </View>
+    </Pressable>
+  )
 }

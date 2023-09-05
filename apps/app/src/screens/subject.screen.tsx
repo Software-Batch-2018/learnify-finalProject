@@ -10,20 +10,28 @@ import {
   Spinner,
   CheckIcon,
   Pressable,
+  Divider,
+  View,
 } from 'native-base';
 import { GetAllSubjects } from '../query/subjects';
 import { InfoBox } from '../components/info';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
+import {  Dimensions, ImageBackground } from 'react-native';
+const screenHeight = Dimensions.get('window').height;
 const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
   return (
-    <Box bg={'white'}>
+    <Box bg={'#91919163'} height={screenHeight-120}>
       <FlatList
+      style={{
+        alignSelf: 'center',
+      }}
+      width={'96%'}
         data={data}
         renderItem={({ item }) => (
           <Pressable
             key={item.subject_id}
             onPress={() =>
-              navigation.navigate('Contents', { subject_id: item.subject_id })
+              navigation.navigate('Contents', { subject_id: item.subject_id , subject_name: item.subject_name, subject_img: item.subject_img , count: item.contentsCount })
             }
           >
             <Box
@@ -32,9 +40,12 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                 borderColor: 'gray.100',
               }}
               borderColor="gray.100"
-              pl={['0', '4']}
-              pr={['0', '5']}
-              py="2"
+              p={5}
+              bg={'white'}
+              mb={1}
+              mt={1}
+              borderRadius={15}
+              shadow={1}
             >
               <HStack space={[2, 3]} justifyContent="space-between">
                 <Avatar
@@ -46,9 +57,9 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                 <VStack>
                   <Text
                     _dark={{
-                      color: 'warmGray.50',
+                      color: '#5d6065',
                     }}
-                    color="coolGray.800"
+                    color="#5d6065"
                     bold
                   >
                     {item.subject_name}
@@ -68,6 +79,7 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                   </Text>
                 </VStack>
                 <Spacer />
+                <Text mr={'3'} mt={3} color={'#8d9096'}>{item.contentsCount}</Text>
               </HStack>
             </Box>
           </Pressable>
@@ -82,21 +94,28 @@ export const SubjectScreen = ({ route, navigation }: any) => {
   const { params } = route;
   const { isLoading, data } = GetAllSubjects(params.level_id);
   return (
-    <Box p={3}>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          {data && data.items.length > 0 ? (
-            <Example navigation={navigation} data={data.items} />
-          ) : (
-            <InfoBox
-              title="No Subjects!"
-              description="There is no subject for this level currently. We will be adding soon!"
-            />
-          )}
-        </>
-      )}
-    </Box>
+    <SafeAreaView>
+      <ImageBackground source={require('../../assets/images/Background.jpg')} imageStyle={{ opacity: 0.1 }} style={{ borderColor: "black", borderBottomWidth: 2 }} >
+          <View px={4} py={3} flexDirection={'row'} justifyContent={'space-between'} justifyItems={'center'} alignItems={'center'}>
+            <Text fontSize={'2xl'} bold color={'emerald.500'}>{params.level_name}</Text>
+          </View>
+        </ImageBackground>
+      <Box p={0} bg={'white'} h={'full'}>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <Box>
+            {data && data.length > 0 ? (
+              <Example navigation={navigation} data={data} />
+            ) : (
+              <InfoBox
+                title="No Subjects!"
+                description="There is no subject for this level currently. We will be adding soon!"
+              />
+            )}
+          </Box>
+        )}
+      </Box>
+    </SafeAreaView>
   );
 };

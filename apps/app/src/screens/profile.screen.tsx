@@ -3,15 +3,23 @@ import {
   Box,
   Button,
   HStack,
+  VStack,
   Pressable,
   Spacer,
   Text,
+  Icon,
+  Center,
 } from 'native-base';
+import { StyleSheet } from "react-native";
 import React, { useContext } from 'react';
 import { returnToken } from '../utils/auth.check';
 import jwt_decode from 'jwt-decode';
 import { InfoBox } from '../components/info';
 import { AuthContext } from '../components/AuthProvider';
+import { Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+const screenHeight = Dimensions.get('window').height;
+const image = { uri: "https://i.ibb.co/7J0zQtN/1521986151.png" };
 export default function ProfilePage({ navigation }: any) {
   const { logout } = useContext(AuthContext);
 
@@ -33,8 +41,45 @@ export default function ProfilePage({ navigation }: any) {
   }, []);
 
   return (
-    <Box p={2}>
-      <Box alignItems="center">
+    <Box p={4} pt={10} bg={'white'} h={screenHeight - 60}>
+      <VStack>
+        <HStack justifyContent={'space-between'} alignItems={'center'}>
+          {user && (<Text fontSize={'3xl'} bold> Hello, <Text>{user.name}</Text></Text>)}
+          <Icon
+            onPress={handleLogout}
+            mr={3}
+            size={29}
+            as={<AntDesign name="logout" />}
+          />
+        </HStack>
+        <Text fontSize={'5xl'} mt={10}>Find Contents</Text>
+        <Text fontSize={'3xl'}>easily and get learning with </Text>
+        <Text fontSize={'4xl'} bold underline color={'emerald.500'}>Learnify</Text>
+        <Center><Text fontSize={'md'} color={'coolGray.500'}>Discover 200+ Materials and constantly increasing</Text></Center>
+        <Center>
+          <Box
+            height="150"
+            w={'80%'}
+            mt={4}
+            mb={5}
+          >
+            <ImageBackground source={image} style={{ width: '100%', height: '100%' }} />
+
+          </Box>
+        </Center>
+        <Center mt={10}><Text fontSize={'2xl'}>View your Quiz History</Text></Center>
+        <Center>
+          <HStack>
+            <TouchableOpacity onPress={() => navigation.navigate('QuizHistory')} style={styles.appButtonContainer}>
+              <Text style={styles.appButtonText}>Overall</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('IndividualHistory')} style={styles.appButtonContainer}>
+              <Text style={styles.appButtonText}>Individual</Text>
+            </TouchableOpacity>
+          </HStack>
+        </Center>
+      </VStack>
+      {/*<Box alignItems="center">
         <Box
           rounded="8"
           overflow="hidden"
@@ -52,7 +97,6 @@ export default function ProfilePage({ navigation }: any) {
                   Hello <Text color={'blue.400'}>{user.name}</Text>
                 </Text>
               )}
-
               <Spacer />
               <Pressable onPress={handleLogout}>
                 <Badge
@@ -92,7 +136,27 @@ export default function ProfilePage({ navigation }: any) {
             View History
           </Button>
         </InfoBox>
-      </Box>
+                </Box>*/}
     </Box>
   );
 }
+
+const styles = StyleSheet.create({
+  // ...
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    margin:10,
+    width: 150,
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
+  }
+});

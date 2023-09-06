@@ -1,4 +1,6 @@
 import ReactECharts from 'echarts-for-react';
+import { useGetAllUserCount } from '../utils/queryfn/home';
+import React from 'react';
 
 function Index() {
   const option = {
@@ -44,60 +46,67 @@ function Index() {
     },
   };
 
-  const faculty = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b} : {c} ({d}%)',
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left',
-      data: [
-        'Software Engineering',
-        'Class 12',
-        'SLC',
-        'Bachelor in Business Administration',
-        'Class 9',
-      ],
-    },
-    series: [
-      {
-        name: 'Number of User By Faculty',
-        type: 'pie',
-        radius: '55%',
-        center: ['50%', '60%'],
-        data: [
-          { value: 335, name: 'Software Engineering' },
-          { value: 310, name: 'Class 12' },
-          { value: 234, name: 'SLC' },
-          { value: 135, name: 'Bachelor in Business Administration' },
-          { value: 1548, name: 'Class 9' },
-        ],
-        itemStyle: {
-          emphasis: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
+  const { data: userCount, isLoading: userCountLoading } = useGetAllUserCount();
+
+  const [faculty, setFaculty] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    if (userCount) {
+      // Extract level names and user counts from the data
+      const levelNames = userCount.map((item: any) => item.level);
+      const userCounts = userCount.map((item: any) => item._count.user);
+      // Create the legend data
+      const legendData = levelNames.map((level: any) => level);
+
+      // Create the series data
+      const seriesData = levelNames.map((level: any, index: number) => ({
+        value: userCounts[index],
+        name: legendData[index],
+      }));
+
+      // Create the faculty object in the desired format
+      const finalFaculty = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)',
         },
-      },
-    ],
-  };
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          data: legendData,
+        },
+        series: [
+          {
+            name: 'Number of User By Faculty',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: seriesData,
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+              },
+            },
+          },
+        ],
+      };
+      setFaculty(finalFaculty);
+      console.log(finalFaculty);
+    }
+  }, [userCount]);
 
   return (
     <div className="space-y-6">
       <div className="font-bold text-2xl dark:text-white">
-        Number of New Users Per Day
-      </div>
-      <ReactECharts option={option} />
-      <div className="font-bold text-2xl dark:text-white">
-        Number of Active Users
-      </div>
-      <ReactECharts option={options} />
-      <div className="font-bold text-2xl dark:text-white">
         Number of User By Faculty
       </div>
-      <ReactECharts option={faculty} style={{ height: 400 }} />
+      {faculty && <ReactECharts option={faculty} style={{ height: 400 }} />}
+      {/* <div className="font-bold text-2xl dark:text-white">
+        Number of New Users Per Day
+      </div>
+      <ReactECharts option={option} /> */}
     </div>
   );
 }

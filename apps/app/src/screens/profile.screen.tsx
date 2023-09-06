@@ -79,20 +79,12 @@ export default function ProfilePage({ navigation }: any) {
             <Text fontSize={'2xl'}>View your Quiz History</Text>
           </Center>
           <Center>
-            <HStack>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('QuizHistory')}
-                style={styles.appButtonContainer}
-              >
-                <Text style={styles.appButtonText}>Overall</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('IndividualHistory')}
-                style={styles.appButtonContainer}
-              >
-                <Text style={styles.appButtonText}>Individual</Text>
-              </TouchableOpacity>
-            </HStack>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('QuizHistory')}
+              style={styles.appButtonContainer}
+            >
+              <Text style={styles.appButtonText}>Overall</Text>
+            </TouchableOpacity>
           </Center>
         </VStack>
       </Box>

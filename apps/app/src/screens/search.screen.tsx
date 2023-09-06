@@ -44,6 +44,7 @@ export default function SearchScreen({ route, navigation }: any) {
                     };
                   }) => (
                     <Pressable
+                      style={{ margin: 5 }}
                       key={course.content_id}
                       onPress={() =>
                         navigation.navigate('MainContent', {
@@ -100,8 +101,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 30,
-    lineHeight: 84,
+    fontSize: 20,
+    lineHeight: 64,
     fontWeight: 'bold',
     marginLeft: 20,
   },

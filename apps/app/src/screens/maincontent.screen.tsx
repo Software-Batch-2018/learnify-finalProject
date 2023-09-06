@@ -243,13 +243,7 @@ export function MainContentScreen({ route, navigation }: any) {
                   Other Materials
                 </Button>
 
-                <Button
-                  bg={'#5d6065'}
-                  ml={3}
-                  disabled={data.quiz === null}
-                  onPress={handleOpenQuiz}
-                  mt={3}
-                >
+                <Button bg={'#5d6065'} ml={3} onPress={handleOpenQuiz} mt={3}>
                   Play Quiz
                 </Button>
               </Box>

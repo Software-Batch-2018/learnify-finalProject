@@ -100,7 +100,6 @@ export class CoursesService {
       .createQueryBuilder('level')
       .leftJoinAndSelect('level.subjects', 'subjects')
       .leftJoinAndSelect('subjects.contents', 'contents')
-
       .loadRelationCountAndMap('level.subjectsCount', 'level.subjects')
       .getMany();
   }

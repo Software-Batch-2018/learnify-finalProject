@@ -37,58 +37,64 @@ export default function ProfilePage({ navigation }: any) {
   }, []);
 
   return (
-    <ScrollView>
-      <Box p={4} pt={10} bg={'white'} h={screenHeight - 60}>
-        <VStack>
-          <HStack justifyContent={'space-between'} alignItems={'center'}>
-            {user && (
-              <Text fontSize={'2xl'} bold>
-                Hello, <Text>{user.name}</Text>
-              </Text>
-            )}
-            <VStack bg={'blue.100'} m={1} p={2} borderRadius={20}>
-              <Center>
-                <Icon
-                  onPress={handleLogout}
-                  mr={3}
-                  size={29}
-                  as={<AntDesign name="logout" />}
+    <ImageBackground
+      source={require('../../assets/images/Background.jpg')}
+      imageStyle={{ opacity: 0.1 }}
+      style={{}}
+    >
+      <ScrollView>
+        <Box p={4} pt={10} h={screenHeight - 60}>
+          <VStack>
+            <HStack justifyContent={'space-between'} alignItems={'center'}>
+              {user && (
+                <Text fontSize={'2xl'} bold>
+                  Hello, <Text>{user.name}</Text>
+                </Text>
+              )}
+              <VStack bg={'blue.100'} m={1} p={2} borderRadius={20}>
+                <Center>
+                  <Icon
+                    onPress={handleLogout}
+                    mr={3}
+                    size={29}
+                    as={<AntDesign name="logout" />}
+                  />
+                  <Text>Logout</Text>
+                </Center>
+              </VStack>
+            </HStack>
+            <Text fontSize={'2xl'} mt={10}>
+              Find Contents easily and get learning with
+            </Text>
+            <Text fontSize={'3xl'} bold color={'emerald.500'}>
+              Learnify
+            </Text>
+            <Text fontSize={'md'} color={'coolGray.500'}>
+              Discover 200+ Materials and constantly increasing
+            </Text>
+            <Center>
+              <Box height="150" w={'80%'} mt={6}>
+                <ImageBackground
+                  source={image}
+                  style={{ width: '100%', height: '100%' }}
                 />
-                <Text>Logout</Text>
-              </Center>
-            </VStack>
-          </HStack>
-          <Text fontSize={'2xl'} mt={10}>
-            Find Contents easily and get learning with
-          </Text>
-          <Text fontSize={'3xl'} bold color={'emerald.500'}>
-            Learnify
-          </Text>
-          <Text fontSize={'md'} color={'coolGray.500'}>
-            Discover 200+ Materials and constantly increasing
-          </Text>
-          <Center>
-            <Box height="150" w={'80%'} mt={6}>
-              <ImageBackground
-                source={image}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </Box>
-          </Center>
-          <Center mt={10}>
-            <Text fontSize={'2xl'}>View your Quiz History</Text>
-          </Center>
-          <Center>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('QuizHistory')}
-              style={styles.appButtonContainer}
-            >
-              <Text style={styles.appButtonText}>Overall</Text>
-            </TouchableOpacity>
-          </Center>
-        </VStack>
-      </Box>
-    </ScrollView>
+              </Box>
+            </Center>
+            <Center mt={10}>
+              <Text fontSize={'2xl'}>View your Quiz History</Text>
+            </Center>
+            <Center>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('QuizHistory')}
+                style={styles.appButtonContainer}
+              >
+                <Text style={styles.appButtonText}>Overall</Text>
+              </TouchableOpacity>
+            </Center>
+          </VStack>
+        </Box>
+      </ScrollView>
+    </ImageBackground>
   );
 }
 

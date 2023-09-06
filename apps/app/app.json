@@ -28,15 +28,7 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": [
-      [
-        "@config-plugins/detox",
-        {
-          "skipProguard": false,
-          "subdomains": ["10.0.2.2", "localhost"]
-        }
-      ]
-    ],
+    "plugins": [["@config-plugins/detox", "sentry-expo"]],
     "extra": {
       "eas": {
         "projectId": "9b9b4ef5-6299-415f-9aff-67ce85aa7136"

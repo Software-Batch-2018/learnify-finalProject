@@ -10,12 +10,10 @@ import {
   Spinner,
   CheckIcon,
   Pressable,
-  Icon,
 } from 'native-base';
-import { AntDesign } from '@expo/vector-icons';
 import { InfoBox } from '../components/info';
 import { GetAllContents } from '../query/content';
-import { Dimensions } from 'react-native';
+import { Dimensions, ImageBackground } from 'react-native';
 const screenHeight = Dimensions.get('window').height;
 const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
   return (
@@ -96,75 +94,81 @@ export const ContentScreen = ({ route, navigation }: any) => {
   const { isLoading, data } = GetAllContents(params.subject_id);
 
   return (
-    <Box height={screenHeight - 60}>
-      <Box bg={'#5d6065'} h={'20%'}>
-        <Box ml={2} mt={6}>
-          <HStack space={[2, 3]} justifyContent="space-between">
-            <Avatar
-              size="60px"
-              source={{
-                uri: route.params.subject_img,
-              }}
-            />
-            <VStack>
-              <Text
-                _dark={{
-                  color: 'white',
+    <ImageBackground
+      source={require('../../assets/images/Background.jpg')}
+      imageStyle={{ opacity: 0.1 }}
+      style={{}}
+    >
+      <Box height={screenHeight - 60}>
+        <Box bg={'#5d6065'} h={'20%'}>
+          <Box ml={2} mt={6}>
+            <HStack space={[2, 3]} justifyContent="space-between">
+              <Avatar
+                size="60px"
+                source={{
+                  uri: route.params.subject_img,
                 }}
-                color="white"
-                fontSize={'2xl'}
-                width={'90%'}
-                bold
-              >
-                {route.params.subject_name}
-              </Text>
-              <Text
-                color="coolGray.600"
-                _dark={{
-                  color: 'warmGray.200',
-                }}
-              ></Text>
-            </VStack>
-            <Spacer />
-          </HStack>
-        </Box>
-      </Box>
-      <Box bg={'#5d6065'} h={'14%'}>
-        <Box
-          bg={'white'}
-          h={'100%'}
-          w={'100%'}
-          borderTopRadius={20}
-          borderBottomWidth={1}
-          _dark={{
-            borderColor: '#5d6065',
-          }}
-          borderColor="#5d6065"
-        >
-          <Text fontSize={'3xl'} bold ml={3} mt={3} color={'gray.700'}>
-            Course Syllabus
-          </Text>
-          <Text fontStyle={'italic'} fontSize={20} ml={3} color={'#8d9096'}>
-            {params.count} Lessons
-          </Text>
-        </Box>
-      </Box>
-      <Box p={0} bg={'white'}>
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <Box>
-            {data && data.items.length > 0 ? (
-              <Example data={data.items} navigation={navigation} />
-            ) : (
-              <InfoBox
-                title="No Contents!"
-                description="There is no contents for this subjects currently. We will be adding soon!"
               />
-            )}
+              <VStack>
+                <Text
+                  _dark={{
+                    color: 'white',
+                  }}
+                  color="white"
+                  fontSize={'2xl'}
+                  width={'90%'}
+                  bold
+                >
+                  {route.params.subject_name}
+                </Text>
+                <Text
+                  color="coolGray.600"
+                  _dark={{
+                    color: 'warmGray.200',
+                  }}
+                ></Text>
+              </VStack>
+              <Spacer />
+            </HStack>
           </Box>
-        )}
+        </Box>
+        <Box bg={'#5d6065'} h={'14%'}>
+          <Box
+            bg={'white'}
+            h={'100%'}
+            w={'100%'}
+            borderTopRadius={20}
+            borderBottomWidth={1}
+            _dark={{
+              borderColor: '#5d6065',
+            }}
+            borderColor="#5d6065"
+          >
+            <Text fontSize={'3xl'} bold ml={3} mt={3} color={'gray.700'}>
+              Course Syllabus
+            </Text>
+            <Text fontStyle={'italic'} fontSize={20} ml={3} color={'#8d9096'}>
+              {params.count} Lessons
+            </Text>
+          </Box>
+        </Box>
+        <Box>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <Box>
+              {data && data.items.length > 0 ? (
+                <Example data={data.items} navigation={navigation} />
+              ) : (
+                <InfoBox
+                  title="No Contents!"
+                  description="There is no contents for this subjects currently. We will be adding soon!"
+                />
+              )}
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </ImageBackground>
   );
 };

@@ -14,10 +14,9 @@ export const UserHistoryCard = ({
       my={2}
       rounded="8"
       overflow="hidden"
-      borderWidth="1"
       borderColor="coolGray.300"
-      shadow="3"
-      bg="green.100"
+      shadow="1"
+      bg="white"
     >
       <Stack px={5} pt={5} space={3}>
         <Heading

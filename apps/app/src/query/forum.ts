@@ -70,3 +70,16 @@ export async function askQuestion(payload: {
     };
   }
 }
+
+export async function askAiQuestion(payload: { question: string }) {
+  try {
+    const response = await axios.post(`${API}forum/ai-ask`, payload);
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    return {
+      error: true,
+      message: error.response.data.message,
+    };
+  }
+}

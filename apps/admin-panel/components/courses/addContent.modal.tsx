@@ -6,6 +6,7 @@ import { useMutation } from 'react-query';
 import { Modal } from '../modal';
 import RichTextEditor from '../RichTextEditor';
 import toast from 'react-hot-toast';
+import { Checkbox } from 'primereact/checkbox';
 
 interface AddContentModalProps {
   addContentModal: boolean;
@@ -28,6 +29,7 @@ export const AddContentModal = ({
     reset,
   } = useForm();
   const img = watch('title_img');
+  const [checked, setChecked] = useState<any>(false);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async (payload: CreateContenPayload) => {
@@ -44,14 +46,14 @@ export const AddContentModal = ({
   });
 
   const onSubmit = (data: any) => {
-    mutate({ ...data, content: content });
+    mutate({ ...data, content: content, auto_quiz: checked });
   };
 
   const [content, setContent] = useState('');
 
   return (
     <Modal modal={addContentModal} setModal={setAddContentModal}>
-      <div className="p-5 w-[40vw]">
+      <div className="p-5 h-screen">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-3">
             <h1 className="font-semibold">Add Content</h1>
@@ -87,6 +89,15 @@ export const AddContentModal = ({
                   (e.target.alt = 'Cannot render image right now!')
                 }
               />
+            </div>
+            <div className="flex align-items-center">
+              <Checkbox
+                onChange={(e) => setChecked(e.checked)}
+                checked={checked}
+              ></Checkbox>
+              <label className="ml-2 italic text-gray-500">
+                Auto Add Quiz and Question Answers
+              </label>
             </div>
             <div className="">
               <label>Content</label>

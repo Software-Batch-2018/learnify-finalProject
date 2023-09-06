@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { ForumService } from './forum.service';
 import { JwtAuthGuard } from '../users/auth/auth.guard';
-import { AskQuestionDTO } from './dto/ask.dto';
+import { AskAiQuestion, AskQuestionDTO } from './dto/ask.dto';
 import { ReplyDTO } from './dto/reply.dto';
 import { ReplyGateway } from './gateway/reply.gateway';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('forum')
 @ApiTags('Forum Related routes')
@@ -39,6 +39,7 @@ export class ForumController {
   }
 
   @Post('ask')
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   async askQuestion(@Body() payload: AskQuestionDTO, @Request() req) {
     return this.forumService.askQuestion(payload, req.user.id);
@@ -58,5 +59,12 @@ export class ForumController {
     );
     this.replyGateway.server.emit(question_id, data);
     return data;
+  }
+
+  @Post('ai-ask')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async askAi(@Body() payload: AskAiQuestion) {
+    return this.forumService.askAiQuestion(payload.question);
   }
 }

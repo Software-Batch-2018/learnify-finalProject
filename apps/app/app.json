@@ -1,27 +1,25 @@
 {
   "expo": {
-    "name": "App",
-    "slug": "app",
+    "name": "Learnify",
+    "slug": "learnify",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo-black.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./assets/Splash.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo-black.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.learnify.app"
@@ -35,10 +33,7 @@
         "@config-plugins/detox",
         {
           "skipProguard": false,
-          "subdomains": [
-            "10.0.2.2",
-            "localhost"
-          ]
+          "subdomains": ["10.0.2.2", "localhost"]
         }
       ]
     ],

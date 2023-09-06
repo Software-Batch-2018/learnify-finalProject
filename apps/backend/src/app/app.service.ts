@@ -1,70 +1,57 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Content } from './api/courses/entities/content.entity';
-import datasource from '../shared/database/migration.config';
-import { Repository } from 'typeorm';
+
+import { PrismaService } from '../shared/prisma/prisma.service';
 
 @Injectable()
 export class AppService {
-  constructor(
-    @InjectRepository(Content)
-    private contentRepository: Repository<Content>
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   getData(): { message: string } {
     return { message: 'Hello API' };
   }
 
-  async getTopCourses() {
-    return await this.contentRepository
-      .createQueryBuilder('q')
-      .orderBy('q.view', 'DESC')
-      .take(10)
-      .getMany();
+  async getTopCourses(req: any) {
+    console.log(req.headers.authorization);
+    return await this.prismaService.content.findMany({
+      select: {
+        content_title: true,
+        content_id: true,
+        title_image: true,
+        subjects: {
+          select: {
+            subject_name: true,
+          },
+        },
+      },
+      take: 10,
+      orderBy: {
+        view: 'desc',
+      },
+    });
   }
 
-  async searchInTable(searchTerm: string): Promise<any[]> {
-    const searchResults = await datasource.query(
-      `SELECT * FROM search_table WHERE vector @@ to_tsquery($1)`,
-      [searchTerm]
-    );
-    const entityIds = searchResults.map((result) => result.entityId);
-    if (entityIds.length === 0) {
-      return [];
-    }
-    const entityIdString = entityIds.map((id) => `'${id}'`).join(', ');
-    const result = await datasource.query(
-      `
-  SELECT
-    subject_id as id,
-    subject_img as image,
-    subject_name as title
-  FROM subjects
-  WHERE subject_id IN (${entityIdString})
-  UNION ALL
-  SELECT
-    blog_id,
-    blog_img,
-    title
-  FROM blog
-  WHERE blog_id IN (${entityIdString})
-  UNION ALL
-  SELECT
-    id,
-    question,
-    description
-  FROM forum
-  WHERE id IN (${entityIdString})
-  UNION ALL
-  SELECT
-    content_id,
-    content_title,
-    title_image
-  FROM content
-  WHERE content_id IN (${entityIdString})
-  `
-    );
-
-    return result;
+  async search(query: string) {
+    return this.prismaService.content.findMany({
+      where: {
+        OR: [
+          {
+            content_title: {
+              contains: query,
+            },
+          },
+          { content: { contains: query } },
+        ],
+      },
+      select: {
+        content_title: true,
+        title_image: true,
+        content_id: true,
+        subjects: {
+          select: {
+            subject_name: true,
+          },
+        },
+      },
+    });
   }
 }

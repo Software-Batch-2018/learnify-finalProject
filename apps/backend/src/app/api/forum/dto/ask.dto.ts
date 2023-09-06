@@ -10,3 +10,9 @@ export class AskQuestionDTO {
   @ApiProperty()
   description: string;
 }
+
+export class AskAiQuestion {
+  @IsString()
+  @ApiProperty()
+  question: string;
+}

@@ -17,11 +17,13 @@ const Cards = ({
   title_image,
   content_id,
   content_title,
+  subject_name,
   navigation,
 }: {
   title_image: string;
   content_title: string;
   content_id: string;
+  subject_name: string;
   navigation: any;
 }) => {
   return (
@@ -34,7 +36,7 @@ const Cards = ({
         })
       }
     >
-      <Box rounded="2xl" overflow="hidden" h={'56'} w={'80'}>
+      <Box rounded="2xl" overflow="hidden" h={'48'} w={'72'}>
         <View style={styles.container}>
           <ImageBackground
             source={{ uri: title_image }}
@@ -44,7 +46,7 @@ const Cards = ({
           >
             <View style={styles.backdrop} />
             <Text style={styles.text}>{content_title}</Text>
-            <Text style={styles.subText}>Data Structure and Algorithm</Text>
+            <Text style={styles.subText}>{subject_name}</Text>
           </ImageBackground>
         </View>
       </Box>
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 39,
+    fontSize: 30,
     lineHeight: 84,
     fontWeight: 'bold',
     marginLeft: 20,
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
   subText: {
     color: 'white',
     marginLeft: 20,
-    fontSize: 20,
+    fontSize: 16,
   },
 });
 
@@ -109,22 +111,25 @@ const SkeletonComponent = () => {
 export function PopularCourses({ navigation, heading = true }: any) {
   const { isLoading, data } = GetAllPopularCourses();
   return (
-    <Box mb={2}>
+    <Box>
       {heading && (
-        <Heading fontSize={'3xl'} mb={5} color={'white'}>
-          Popular Courses
+        <Heading fontSize={'2xl'} textAlign={'center'} mb={5}>
+          Recommended Courses
         </Heading>
       )}
       {isLoading ? (
         <SkeletonComponent />
       ) : (
         <ScrollView horizontal={true}>
-          <HStack space={5}>
+          <HStack space={5} mx={4}>
             {data.map(
               (course: {
                 content_id: string;
                 content_title: string;
                 title_image: string;
+                subjects: {
+                  subject_name: string;
+                };
               }) => (
                 <Cards
                   navigation={navigation}
@@ -132,6 +137,7 @@ export function PopularCourses({ navigation, heading = true }: any) {
                   content_id={course.content_id}
                   content_title={course.content_title}
                   title_image={course.title_image}
+                  subject_name={course.subjects.subject_name}
                 />
               )
             )}

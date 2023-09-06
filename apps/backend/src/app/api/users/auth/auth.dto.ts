@@ -15,6 +15,10 @@ export class RegisterDto {
   @ApiProperty({ example: 'sad' })
   @IsOptional()
   public readonly name?: string;
+
+  @IsString()
+  @ApiProperty()
+  public readonly user_level: string;
 }
 
 export class LoginDto {

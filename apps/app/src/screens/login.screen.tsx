@@ -14,9 +14,13 @@ import { useForm, Controller } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { loginUser } from '../query/user';
 import React from 'react';
-import { hasToken } from '../utils/auth.check';
 import { AuthContext } from '../components/AuthProvider';
-
+import { ImageBackground, ScrollView } from 'react-native';
+import { Dimensions } from 'react-native';
+const screenHeight = Dimensions.get('window').height;
+const image = {
+  uri: 'https://i.ibb.co/zJF1mBy/Pngtree-an-old-bookcase-in-a-2760144.jpg',
+};
 export function AccountScreen({ navigation }: any) {
   const { handleSubmit, control } = useForm();
 
@@ -60,108 +64,123 @@ export function AccountScreen({ navigation }: any) {
   }, [data, isAuth, login, navigation]);
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" py="8" w="90%" maxW="290">
-        <Heading
-          size="lg"
-          fontWeight="600"
-          color="coolGray.800"
-          _dark={{
-            color: 'warmGray.50',
-          }}
-        >
-          Welcome to
-          <Text color={'blue.400'} fontWeight={'bold'}>
-            Learnify
-          </Text>
-        </Heading>
-        <Heading
-          mt="1"
-          _dark={{
-            color: 'warmGray.200',
-          }}
-          color="coolGray.600"
-          fontWeight="medium"
-          size="xs"
-        >
-          Sign in to continue!
-        </Heading>
-
-        <VStack space={3} mt="5">
-          <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  onBlur={onBlur}
-                  onChangeText={(value) => onChange(value)}
-                  value={value}
-                  type="text"
-                />
-              )}
-              name="email"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
-            <Controller
-              defaultValue=""
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  onBlur={onBlur}
-                  onChangeText={(value) => onChange(value)}
-                  value={value}
-                  type="password"
-                />
-              )}
-              name="password"
-              rules={{ required: true }}
-            />
-          </FormControl>
-          {error.status && (
-            <Box
-              bg={'red.200'}
-              p={1}
-              justifyContent={'center'}
-              alignItems={'center'}
-            >
-              <Text>{error.message}</Text>
+    <ImageBackground source={image}>
+      <Box height={screenHeight - 60}>
+        <Center h={'20%'}>
+          <Heading fontSize={'5xl'} color={'white'}>
+            Login
+          </Heading>
+        </Center>
+        <Box bg={'white'} borderTopLeftRadius={'150'}>
+          <Box w="100%" h={'80%'}>
+            <Box safeArea p="2" w="100%">
+              <Center>
+                <Heading mt={7} pb={4} color={'black'} fontSize={'2xl'}>
+                  Welcome to
+                  <Text color="emerald.500"> Learnify</Text>
+                </Heading>
+                <Heading
+                  mt="1"
+                  mb={2}
+                  _dark={{
+                    color: 'warmGray.200',
+                  }}
+                  color="coolGray.600"
+                  fontWeight="medium"
+                  size="xs"
+                >
+                  Sign in to continue!
+                </Heading>
+              </Center>
+              <ScrollView automaticallyAdjustKeyboardInsets={true}>
+                <Center>
+                  <VStack space={3} mt="5">
+                    <FormControl w={'80'}>
+                      <FormControl.Label>Email ID</FormControl.Label>
+                      <Controller
+                        control={control}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <Input
+                            onBlur={onBlur}
+                            onChangeText={(value) => onChange(value)}
+                            value={value}
+                            type="text"
+                          />
+                        )}
+                        name="email"
+                        rules={{ required: true }}
+                      />
+                    </FormControl>
+                    <FormControl w={'80'}>
+                      <FormControl.Label>Password</FormControl.Label>
+                      <Controller
+                        defaultValue=""
+                        control={control}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <Input
+                            onBlur={onBlur}
+                            onChangeText={(value) => onChange(value)}
+                            value={value}
+                            type="password"
+                          />
+                        )}
+                        name="password"
+                        rules={{ required: true }}
+                      />
+                    </FormControl>
+                    {error.status && (
+                      <Box
+                        bg={'red.200'}
+                        p={1}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                      >
+                        <Text>{error.message}</Text>
+                      </Box>
+                    )}
+                    <Center>
+                      <Button
+                        w={200}
+                        onPress={handleSubmit(onSubmit)}
+                        isLoading={isLoading}
+                        isLoadingText="Logging in"
+                        mt={5}
+                        bg={'emerald.500'}
+                      >
+                        <Text color={'white'} fontSize={'xl'}>
+                          Login
+                        </Text>
+                      </Button>
+                    </Center>
+                    <HStack justifyContent="center" height={screenHeight / 3}>
+                      <Text
+                        mr={1}
+                        fontSize="lg"
+                        color="coolGray.600"
+                        _dark={{
+                          color: 'warmGray.200',
+                        }}
+                      >
+                        Don't have an account?
+                      </Text>
+                      <Link
+                        _text={{
+                          color: 'emerald.500',
+                          fontWeight: 'medium',
+                          fontSize: 'lg',
+                        }}
+                        onPress={() => navigation.navigate('Signup')}
+                      >
+                        Sign Up
+                      </Link>
+                    </HStack>
+                  </VStack>
+                </Center>
+              </ScrollView>
             </Box>
-          )}
-          <Button
-            onPress={handleSubmit(onSubmit)}
-            isLoading={isLoading}
-            isLoadingText="Submitting"
-          >
-            Submit
-          </Button>
-
-          <HStack mt="6" justifyContent="center">
-            <Text
-              fontSize="sm"
-              color="coolGray.600"
-              _dark={{
-                color: 'warmGray.200',
-              }}
-            >
-              I'm a new user.
-            </Text>
-            <Link
-              _text={{
-                color: 'indigo.500',
-                fontWeight: 'medium',
-                fontSize: 'sm',
-              }}
-              onPress={() => navigation.navigate('Signup')}
-            >
-              Sign Up
-            </Link>
-          </HStack>
-        </VStack>
+          </Box>
+        </Box>
       </Box>
-    </Center>
+    </ImageBackground>
   );
 }

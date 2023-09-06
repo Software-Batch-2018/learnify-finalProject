@@ -10,20 +10,32 @@ import {
   Spinner,
   CheckIcon,
   Pressable,
+  View,
 } from 'native-base';
 import { GetAllSubjects } from '../query/subjects';
 import { InfoBox } from '../components/info';
-
+import { Dimensions, ImageBackground } from 'react-native';
+const screenHeight = Dimensions.get('window').height;
 const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
   return (
-    <Box bg={'white'}>
+    <Box height={screenHeight - 120}>
       <FlatList
+        style={{
+          alignSelf: 'center',
+        }}
+        width={'96%'}
         data={data}
+        mt={3}
         renderItem={({ item }) => (
           <Pressable
             key={item.subject_id}
             onPress={() =>
-              navigation.navigate('Contents', { subject_id: item.subject_id })
+              navigation.navigate('Contents', {
+                subject_id: item.subject_id,
+                subject_name: item.subject_name,
+                subject_img: item.subject_img,
+                count: item.contentsCount,
+              })
             }
           >
             <Box
@@ -32,9 +44,11 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                 borderColor: 'gray.100',
               }}
               borderColor="gray.100"
-              pl={['0', '4']}
-              pr={['0', '5']}
-              py="2"
+              bg={'white'}
+              py={3}
+              px={5}
+              borderRadius={15}
+              shadow={1}
             >
               <HStack space={[2, 3]} justifyContent="space-between">
                 <Avatar
@@ -46,9 +60,9 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                 <VStack>
                   <Text
                     _dark={{
-                      color: 'warmGray.50',
+                      color: '#5d6065',
                     }}
-                    color="coolGray.800"
+                    color="#5d6065"
                     bold
                   >
                     {item.subject_name}
@@ -61,9 +75,8 @@ const Example = ({ data, navigation }: { data: any[]; navigation: any }) => {
                   >
                     <HStack mt={2} space={1}>
                       <Text color="emerald.500" fontSize="sm">
-                        Learnify Verfied
+                        {item.contentsCount} Total courses
                       </Text>
-                      <CheckIcon size="3" mt="1" color="emerald.500" />
                     </HStack>
                   </Text>
                 </VStack>
@@ -82,21 +95,40 @@ export const SubjectScreen = ({ route, navigation }: any) => {
   const { params } = route;
   const { isLoading, data } = GetAllSubjects(params.level_id);
   return (
-    <Box p={3}>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          {data && data.items.length > 0 ? (
-            <Example navigation={navigation} data={data.items} />
+    <Box>
+      <ImageBackground
+        source={require('../../assets/images/Background.jpg')}
+        imageStyle={{ opacity: 0.1 }}
+      >
+        <View
+          px={4}
+          py={3}
+          flexDirection={'row'}
+          justifyContent={'space-between'}
+          justifyItems={'center'}
+          alignItems={'center'}
+        >
+          <Text fontSize={'xl'} bold color={'emerald.500'}>
+            {params.level_name}
+          </Text>
+        </View>
+        <Box p={0} h={'full'}>
+          {isLoading ? (
+            <Spinner />
           ) : (
-            <InfoBox
-              title="No Subjects!"
-              description="There is no subject for this level currently. We will be adding soon!"
-            />
+            <Box>
+              {data && data.length > 0 ? (
+                <Example navigation={navigation} data={data} />
+              ) : (
+                <InfoBox
+                  title="No Subjects!"
+                  description="There is no subject for this level currently. We will be adding soon!"
+                />
+              )}
+            </Box>
           )}
-        </>
-      )}
+        </Box>
+      </ImageBackground>
     </Box>
   );
 };

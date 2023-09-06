@@ -1,13 +1,9 @@
 import {
   Box,
-  Divider,
   HStack,
-  Heading,
-  Spacer,
   Spinner,
   Text,
   VStack,
-  Pressable,
   View,
   Button,
   ScrollView,
@@ -15,14 +11,20 @@ import {
   FormControl,
   Input,
   TextArea,
+  Icon,
 } from 'native-base';
 import { GetAllForumQuestion, askQuestion } from '../query/forum';
 import { getTimeAgo } from '../utils/date';
-import React, { useContext } from 'react';
-import { hasToken } from '../utils/auth.check';
+import React, { useContext, useRef, useState } from 'react';
 import { AuthContext } from '../components/AuthProvider';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Animated, ImageBackground } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { truncateString } from './blog.screen';
+import { AskAiQuestionModal } from '../components/ai.chat';
 
 interface AskQuestionModalProps {
   modalVisible: boolean;
@@ -133,7 +135,7 @@ const AskQuestionModal = ({
               Cancel
             </Button>
             <Button isLoading={submitting} onPress={handleSubmit(onSubmit)}>
-              Reply
+              Post
             </Button>
           </Button.Group>
         </Modal.Footer>
@@ -149,6 +151,11 @@ export default function ForumScreen({ navigation }: any) {
   const finalRef = React.useRef(null);
   const { isAuth } = useContext(AuthContext);
 
+  const [modalVisibleAi, setModalVisibleAi] = React.useState(false);
+
+  const initialRefAi = React.useRef(null);
+  const finalRefAi = React.useRef(null);
+
   const handleAskQuestion = () => {
     console.log(isAuth, 'is user authenticated?');
     if (isAuth) {
@@ -158,63 +165,217 @@ export default function ForumScreen({ navigation }: any) {
     }
   };
 
-  return (
-    <ScrollView>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <Box>
-          <View
-            mt={2}
-            pr={2}
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <View style={{ flex: 1 }} />
-            <View style={{ marginRight: 10 }}>
-              <Button size={'xs'} onPress={handleAskQuestion}>
-                Ask Question
-              </Button>
-            </View>
-          </View>
-          {data.items.map((q: any) => (
-            <Pressable
-              key={q.id}
-              onPress={() =>
-                navigation.navigate('ForumReply', {
-                  forum_id: q.id,
-                })
-              }
-              m={4}
-            >
-              <VStack space={4} bg={'blue.100'} rounded={'md'} p={5}>
-                <VStack space={2}>
-                  <Heading>{q.question}</Heading>
-                  <HStack>
-                    <Text>By {q.asked_by.name}</Text>
-                    <Spacer />
-                    <Text>{getTimeAgo(q.created_at)}</Text>
-                  </HStack>
-                </VStack>
-                <Divider />
-                <Text>{q.description}</Text>
+  const animation = useRef(new Animated.Value(0)).current;
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const toggleButton = () => {
+    let toValue = 0;
+    toValue = isButtonClicked ? 0 : 1;
+    Animated.spring(animation, {
+      toValue,
+      friction: 5,
+      useNativeDriver: true,
+    }).start();
+    setIsButtonClicked(!isButtonClicked);
+  };
+  const rotation = {
+    transform: [
+      {
+        rotate: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '45deg'],
+        }),
+      },
+    ],
+  };
+  const style1 = {
+    transform: [
+      { scale: animation },
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -65],
+        }),
+      },
+      {
+        translateX: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -20],
+        }),
+      },
+    ],
+  };
+  const style2 = {
+    transform: [
+      { scale: animation },
+      {
+        translateY: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -10],
+        }),
+      },
+      {
+        translateX: animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -70],
+        }),
+      },
+    ],
+  };
 
-                <Text color={'gray.400'}>Read More</Text>
-              </VStack>
-            </Pressable>
-          ))}
+  return (
+    <ImageBackground
+      source={require('../../assets/images/Background.jpg')}
+      imageStyle={{ opacity: 0.1 }}
+      style={{ borderColor: 'gray', borderBottomWidth: 1 }}
+    >
+      <View
+        px={4}
+        flexDirection={'row'}
+        justifyContent={'space-between'}
+        justifyItems={'center'}
+        alignItems={'center'}
+      >
+        <Text fontSize={'3xl'} bold color={'emerald.500'}>
+          Learnify Forum
+        </Text>
+      </View>
+      <ScrollView h={'100%'}>
+        <Box mb={20}>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <Box>
+              {data.items.map((q: any) => (
+                <Box
+                  key={q.id}
+                  m={3}
+                  bgColor={'gray.100'}
+                  p={4}
+                  borderBottomWidth="1"
+                  _dark={{
+                    borderColor: 'gray.100',
+                  }}
+                  borderColor="gray.100"
+                  bg={'white'}
+                  shadow={1}
+                >
+                  <VStack>
+                    <HStack justifyContent={'space-between'} mb={3}>
+                      <VStack>
+                        <Text bold fontSize={'lg'}>
+                          {q.asked_by.name}
+                        </Text>
+                        <Box bg={'#2bd11c'} h={6} w={60} borderRadius={30}>
+                          <Text textAlign={'center'} bold color={'white'}>
+                            open
+                          </Text>
+                        </Box>
+                      </VStack>
+                      <Text>{getTimeAgo(q.created_at)}</Text>
+                    </HStack>
+                    <Text bold fontSize={'xl'} mb={2}>
+                      {q.question}
+                    </Text>
+                    <Text>{truncateString(q.description)}</Text>
+                    <HStack justifyContent={'flex-end'} mt={5} mb={5}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('ForumReply', {
+                            forum_id: q.id,
+                          })
+                        }
+                      >
+                        <HStack>
+                          <Icon
+                            color={'black'}
+                            size={30}
+                            as={<AntDesign name="message1" />}
+                          />
+                          <Text ml={1} mr={3} fontSize={'lg'}>
+                            {q.replycount}
+                          </Text>
+                        </HStack>
+                      </TouchableOpacity>
+                    </HStack>
+                  </VStack>
+                </Box>
+              ))}
+            </Box>
+          )}
+          <AskQuestionModal
+            refetch={refetch}
+            finalRef={finalRef}
+            initialRef={initialRef}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+          />
         </Box>
-      )}
-      <AskQuestionModal
-        refetch={refetch}
-        finalRef={finalRef}
-        initialRef={initialRef}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+      </ScrollView>
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 70,
+            right: 20,
+          }}
+        >
+          <Animated.View style={[{ backfaceVisibility: 'hidden' }, style2]}>
+            <Button
+              position={'absolute'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              alignSelf={'center'}
+              bg={'emerald.400'}
+              h={55}
+              w={55}
+              borderRadius={50}
+              onPress={() => setModalVisibleAi(true)}
+            >
+              <MaterialCommunityIcons
+                size={30}
+                color={'white'}
+                name="layers-search-outline"
+              />
+            </Button>
+          </Animated.View>
+          <Animated.View style={[{ backfaceVisibility: 'hidden' }, style1]}>
+            <Button
+              position={'absolute'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              alignSelf={'center'}
+              bg={'emerald.400'}
+              h={55}
+              w={55}
+              borderRadius={50}
+              onPress={handleAskQuestion}
+            >
+              <MaterialCommunityIcons
+                size={30}
+                color={'white'}
+                name="message-question-outline"
+              />
+            </Button>
+          </Animated.View>
+          <Animated.View style={[{ backfaceVisibility: 'hidden' }, rotation]}>
+            <Button
+              bg={'#5d6065'}
+              h={45}
+              w={45}
+              borderRadius={50}
+              onPress={toggleButton}
+            >
+              <MaterialCommunityIcons size={20} color={'white'} name="plus" />
+            </Button>
+          </Animated.View>
+        </View>
+      </View>
+      <AskAiQuestionModal
+        modalVisible={modalVisibleAi}
+        setModalVisible={setModalVisibleAi}
+        initialRef={initialRefAi}
+        finalRef={finalRefAi}
       />
-    </ScrollView>
+    </ImageBackground>
   );
 }

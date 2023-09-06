@@ -7,6 +7,7 @@ import { AskQuestionDTO } from './dto/ask.dto';
 import { User } from '../users/entities/user.entity';
 import { ReplyDTO } from './dto/reply.dto';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { OpenAiService } from '../../../shared/openai/openai.service';
 
 @Injectable()
 export class ForumService {
@@ -18,7 +19,9 @@ export class ForumService {
     private forumReplyRepository: Repository<ForumReply>,
 
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+
+    private readonly openai: OpenAiService
   ) {}
 
   async askQuestion(payload: AskQuestionDTO, user_id: number) {
@@ -46,8 +49,9 @@ export class ForumService {
     const query = this.forumRepository
       .createQueryBuilder('q')
       .leftJoinAndSelect('q.asked_by', 'user')
-      .orderBy("q.created_at", "DESC")
+      .loadRelationCountAndMap('q.replycount', 'q.replies')
 
+      .orderBy('q.created_at', 'DESC');
 
     return paginate<Forum>(query, options);
   }
@@ -58,8 +62,12 @@ export class ForumService {
       .leftJoinAndSelect('q.asked_by', 'asker')
       .leftJoinAndSelect('q.replies', 'replies')
       .leftJoinAndSelect('replies.replied_by', 'replier')
-      .orderBy("replies.created_at", "DESC")
+      .orderBy('replies.created_at', 'DESC')
       .where('q.id = :forum_id', { forum_id })
       .getOne();
+  }
+
+  async askAiQuestion(question: string) {
+    return this.openai.askAi(question);
   }
 }

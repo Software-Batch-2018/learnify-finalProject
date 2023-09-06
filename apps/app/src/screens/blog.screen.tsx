@@ -17,7 +17,7 @@ import {
 } from 'native-base';
 import React from 'react';
 import { GetAllBlogs } from '../query/blog';
-import { useWindowDimensions } from 'react-native';
+import { ImageBackground, useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 
 function AlertBox() {
@@ -79,7 +79,7 @@ function getTimeAgo(dateString: string) {
   }
 }
 
-function truncateString(text: string) {
+export function truncateString(text: string) {
   const words = text.split(' ');
   const truncatedWords = words.slice(0, 20);
   const truncatedText = truncatedWords.join(' ');
@@ -107,12 +107,18 @@ export default function BlogScreen() {
   });
 
   return (
-    <Center mt={2} p={1}>
-      <ScrollView>
-        <Heading mx={5}>
-          A Collection of blog from
+    <ImageBackground
+      source={require('../../assets/images/Background.jpg')}
+      imageStyle={{ opacity: 0.1 }}
+      style={{ height: '100%' }}
+    >
+      <Center>
+        <Heading mt={7} pb={4} color={'black'} fontSize={'2xl'}>
+          Blogs from
           <Text color="emerald.500"> Learnify</Text>
         </Heading>
+      </Center>
+      <ScrollView>
         {isLoading ? (
           <Spinner />
         ) : (
@@ -187,7 +193,7 @@ export default function BlogScreen() {
           </ScrollView>
         </Actionsheet.Content>
       </Actionsheet>
-    </Center>
+    </ImageBackground>
   );
 }
 
@@ -209,8 +215,9 @@ const BlogCard = ({
   return (
     <Box alignItems="center">
       <Box
-        m={4}
+        m={2}
         mt={2}
+        mb={0}
         rounded="lg"
         overflow="hidden"
         borderColor="coolGray.200"

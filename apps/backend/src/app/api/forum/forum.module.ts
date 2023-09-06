@@ -6,10 +6,11 @@ import { Forum } from './entities/forum.entity';
 import { ForumReply } from './entities/replies.entity';
 import { User } from '../users/entities/user.entity';
 import { ReplyGateway } from './gateway/reply.gateway';
+import { OpenAiService } from '../../../shared/openai/openai.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Forum, ForumReply, User])],
   controllers: [ForumController],
-  providers: [ForumService, ReplyGateway],
+  providers: [ForumService, ReplyGateway, OpenAiService],
 })
 export class ForumModule {}

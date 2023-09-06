@@ -21,17 +21,16 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       entities: getMetadataArgsStorage().tables.map((tbl) => tbl.target),
       subscribers: [ContentSubscriber],
       migrations: [],
-      migrationsTableName: 'migrations',
+      migrationsTableName: 'typeorm_migrations',
       logging: false,
       dropSchema: false,
       synchronize: true,
-      ssl: true,
-
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
+      // ssl: true,
+      // extra: {
+      //   ssl: {
+      //     rejectUnauthorized: false,
+      //   },
+      // },
     };
   }
 }

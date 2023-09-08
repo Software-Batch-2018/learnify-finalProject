@@ -38,7 +38,7 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-        <title>E-Library | Login</title>
+        <title>Learnify</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="bg-white dark:bg-gray-900">
@@ -52,17 +52,14 @@ const LoginPage = () => {
             <div className="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
               <div>
                 <h2 className="text-4xl font-bold text-white">Learnify</h2>
-
                 <p className="max-w-xl mt-3 text-gray-300">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
-                  autem ipsa, nulla laboriosam dolores, repellendus perferendis
-                  libero suscipit nam temporibus molestiae
+                Learnify is a comprehensive mobile app designed to enhance your learning experience. With interactive courses and quizzes, it provides a dynamic platform to expand your knowledge and skills effectively.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center w-full max-w-lg px-6 mx-auto lg:w-2/6  bg-gray-100">
+          <div className="flex items-center w-full max-w-2xl  px-16 mx-auto   bg-gray-100">
             <div className="flex-1">
               <div className="text-center">
                 <h2 className="text-4xl font-bold text-center text-gray-700 dark:text-white">

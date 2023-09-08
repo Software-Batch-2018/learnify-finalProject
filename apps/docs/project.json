@@ -13,7 +13,8 @@
     "serve": {
       "executor": "@nx-plus/docusaurus:dev-server",
       "options": {
-        "port": 3004
+        "port": 3004,
+        "hostname": "0.0.0.0"
       }
     }
   },

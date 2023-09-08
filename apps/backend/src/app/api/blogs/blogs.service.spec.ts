@@ -30,16 +30,6 @@ describe('BlogService', () => {
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
-  const mockRepository = {
-    create: jest.fn(),
-    save: jest.fn(),
-    findOne: jest.fn(() => {
-      return null;
-    }),
-    update: jest.fn(),
-    delete: jest.fn(),
-  };
-
   it('should be defined', () => {
     expect(blogService).toBeDefined();
   });

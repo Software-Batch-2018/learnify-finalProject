@@ -7,7 +7,6 @@ export class OpenAiService {
   private openAi: OpenAI;
 
   constructor(private readonly config: ConfigService) {
-    console.log(this.config.get('OPEN_AI_KEY'));
     this.openAi = new OpenAI({
       apiKey: this.config.get<string>('OPEN_AI_KEY'),
     });

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 import { Modal } from '../modal';
-import { Button } from '@finalproject/ui';
+import { Button } from '@learnify/ui';
 
 interface AddLevelModalProps {
   addLevelModal: boolean;

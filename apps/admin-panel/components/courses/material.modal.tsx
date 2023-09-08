@@ -6,7 +6,7 @@ import {
   addQa,
   useGetMaterial,
 } from '../../utils/queryfn/material';
-import { Button } from '@finalproject/ui';
+import { Button } from '@learnify/ui';
 import { useMutation } from 'react-query';
 import { toast } from 'react-hot-toast';
 import { useForm } from 'react-hook-form';

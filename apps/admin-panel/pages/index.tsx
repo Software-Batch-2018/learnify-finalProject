@@ -93,7 +93,6 @@ function Index() {
         ],
       };
       setFaculty(finalFaculty);
-      console.log(finalFaculty);
     }
   }, [userCount]);
 

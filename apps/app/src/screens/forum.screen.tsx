@@ -66,7 +66,6 @@ const AskQuestionModal = ({
     },
   });
   const onSubmit = (formData: any) => {
-    console.log(formData);
     mutate(formData);
     reset();
     setModalVisible(false);
@@ -157,7 +156,6 @@ export default function ForumScreen({ navigation }: any) {
   const finalRefAi = React.useRef(null);
 
   const handleAskQuestion = () => {
-    console.log(isAuth, 'is user authenticated?');
     if (isAuth) {
       setModalVisible(true);
     } else {

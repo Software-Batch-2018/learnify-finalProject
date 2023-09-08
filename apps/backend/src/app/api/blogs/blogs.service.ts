@@ -1,8 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+
 import { Blog } from './entities/blog.entity';
 import {
   paginate,
@@ -10,6 +9,7 @@ import {
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
 import { Roles, User } from '../users/entities/user.entity';
+import { CreateBlogDto, UpdateBlogDto } from '@learnify/dto';
 
 @Injectable()
 export class BlogsService {

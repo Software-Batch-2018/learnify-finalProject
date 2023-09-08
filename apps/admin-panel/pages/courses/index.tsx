@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { editCourseContent } from '../../utils/courses';
 import toast from 'react-hot-toast';
-import { Button } from '@finalproject/ui';
+import { Button } from '@learnify/ui';
 import { MaterialModal } from '../../components/courses/material.modal';
 
 const CourseTable = () => {

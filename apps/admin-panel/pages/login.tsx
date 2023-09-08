@@ -6,7 +6,7 @@ import { loginUser } from '../utils/queryfn/auth';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { Button } from '@finalproject/ui';
+import { Button } from '@learnify/ui';
 const LoginPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm();

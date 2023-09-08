@@ -13,11 +13,11 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BlogsService } from './blogs.service';
-import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+
 import { Blog } from './entities/blog.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { JwtAuthGuard } from '../users/auth/auth.guard';
+import { CreateBlogDto, UpdateBlogDto } from '@learnify/dto';
 
 @Controller('blogs')
 @ApiTags('Blog Related Routes')

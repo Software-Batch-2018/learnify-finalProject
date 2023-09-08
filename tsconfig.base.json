@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@finalproject/ui": ["libs/ui/src/index.ts"]
+      "@learnify/dto": ["libs/dtos/src/index.ts"],
+      "@learnify/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,4 +1,4 @@
-import { Button } from '@finalproject/ui';
+import { Button } from '@learnify/ui';
 import { CreateContenPayload, CreateContent } from '../../utils/courses';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';

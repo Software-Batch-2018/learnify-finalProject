@@ -4,7 +4,6 @@ import { SearchAllCourses } from '../query/home';
 
 export default function SearchScreen({ route, navigation }: any) {
   const { params } = route;
-  console.log(params);
   const { data, isLoading } = SearchAllCourses(params.query);
 
   return (
@@ -102,9 +101,9 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontSize: 20,
-    lineHeight: 64,
     fontWeight: 'bold',
     marginLeft: 20,
+    marginBottom: 20,
   },
   subText: {
     color: 'white',

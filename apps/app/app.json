@@ -6,14 +6,16 @@
     "orientation": "portrait",
     "icon": "./assets/logo-black.png",
     "splash": {
-      "image": "./assets/Splash.png",
+      "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -28,10 +30,15 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": [["@config-plugins/detox", "sentry-expo"]],
+    "plugins": [
+      [
+        "@config-plugins/detox",
+        "sentry-expo"
+      ]
+    ],
     "extra": {
       "eas": {
-        "projectId": "9b9b4ef5-6299-415f-9aff-67ce85aa7136"
+        "projectId": "40bc7a24-2cc6-4daa-bf14-601aa3eb4dba"
       }
     }
   }

@@ -48,6 +48,20 @@ npx nx storybook ui
 npx nx start app
 ```
 
+
+### Serve Learnify Website
+
+```bash
+npx nx serve website
+```
+
+### Serve Learnify Docs
+
+```bash
+npx nx serve website
+```
+
+
 ## Understand this workspace
 
 Run `nx graph` to see a diagram of the dependencies of the projects.
